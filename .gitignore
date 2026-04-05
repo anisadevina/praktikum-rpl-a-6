@@ -1,1 +1,17 @@
+# Configuration & sensitive files
 .env
+.env.*
+config.php
+database.php
+*local.php
+
+# Database files
+*.sql
+*.sqlite
+*.db
+
+# Editor settings
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
