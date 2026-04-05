@@ -7,14 +7,14 @@
 ## Jadwal meeting
 Minimal 1 kali dalam 1 minggu, hari dan tempat menyesuaikan
 
-## Channel komunikasi: 
+## Channel komunikasi 
 WhatsApp, Discord, Notion
 
-## Aturan respons: 
-Maksimal 1 jam sudah membalas chat di jam kerja
+## Aturan respons
+Maksimal 1 jam sudah membalas chat di group chat pada jam kerja
 
 ## Standar commit messege
-Format bahasa inggris dengan keterangan jelas. Contoh: “Add login page”, “Fixed xx feature”
+Format bahasa inggris dengan keterangan jelas. Contoh: “Add login page”, “Fixed xx feature”.
 
 ## Mekanisme eksalasi
 - Jika mengalami kendala, anggota wajib bertanya di grup dalam waktu maksimal 2 jam sejak menemukan masalah.
