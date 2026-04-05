@@ -10,4 +10,4 @@ Repository ini digunakan untuk praktikum RPL.
 
 ## Anggota Kelompok
 - Haliza Hana Maulina (L0124017)
-- Nama 2
+- Jelita Kustyara Nanda Safitri (L0124020)
