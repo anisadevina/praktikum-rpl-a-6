@@ -9,5 +9,5 @@ Repository ini digunakan untuk praktikum RPL.
 - tests/ : pengujian
 
 ## Anggota Kelompok
-- Nama 1
+- Haliza Hana Maulina (L0124017)
 - Nama 2
