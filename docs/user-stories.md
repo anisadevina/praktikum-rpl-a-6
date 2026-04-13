@@ -28,7 +28,7 @@
 - AC-1: Given user berada pada halaman pencarian, When user mengetik kata kunci pada kolom pencarian, Then sistem akan menampilkan saran hasil pencarian secara otomatis yang relevan dengan kata kunci tersebut.
 - AC-2: Given user sudah berada pada halaman hasil pencarian, when user memilih filter berdasarkan kategori tertentu, Then sistem akan memperbarui daftar tampilan secara instan dengan hanya menampilkan item yang sesuai dengan kategori terpilih.
 
-### 6. As a user, I want to melihat dashboard utama berisi fitur pencarian, akses terakhir mata kuliah, dan forum terbaru, so that user dapat mengakses informasi penting dan melanjutkan aktivitas belajar mereka dengan lebih cepat dan efisien dalam satu halaman terpusat.
+### 6. As a user, I want to melihat dashboard utama berisi fitur pencarian, akses terakhir mata kuliah, dan forum terbaru, so that user dapat mengakses informasi penting dan melanjutkan aktivitas belajar dalam satu halaman terpusat.
 
 - AC-1: Given user sudah login, When dashboard utama muncul, Then user bisa melihat bar fitur pencarian serta kolom akses terakhir mata kuliah, dan forum terbaru.
 - AC-2: Given saya sudah login dan belum pernah membuka mata kuliah apapun, When dashboard utama muncul, Then kolom akses terakhir menampilkan pesan kosong atau saran untuk mulai mencari mata kuliah.
