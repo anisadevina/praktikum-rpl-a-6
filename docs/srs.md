@@ -2,9 +2,9 @@
 
 ---
 
-## Pendahuluan
+## 1. Pendahuluan
 
-### Tujuan Dokumen
+### 1.1 Tujuan Dokumen
 Dokumen Software Requirements Specification (SRS) ini disusun sebagai acuan dalam pengembangan platform sistem informasi akademik yang kami kembangkan. Dokumen ini menjelaskan kebutuhan sistem secara menyeluruh agar proses pengembangan dapat berjalan terarah dan sesuai dengan tujuan yang diharapkan.
 
 Dokumen ini bertujuan untuk:
@@ -15,12 +15,12 @@ Dokumen ini bertujuan untuk:
 5. Menjadi referensi bagi pihak terkait dalam memahami ruang lingkup dan tujuan sistem yang digunakan.
 6. Menjadi acuan dalam proses validasi untuk memastikan bahwa setiap fitur yang dikembangkan sesuai dengan user story yang telah ditentukan.
 
-### Ruang Lingkup Sistem
+### 1.2 Ruang Lingkup Sistem
 Ruang lingkup sistem ini mencakup pengembangan sebuah platform sistem informasi akademik terintegrasi yang ditujukan khusus bagi mahasiswa FATISDA. Sistem ini menyediakan fitur arsip soal ujian, tugas, materi, dan insight mata kuliah. Selain itu, terdapat fitur pendukung berupa bookmark file, pencarian, penyaringan, pengunggahan file, forum diskusi, sekaligus dashboard yang menampilkan informasi seperti akses terakhir, forum terbaru, dan lainnya.
 
 Dalam operasionalnya, sistem melibatkan dua peran utama yaitu admin dan mahasiswa, di mana admin berfokus dalam memverifikasi unggahan, mengelola konten, serta menjaga kualitas dan ketertiban platform. Akses terhadap sistem dibatasi hanya untuk mahasiswa FATISDA melalui proses validasi data, sehingga penggunaan sistem tetap berfokus pada lingkup akademik yang relevan.
 
-### Definisi dan Akronim
+### 1.3 Definisi dan Akronim
 
 | Istilah/Akronim | Kepanjangan | Deskripsi/Makna |
 |---|---|---|
@@ -41,16 +41,16 @@ Dalam operasionalnya, sistem melibatkan dua peran utama yaitu admin dan mahasisw
 
 ---
 
-## Deskripsi Umum
+## 2. Deskripsi Umum
 
-### Perspektif & Konteks Produk
+### 2.1 Perspektif Produk
 StudyScoope merupakan platform sistem informasi akademik berbasis web yang dikembangkan dan dirancang untuk mahasiswa di lingkungan FATISDA UNS. Platform ini dikembangkan sebagai wadah digital terpusat yang memudahkan mahasiswa dalam mengakses arsip soal ujian, materi, dan tugas, serta dilengkapi fitur ruang diskusi online antar mahasiswa.
 
 Pada tahap awal pengembangan, cakupan StudyScoope terbatas hanya berada di lingkungan FATISDA saja. Pembatasan ini dilakukan untuk mengurangi beban kerja karena waktu pengembangan yang terbatas, tetapi platform tetap harus menyediakan data yang faktual dan relevan. Pengembangan ke skala lebih besar, seperti skala universitas, dapat dipertimbangkan jika kedepannya platform sudah teruji stabil dan valid di lingkungan FATISDA.
 
 StudyScoope berdiri sebagai sistem mandiri yang tidak terintegrasi dengan sistem resmi akademik kampus, namun tetap menggunakan data faktual yang dapat diakses oleh publik. Akses pengguna (Mahasiswa) ke platform dibatasi hanya untuk mahasiswa FATISDA yang tervalidasi melalui NIM mahasiswa saat registrasi akun, sehingga seluruh konten dan diskusi di dalamnya tetap relevan dan terfokus pada kegiatan akademik di FATISDA.
 
-### Fungsi Produk
+### 2.2 Fungsi Produk
 StudyScoope menyediakan enam fungsi utama yang saling terintegrasi dalam satu platform, yaitu:
 
 1. Dashboard utama yang menampilkan pencarian mata kuliah (search bar), riwayat akses terakhir mata kuliah, dan forum diskusi terbaru.
@@ -60,7 +60,7 @@ StudyScoope menyediakan enam fungsi utama yang saling terintegrasi dalam satu pl
 5. Fitur bookmark file soal ujian, materi, atau tugas per mata kuliah agar pengguna (Mahasiswa) bisa mengakses kembali dengan cepat.
 6. Fitur pencarian dan filter di halaman mata kuliah berdasarkan kategori tertentu.
 
-### Karakteristik 
+### 2.3 Karakteristik Pengguna
 Sistem ini memiliki dua jenis pengguna utama, yaitu Mahasiswa dan Admin, dengan karakteristik sebagai berikut:
 
 **Pengguna (Mahasiswa)**
@@ -83,7 +83,7 @@ Sistem ini memiliki dua jenis pengguna utama, yaitu Mahasiswa dan Admin, dengan 
 - Mengelola distribusi survei tingkat kesulitan mata kuliah kepada pengguna.
 - Memiliki akses penuh terhadap fitur manajemen sistem.
 
-### Batasan Sistem
+### 2.4 Batasan
 Berikut batasan sistem pada platform Study Scope:
 - Hanya dapat diakses oleh mahasiswa FATISDA yang telah terverifikasi melalui data yang valid, sehingga pengguna (Mahasiswa) di luar lingkup tersebut tidak memiliki akses ke dalam sistem.
 - Sistem difokuskan pada pengelolaan dan penyediaan arsip akademik seperti soal ujian, tugas, materi, serta forum diskusi, sehingga tidak mencakup fitur pembelajaran interaktif seperti rekaman kelas daring.
@@ -94,7 +94,7 @@ Berikut batasan sistem pada platform Study Scope:
 
 ---
 
-## Kebutuhan Fungsional
+## 3. Kebutuhan Fungsional
 
 | ID | Deskripsi | Prioritas | Ref |
 |---|---|---|---|
@@ -116,7 +116,7 @@ Berikut batasan sistem pada platform Study Scope:
 
 ---
 
-## Kebutuhan Non-Fungsional
+## 4. Kebutuhan Non-Fungsional
 
 | ID | Kategori | Deskripsi |
 |---|---|---|
@@ -129,7 +129,7 @@ Berikut batasan sistem pada platform Study Scope:
 
 ---
 
-## Asumsi dan Catatan
+## 5. Catatan dan Asumsi
 
 ### Asumsi
 - Pengguna diasumsikan memiliki perangkat desktop dan koneksi internet yang stabil untuk mengakses sistem.
