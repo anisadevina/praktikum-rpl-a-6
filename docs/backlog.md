@@ -6,7 +6,8 @@
 - Fitur bookmark file (soal, tugas, maupun materi)  
 - Dashboard utama (pencarian, akses terakhir, forum terbaru)  
 - Pengguna dapat mencari dan menyaring berdasarkan kategori  
-- Verifikasi unggahan oleh admin  
+- Verifikasi unggahan oleh admin
+- Pengembangan Modul "Insight Mata Kuliah" (Fokus Materi & Rating Kesulitan)
 
 ## Should-have
 - Pembatasan akses hanya mahasiswa FATISDA  
