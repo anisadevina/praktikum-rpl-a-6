@@ -131,13 +131,13 @@ Berikut batasan sistem pada platform Study Scope:
 
 ## 5. Catatan dan Asumsi
 
-### Asumsi
+### 5.1 Asumsi
 - Pengguna diasumsikan memiliki perangkat desktop dan koneksi internet yang stabil untuk mengakses sistem.
 - Diasumsikan setiap pengguna memiliki identitas unik (NIM/Username dan Password) untuk masuk ke sistem.
 - Admin diasumsikan memiliki satu identitas unik (Password) untuk masuk dan mengelola sistem.
 - Admin diasumsikan aktif dalam memverifikasi unggahan yang masuk ke sistem.
 
-### Catatan
+### 5.2 Catatan
 - Selain mahasiswa FATISDA tidak dapat melakukan registrasi, login, maupun mengakses platform ini.
 - Sistem beroperasi secara mandiri dan tidak terintegrasi langsung dengan database pusat kampus (SIAKAD), sehingga data master NIM perlu diperbarui manual oleh Admin.
 - Fitur survei menggunakan G-Form membuat alur data tidak otomatis, sehingga Admin harus memasukkan rekap hasil survei secara manual ke sistem.
