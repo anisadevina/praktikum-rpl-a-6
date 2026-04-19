@@ -53,18 +53,18 @@
 - AC-3: Given NIM user sudah terdaftar di database master dan sudah memiliki akun aktif di platform, When seseorang mencoba mendaftar kembali menggunakan NIM yang sama, then sistem menampilkan pesan bahwa NIM tersebut sudah digunakan dan mengarahkan user ke halaman Login.
 - AC-4: Given admin memiliki data mahasiswa baru, When admin mengunggah file (CSV/Excel) berisi NIM baru ke database, Then sistem memperbarui master_mahasiswa_fatisda sehingga mahasiswa baru tersebut bisa melakukan resgistrasi di platform.
 
-## 11. As an admin, I want to memberikan insight Mata Kuliah mengenai Fokus Materi, so that mahasiswa bisa memiliki gambaran mengenai Mata Kuliah yang akan dipelajari
+### 11. As an admin, I want to memberikan insight Mata Kuliah mengenai Fokus Materi, so that mahasiswa bisa memiliki gambaran mengenai Mata Kuliah yang akan dipelajari
 
 - AC-1: Given admin memiliki informasi mengenai fokus materi tiap Mata Kuliah, When admin mengunggah informasi ke insight Mata Kuliah, Then sistem menampilkannya di page insight masing-masing Mata Kuliah
 
-## 12. As an admin, I want to membagikan survey Tingkat Kesulitan tiap Mata Kuliah kepada user tiap akhir semester, so that user bisa memberikan rating ke tiap Mata Kuliah yang telah ditempuh.
+### 12. As an admin, I want to membagikan survey Tingkat Kesulitan tiap Mata Kuliah kepada user tiap akhir semester, so that user bisa memberikan rating ke tiap Mata Kuliah yang telah ditempuh.
 
 - AC-1: Given berdasarkan Kalender Akademik sudah memasuki akhir semester, When admin membuat G-form survey Tingkat Kesulitan Mata Kuliah dan mengunggahnya, Then sistem menampilkan alert/pop up di website.
 
-## 13. As an admin, I want to memberikan insight Tingkat Kesulitan tiap Mata Kuliah berdasarkan survey yang telah dilakukan di akhir semester, so that user semester berikutnya dapat mengetahui tingkat kesulitan tiap Mata Kuliah.
+### 13. As an admin, I want to memberikan insight Tingkat Kesulitan tiap Mata Kuliah berdasarkan survey yang telah dilakukan di akhir semester, so that user semester berikutnya dapat mengetahui tingkat kesulitan tiap Mata Kuliah.
 
 - AC-1: Given admin mempunyai data survey Tingkat Kesulitan Mata Kuliah, When admin menambahkannya ke Insight Mata Kuliah, Then sistem menghitung rata-rata dan menampilkannya.
 
-## 14. As an user, I want to memberikan rating di survey Tingkat Kesulitan Mata Kuliah, so that user lain bisa mendapat informasi mengenai Tingkat Kesulitan tiap Mata Kuliah.
+### 14. As an user, I want to memberikan rating di survey Tingkat Kesulitan Mata Kuliah, so that user lain bisa mendapat informasi mengenai Tingkat Kesulitan tiap Mata Kuliah.
 
 - AC-1:  Given user mendapatkan pop up survey, When user menekan link, Then sistem mengarahkan ke halaman G-Form.
