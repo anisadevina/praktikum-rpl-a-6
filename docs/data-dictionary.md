@@ -63,7 +63,7 @@
 | Dokumen | tahun_dokumen | YEAR | NOT NULL | Tahun dokumen |
 | Dokumen | dosen | VARCHAR(200) | NOT NULL | Nama dosen terkait |
 | Dokumen | file_path | VARCHAR(500) | NOT NULL | Lokasi penyimpanan file |
-| Dokumen | status | ENUM('pending', 'approved', 'rejected') | NOT NULL, DEFAULT 'pending' | Status verifikasi dokumen |
+| Dokumen | status | ENUM('menunggu', 'disetujui', 'ditolak') | NOT NULL, DEFAULT 'pending' | Status verifikasi dokumen |
 | Dokumen | waktu_unggah | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Waktu dokumen diunggah |
 | Dokumen | catatan_admin | TEXT | NULL | Catatan/balasan dari admin |
 
