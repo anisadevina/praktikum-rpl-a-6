@@ -7,7 +7,7 @@
 | Tabel | Kolom | Tipe Data | Constraint | Keterangan |
 |-------|-------|-----------|------------|------------|
 | Users | id_user | INT | PK, AUTO_INCREMENT | ID unik pengguna |
-| Users | nim | VARCHAR(20) | UNIQUE, NOT NULL | Nomor Induk Mahasiswa |
+| Users | nim | VARCHAR(20) | FK → Master_Mahasiswa_Fatisda.nim, UNIQUE, NOT NULL | Nomor Induk Mahasiswa |
 | Users | username | VARCHAR(100) | UNIQUE, NOT NULL | Username login |
 | Users | email_user | VARCHAR(255) | UNIQUE, NOT NULL | Email pengguna |
 | Users | password | VARCHAR(255) | NOT NULL | Password |
@@ -58,10 +58,10 @@
 | Dokumen | id_dokumen | INT | PK, AUTO_INCREMENT | ID unik file dokumen |
 | Dokumen | id_user | INT | FK → Users.id_user | Pengguna yang mengupload |
 | Dokumen | id_matkul | INT | FK → Mata_Kuliah.id_matkul | Referensi ke mata kuliah |
+| Dokumen | id_dosen | INT | FK → Dosen.id_dosen | Dosen terkait |
 | Dokumen | judul | VARCHAR(255) | NOT NULL | Judul dokumen |
 | Dokumen | kategori_file | ENUM('soal ujian', 'tugas', 'materi') | NOT NULL | Kategori file yang diupload pengguna |
 | Dokumen | tahun_dokumen | YEAR | NOT NULL | Tahun dokumen |
-| Dokumen | dosen | VARCHAR(200) | NOT NULL | Nama dosen terkait |
 | Dokumen | file_path | VARCHAR(500) | NOT NULL | Lokasi penyimpanan file |
 | Dokumen | status | ENUM('menunggu', 'disetujui', 'ditolak') | NOT NULL, DEFAULT 'menunggu' | Status verifikasi dokumen |
 | Dokumen | waktu_unggah | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Waktu dokumen diunggah |
@@ -102,3 +102,11 @@
 | Forum_Balasan | pesan_balasan | TEXT | NOT NULL | Isi teks jawaban |
 | Forum_Balasan | is_anonim | BOOLEAN | NOT NULL, DEFAULT FALSE | Opsi anonim pengguna |
 | Forum_Balasan | waktu_balasan | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Waktu balasan dibuat |
+
+## 9. Tabel `Dosen`
+| Tabel | Kolom | Tipe Data | Constraint | Keterangan |
+|-------|-------|-----------|------------|------------|
+| Dosen | id_dosen | INT | PK, AUTO_INCREMENT |	ID unik dosen |
+| Dosen | nama_dosen	| VARCHAR(200) | NOT NULL | Nama lengkap beserta gelar |
+| Dosen | nuptk	| VARCHAR(20)	| UNIQUE, NOT NULL | Identitas wajib bagi seluruh pendidik dan tenaga kependidikan |
+
