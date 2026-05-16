@@ -1,39 +1,70 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&display=swap');
 
 :root {
-  /* Brand Colors */
-  --color-primary:       #386641;
-  --color-primary-mid:   #6A994E;
-  --color-primary-light: #A7C957;
-  --color-bg:            #F2E8CF;
-  --color-surface:       #EDF2F4;
-  --color-danger:        #BC4749;
-  --color-text:          #1E1E1E;
-  --color-text-muted:    #5a5a5a;
-  --color-border:        #d4d4d4;
+  /* --- Font --- */
+  --font-base: 'Plus Jakarta Sans', sans-serif;
 
-  /* Card (green background) */
-  --color-card-bg:       #A7C957;
+  /* --- Type Scale --- */
+  --text-hero:    48px;
+  --text-h1:      28px;
+  --text-h2:      20px;
+  --text-h3:      16px;
+  --text-body:    14px;
+  --text-small:   13px;
+  --text-label:   12px;
 
-  /* Spacing — kelipatan 8 */
-  --space-1: 8px;
-  --space-2: 16px;
-  --space-3: 24px;
-  --space-4: 32px;
-  --space-5: 40px;
-  --space-6: 48px;
+  /* --- Colors --- */
+  --color-primary:        #4a7c2f;
+  --color-primary-dark:   #3a6122;
+  --color-primary-light:  #6aab44;
+  --color-primary-card:   #5a8f38;
 
-  /* Radius */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
+  /* Tombol CTA — kuning-hijau */
+  --color-accent:         #c8e86a;
+  --color-accent-dark:    #afd44f;
+  --color-accent-hover:   #ffffff;   /* warna teks btn saat hover */
 
-  /* Shadow */
-  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.10);
+  /* Hero banner — hijau pekat */
+  --color-hero-bg:        #2d5a1b;
 
-  --font-main: 'Plus Jakarta Sans', sans-serif;
+  --color-bg-page:        #f5f0e4;
+  --color-bg-card:        #ffffff;
+  --color-bg-sidebar:     #ffffff;
+
+  --color-text-primary:   #1a1a1a;
+  --color-text-secondary: #555555;
+  --color-text-muted:     #888888;
+  --color-text-on-green:  #ffffff;
+  --color-text-on-green-sub: #d4eabd;
+
+  --color-star:           #f0b429;
+
+  --color-border:         #e0ddd4;
+  --color-border-input:   #cccccc;
+
+  /* Nav aktif */
+  --color-nav-active-bg:  #c8e86a;   /* sorot kuning-hijau */
+  --color-nav-active-text:#1a1a1a;   /* teks hitam saat aktif */
+
+  /* --- Radius --- */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-xl:   20px;
+  --radius-full: 9999px;
+
+  /* --- Shadow --- */
+  --shadow-card: 0 2px 8px rgba(0,0,0,0.07);
+  --shadow-nav:  2px 0 12px rgba(0,0,0,0.06);
+
+  /* --- Spacing --- */
+  --sidebar-width: 210px;
+  --topbar-height: 60px;
 }
 
+/* =============================================
+   Reset & Base
+   ============================================= */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -42,26 +73,30 @@
 
 html, body {
   height: 100%;
-}
-
-body {
-  font-family: var(--font-main);
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  font-size: 14px;
-  line-height: 1.5;
+  font-family: var(--font-base);
+  font-size: var(--text-body);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-page);
   -webkit-font-smoothing: antialiased;
 }
 
 a {
-  color: var(--color-primary);
   text-decoration: none;
+  color: inherit;
 }
 
-a:hover {
-  text-decoration: underline;
+img {
+  display: block;
+  max-width: 100%;
 }
 
-button, input {
-  font-family: var(--font-main);
+button {
+  font-family: var(--font-base);
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, textarea {
+  font-family: var(--font-base);
 }
