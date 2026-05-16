@@ -1,16 +1,16 @@
-const registerForm = document.getElementById('registerForm');
+const registerForm  = document.getElementById('registerForm');
 const usernameInput = document.getElementById('username');
-const nimInput = document.getElementById('nim');
-const emailInput = document.getElementById('email');
+const nimInput      = document.getElementById('nim');
+const emailInput    = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 const usernameError = document.getElementById('usernameError');
-const nimError = document.getElementById('nimError');
-const emailError = document.getElementById('emailError');
+const nimError      = document.getElementById('nimError');
+const emailError    = document.getElementById('emailError');
 const passwordError = document.getElementById('passwordError');
-const formError = document.getElementById('formError');
+const formError     = document.getElementById('formError');
 const togglePasswordBtn = document.querySelector('.toggle-password');
 
-// Toggle show/hide password
+// ── Toggle show/hide password ──────────────────────────────────────────────
 togglePasswordBtn.addEventListener('click', () => {
   const isPassword = passwordInput.type === 'password';
   passwordInput.type = isPassword ? 'text' : 'password';
@@ -30,6 +30,7 @@ togglePasswordBtn.addEventListener('click', () => {
   }
 });
 
+// ── Validasi ───────────────────────────────────────────────────────────────
 function validateRequired(input, errorEl, label) {
   if (!input.value.trim()) {
     errorEl.textContent = `${label} tidak boleh kosong.`;
@@ -65,7 +66,7 @@ function validateNIM(input, errorEl) {
     return false;
   }
   if (!/^\d{8,15}$/.test(input.value.trim())) {
-    errorEl.textContent = 'NIM harus berupa angka (8-15 digit).';
+    errorEl.textContent = 'NIM harus berupa angka (8–15 digit).';
     input.classList.add('is-error');
     return false;
   }
@@ -74,13 +75,14 @@ function validateNIM(input, errorEl) {
   return true;
 }
 
+// ── Submit ─────────────────────────────────────────────────────────────────
 registerForm.addEventListener('submit', (e) => {
   e.preventDefault();
   formError.textContent = '';
 
   const validUsername = validateRequired(usernameInput, usernameError, 'Username');
-  const validNIM = validateNIM(nimInput, nimError);
-  const validEmail = validateEmail(emailInput, emailError);
+  const validNIM      = validateNIM(nimInput, nimError);
+  const validEmail    = validateEmail(emailInput, emailError);
   const validPassword = validateRequired(passwordInput, passwordError, 'Password');
 
   if (!validUsername || !validNIM || !validEmail || !validPassword) return;
@@ -88,16 +90,18 @@ registerForm.addEventListener('submit', (e) => {
   // TODO: ganti dengan panggilan API backend
   console.log('Register payload:', {
     username: usernameInput.value.trim(),
-    nim: nimInput.value.trim(),
-    email: emailInput.value.trim(),
+    nim:      nimInput.value.trim(),
+    email:    emailInput.value.trim(),
     password: passwordInput.value,
   });
 
-  alert('Pendaftaran berhasil! Silakan login.');
+  // Setelah daftar → kembali ke halaman login
+  alert('Pendaftaran berhasil! Silakan masuk dengan akun baru kamu.');
   window.location.href = 'login.html';
 });
 
-[usernameInput, nimInput, emailInput, passwordInput].forEach((input) => {
+// ── Reset error on input ───────────────────────────────────────────────────
+[usernameInput, nimInput, emailInput, passwordInput].forEach(input => {
   input.addEventListener('input', () => {
     const errEl = document.getElementById(input.id + 'Error');
     if (errEl) errEl.textContent = '';

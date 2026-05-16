@@ -1,12 +1,12 @@
-const loginForm = document.getElementById('loginForm');
+const loginForm     = document.getElementById('loginForm');
 const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
 const usernameError = document.getElementById('usernameError');
 const passwordError = document.getElementById('passwordError');
-const formError = document.getElementById('formError');
+const formError     = document.getElementById('formError');
 const togglePasswordBtn = document.querySelector('.toggle-password');
 
-// Toggle show/hide password
+// ── Toggle show/hide password ──────────────────────────────────────────────
 togglePasswordBtn.addEventListener('click', () => {
   const isPassword = passwordInput.type === 'password';
   passwordInput.type = isPassword ? 'text' : 'password';
@@ -26,6 +26,7 @@ togglePasswordBtn.addEventListener('click', () => {
   }
 });
 
+// ── Validasi field ─────────────────────────────────────────────────────────
 function validateField(input, errorEl, message) {
   if (!input.value.trim()) {
     errorEl.textContent = message;
@@ -37,6 +38,7 @@ function validateField(input, errorEl, message) {
   return true;
 }
 
+// ── Submit ─────────────────────────────────────────────────────────────────
 loginForm.addEventListener('submit', (e) => {
   e.preventDefault();
   formError.textContent = '';
@@ -48,22 +50,24 @@ loginForm.addEventListener('submit', (e) => {
 
   // TODO: ganti dengan panggilan API backend
   const mockUsers = [
-    { username: 'admin', password: 'admin123' },
-    { username: 'mahasiswa', password: 'pass123' },
+    { username: 'admin',      password: 'admin123' },
+    { username: 'mahasiswa',  password: 'pass123'  },
   ];
 
   const found = mockUsers.find(
-    (u) => u.username === usernameInput.value.trim() && u.password === passwordInput.value
+    u => u.username === usernameInput.value.trim() && u.password === passwordInput.value
   );
 
   if (found) {
+    // Simpan user ke sessionStorage lalu masuk ke beranda
     sessionStorage.setItem('loggedUser', JSON.stringify({ username: found.username }));
-    window.location.href = '../dashboard/dashboard.html';
+    window.location.href = '../beranda/beranda.html';
   } else {
     formError.textContent = 'Username atau password salah.';
   }
 });
 
+// ── Reset error on input ───────────────────────────────────────────────────
 usernameInput.addEventListener('input', () => {
   usernameError.textContent = '';
   usernameInput.classList.remove('is-error');
