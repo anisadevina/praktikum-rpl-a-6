@@ -48,9 +48,9 @@ function validateEmail(input, errorEl) {
         input.classList.add("is-error");
         return false;
     }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(input.value.trim())) {
-        errorEl.textContent = "Format email tidak valid.";
+    if (!input.value.trim().endsWith("@student.uns.ac.id")) {
+        errorEl.textContent =
+            "Email harus menggunakan SSO UNS (@student.uns.ac.id).";
         input.classList.add("is-error");
         return false;
     }
@@ -65,11 +65,12 @@ function validateNIM(input, errorEl) {
         input.classList.add("is-error");
         return false;
     }
-    // if (!/^\d{8,15}$/.test(input.value.trim())) {
-    //     errorEl.textContent = "NIM harus berupa angka (8–15 digit).";
-    //     input.classList.add("is-error");
-    //     return false;
-    // }
+    if (!/^[a-zA-Z][a-zA-Z0-9]{7}$/.test(input.value.trim())) {
+        errorEl.textContent =
+            "NIM harus 8 karakter, diawali huruf (contoh: L0124003).";
+        input.classList.add("is-error");
+        return false;
+    }
     errorEl.textContent = "";
     input.classList.remove("is-error");
     return true;
