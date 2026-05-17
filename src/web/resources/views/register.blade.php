@@ -42,7 +42,7 @@
             value="{{ old('username') }}"
             required
           />
-          <span class="field-error" id="usernameError"></span>
+          <span class="field-error" id="usernameError">@error('username') {{ $message }} @enderror</span>
         </div>
 
         <div class="form-group">
@@ -55,7 +55,7 @@
             value="{{ old('nim') }}"
             required
           />
-          <span class="field-error" id="nimError"></span>
+          <span class="field-error" id="nimError">@error('nim') {{ $message }} @enderror</span>
         </div>
 
         <div class="form-group">
@@ -69,7 +69,7 @@
             value="{{ old('email_user') }}"
             required
           />
-          <span class="field-error" id="emailError"></span>
+          <span class="field-error" id="emailError">@error('email_user') {{ $message }} @enderror</span>
         </div>
 
         <div class="form-group">
@@ -91,7 +91,7 @@
               </svg>
             </button>
           </div>
-          <span class="field-error" id="passwordError"></span>
+          <span class="field-error" id="passwordError">@error('password') {{ $message }} @enderror</span>
         </div>
 
         <span class="form-error" id="formError"></span>

@@ -65,8 +65,24 @@ function validateNIM(input, errorEl) {
         input.classList.add("is-error");
         return false;
     }
-    if (!/^\d{8,15}$/.test(input.value.trim())) {
-        errorEl.textContent = "NIM harus berupa angka (8–15 digit).";
+    // if (!/^\d{8,15}$/.test(input.value.trim())) {
+    //     errorEl.textContent = "NIM harus berupa angka (8–15 digit).";
+    //     input.classList.add("is-error");
+    //     return false;
+    // }
+    errorEl.textContent = "";
+    input.classList.remove("is-error");
+    return true;
+}
+
+function validatePassword(input, errorEl) {
+    if (!input.value.trim()) {
+        errorEl.textContent = "Password tidak boleh kosong.";
+        input.classList.add("is-error");
+        return false;
+    }
+    if (input.value.length < 8) {
+        errorEl.textContent = "Password minimal harus 8 karakter.";
         input.classList.add("is-error");
         return false;
     }
@@ -87,25 +103,14 @@ registerForm.addEventListener("submit", (e) => {
     );
     const validNIM = validateNIM(nimInput, nimError);
     const validEmail = validateEmail(emailInput, emailError);
-    const validPassword = validateRequired(
-        passwordInput,
-        passwordError,
-        "Password",
-    );
+    const validPassword = validatePassword(passwordInput, passwordError);
 
-    if (!validUsername || !validNIM || !validEmail || !validPassword) return;
+    if (!validUsername || !validNIM || !validEmail || !validPassword) {
+        e.preventDefault();
+        return;
+    }
 
-    // TODO: ganti dengan panggilan API backend
-    console.log("Register payload:", {
-        username: usernameInput.value.trim(),
-        nim: nimInput.value.trim(),
-        email: emailInput.value.trim(),
-        password: passwordInput.value,
-    });
-
-    // Setelah daftar → kembali ke halaman login
-    alert("Pendaftaran berhasil! Silakan masuk dengan akun baru kamu.");
-    window.location.href = "login.html";
+    registerForm.submit();
 });
 
 // ── Reset error on input ───────────────────────────────────────────────────
