@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daftar | Study Scope</title>
+  <title>Login — Study Scope</title>
   <link rel="stylesheet" href="../../styles/global.css" />
-  <link rel="stylesheet" href="register.css" />
+  <link rel="stylesheet" href="login.css" />
 </head>
 <body>
   <div class="auth-wrapper">
@@ -24,12 +24,11 @@
 
       <!-- Heading -->
       <div class="auth-heading">
-        <h1>Daftar Sekarang</h1>
-        <p>Lalu Akses Mata Kuliah dan Forum di Study Scope</p>
+        <h1>Selamat Datang di<br />Study Scope</h1>
       </div>
 
       <!-- Form -->
-      <form class="auth-form" id="registerForm" novalidate>
+      <form class="auth-form" id="loginForm" novalidate>
 
         <div class="form-group">
           <label for="username">Username</label>
@@ -45,32 +44,6 @@
         </div>
 
         <div class="form-group">
-          <label for="nim">NIM</label>
-          <input
-            type="text"
-            id="nim"
-            name="nim"
-            placeholder="Masukkan NIM"
-            maxlength="8"
-            required
-          />
-          <span class="field-error" id="nimError"></span>
-        </div>
-
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Masukkan email SSO"
-            autocomplete="email"
-            required
-          />
-          <span class="field-error" id="emailError"></span>
-        </div>
-
-        <div class="form-group">
           <label for="password">Password</label>
           <div class="input-password-wrapper">
             <input
@@ -78,7 +51,7 @@
               id="password"
               name="password"
               placeholder="••••••••"
-              autocomplete="new-password"
+              autocomplete="current-password"
               required
             />
             <button type="button" class="toggle-password" aria-label="Tampilkan password">
@@ -95,17 +68,14 @@
         <span class="form-error" id="formError"></span>
 
         <div class="auth-actions">
-          <button type="submit" class="btn btn-primary">Daftar</button>
+          <button type="submit" class="btn btn-primary">Masuk</button>
+          <a href="register.html" class="btn btn-secondary">Daftar</a>
         </div>
-
-        <p class="auth-redirect">
-          Sudah punya akun? <a href="login.html">Masuk di sini</a>
-        </p>
 
       </form>
     </div>
   </div>
 
-  <script src="register.js"></script>
+  <script src="login.js"></script>
 </body>
 </html>

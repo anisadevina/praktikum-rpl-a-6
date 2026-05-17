@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daftar | Study Scope</title>
-  <link rel="stylesheet" href="../../styles/global.css" />
-  <link rel="stylesheet" href="register.css" />
+  <title>Daftar — Study Scope</title>
+  <link rel="stylesheet" href="{{ asset('style/global.css') }}" />
+  <link rel="stylesheet" href="{{ asset('style/register.css') }}" />
 </head>
 <body>
   <div class="auth-wrapper">
@@ -29,8 +29,8 @@
       </div>
 
       <!-- Form -->
-      <form class="auth-form" id="registerForm" novalidate>
-
+      <form action="{{ route('register.proses') }}" method="POST" class="auth-form" id="registerForm" novalidate>
+        @csrf
         <div class="form-group">
           <label for="username">Username</label>
           <input
@@ -39,9 +39,14 @@
             name="username"
             placeholder="Masukkan Username"
             autocomplete="username"
+            value="{{ old('username') }}"
             required
           />
+<<<<<<< Updated upstream
+          <span class="field-error" id="usernameError">@error('username') {{ $message }} @enderror</span>
+=======
           <span class="field-error" id="usernameError"></span>
+>>>>>>> Stashed changes
         </div>
 
         <div class="form-group">
@@ -51,10 +56,14 @@
             id="nim"
             name="nim"
             placeholder="Masukkan NIM"
-            maxlength="8"
+            value="{{ old('nim') }}"
             required
           />
+<<<<<<< Updated upstream
+          <span class="field-error" id="nimError">@error('nim') {{ $message }} @enderror</span>
+=======
           <span class="field-error" id="nimError"></span>
+>>>>>>> Stashed changes
         </div>
 
         <div class="form-group">
@@ -62,12 +71,17 @@
           <input
             type="email"
             id="email"
-            name="email"
+            name="email_user"
             placeholder="Masukkan email SSO"
             autocomplete="email"
+            value="{{ old('email_user') }}"
             required
           />
+<<<<<<< Updated upstream
+          <span class="field-error" id="emailError">@error('email_user') {{ $message }} @enderror</span>
+=======
           <span class="field-error" id="emailError"></span>
+>>>>>>> Stashed changes
         </div>
 
         <div class="form-group">
@@ -89,7 +103,11 @@
               </svg>
             </button>
           </div>
+<<<<<<< Updated upstream
+          <span class="field-error" id="passwordError">@error('password') {{ $message }} @enderror</span>
+=======
           <span class="field-error" id="passwordError"></span>
+>>>>>>> Stashed changes
         </div>
 
         <span class="form-error" id="formError"></span>
@@ -99,13 +117,13 @@
         </div>
 
         <p class="auth-redirect">
-          Sudah punya akun? <a href="login.html">Masuk di sini</a>
+          Sudah punya akun? <a href="{{ route('login') }}">Masuk di sini</a>
         </p>
 
       </form>
     </div>
   </div>
 
-  <script src="register.js"></script>
+  <script src="{{ asset('script/register.js') }}"></script>
 </body>
 </html>
