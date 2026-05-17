@@ -48,9 +48,9 @@ function validateEmail(input, errorEl) {
         input.classList.add("is-error");
         return false;
     }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(input.value.trim())) {
-        errorEl.textContent = "Format email tidak valid.";
+    if (!input.value.trim().endsWith("@student.uns.ac.id")) {
+        errorEl.textContent =
+            "Email harus menggunakan SSO UNS (@student.uns.ac.id).";
         input.classList.add("is-error");
         return false;
     }
@@ -65,12 +65,12 @@ function validateNIM(input, errorEl) {
         input.classList.add("is-error");
         return false;
     }
-<<<<<<< Updated upstream
-    // if (!/^\d{8,15}$/.test(input.value.trim())) {
-    //     errorEl.textContent = "NIM harus berupa angka (8–15 digit).";
-    //     input.classList.add("is-error");
-    //     return false;
-    // }
+    if (!/^[a-zA-Z][a-zA-Z0-9]{7}$/.test(input.value.trim())) {
+        errorEl.textContent =
+            "NIM harus 8 karakter, diawali huruf (contoh: L0124003).";
+        input.classList.add("is-error");
+        return false;
+    }
     errorEl.textContent = "";
     input.classList.remove("is-error");
     return true;
@@ -84,10 +84,6 @@ function validatePassword(input, errorEl) {
     }
     if (input.value.length < 8) {
         errorEl.textContent = "Password minimal harus 8 karakter.";
-=======
-    if (!/^\d{8,15}$/.test(input.value.trim())) {
-        errorEl.textContent = "NIM harus berupa angka (8–15 digit).";
->>>>>>> Stashed changes
         input.classList.add("is-error");
         return false;
     }
@@ -108,7 +104,6 @@ registerForm.addEventListener("submit", (e) => {
     );
     const validNIM = validateNIM(nimInput, nimError);
     const validEmail = validateEmail(emailInput, emailError);
-<<<<<<< Updated upstream
     const validPassword = validatePassword(passwordInput, passwordError);
 
     if (!validUsername || !validNIM || !validEmail || !validPassword) {
@@ -117,27 +112,6 @@ registerForm.addEventListener("submit", (e) => {
     }
 
     registerForm.submit();
-=======
-    const validPassword = validateRequired(
-        passwordInput,
-        passwordError,
-        "Password",
-    );
-
-    if (!validUsername || !validNIM || !validEmail || !validPassword) return;
-
-    // TODO: ganti dengan panggilan API backend
-    console.log("Register payload:", {
-        username: usernameInput.value.trim(),
-        nim: nimInput.value.trim(),
-        email: emailInput.value.trim(),
-        password: passwordInput.value,
-    });
-
-    // Setelah daftar → kembali ke halaman login
-    alert("Pendaftaran berhasil! Silakan masuk dengan akun baru kamu.");
-    window.location.href = "login.html";
->>>>>>> Stashed changes
 });
 
 // ── Reset error on input ───────────────────────────────────────────────────

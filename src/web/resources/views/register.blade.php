@@ -42,11 +42,7 @@
             value="{{ old('username') }}"
             required
           />
-<<<<<<< Updated upstream
           <span class="field-error" id="usernameError">@error('username') {{ $message }} @enderror</span>
-=======
-          <span class="field-error" id="usernameError"></span>
->>>>>>> Stashed changes
         </div>
 
         <div class="form-group">
@@ -59,11 +55,7 @@
             value="{{ old('nim') }}"
             required
           />
-<<<<<<< Updated upstream
           <span class="field-error" id="nimError">@error('nim') {{ $message }} @enderror</span>
-=======
-          <span class="field-error" id="nimError"></span>
->>>>>>> Stashed changes
         </div>
 
         <div class="form-group">
@@ -77,11 +69,7 @@
             value="{{ old('email_user') }}"
             required
           />
-<<<<<<< Updated upstream
           <span class="field-error" id="emailError">@error('email_user') {{ $message }} @enderror</span>
-=======
-          <span class="field-error" id="emailError"></span>
->>>>>>> Stashed changes
         </div>
 
         <div class="form-group">
@@ -103,11 +91,7 @@
               </svg>
             </button>
           </div>
-<<<<<<< Updated upstream
           <span class="field-error" id="passwordError">@error('password') {{ $message }} @enderror</span>
-=======
-          <span class="field-error" id="passwordError"></span>
->>>>>>> Stashed changes
         </div>
 
         <span class="form-error" id="formError"></span>

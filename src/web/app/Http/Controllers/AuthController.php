@@ -3,16 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-<<<<<<< Updated upstream
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-=======
-use App\Models\user;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
->>>>>>> Stashed changes
 
 class authController extends Controller
 {
@@ -21,7 +15,6 @@ class authController extends Controller
         $request->validate([
             'nim' => 'required|exists:master_mahasiswa_fatisda,nim|unique:users,nim',
             'username' => 'required|unique:users,username',
-<<<<<<< Updated upstream
             'email_user' => [
                 'required',
                 'email',
@@ -37,14 +30,10 @@ class authController extends Controller
                     }
                 },
             ],
-=======
-            'email_user' => 'required|email|unique:users,email_user',
->>>>>>> Stashed changes
             'password' => 'required|min:8',
         ], [
             'nim.required' => 'NIM wajib diisi.',
             'nim.exists' => 'NIM tidak ditemukan dalam data mahasiswa.',
-<<<<<<< Updated upstream
             'nim.unique' => 'NIM sudah terdaftar, silakan login.',
             'username.required' => 'Username wajib diisi.',
             'username.unique' => 'Username sudah terdaftar, silakan pilih yang lain.',
@@ -57,12 +46,6 @@ class authController extends Controller
         ]);
 
         User::create([
-=======
-            'nim.unique' => 'NIM sudah terdaftar.',
-        ]);
-
-        user::create([
->>>>>>> Stashed changes
             'nim' => $request->nim,
             'username' => $request->username,
             'email_user' => $request->email_user,
