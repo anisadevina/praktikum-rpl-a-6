@@ -161,10 +161,53 @@
         <h2 class="section-title">Terakhir Dilihat</h2>
 
         <h3 class="sub-title">Mata Kuliah</h3>
-        <div class="cards-grid" id="matkul-grid"></div>
+        <div class="cards-grid" id="matkul-grid">
+            @forelse ($mataKuliahTerakhir as $mk)
+                <div class="matkul-card" data-id="{{ $mk->id_matkul }}">
+                  <div class="card-thumbnail">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                  </div>
+                  <div class="card-body">
+                    <p class="card-name" title="{{ $mk->nama_matkul }}">{{ $mk->nama_matkul }}</p>
+                    
+                    <div class="card-rating">
+                      <span class="card-rating-star">★</span>
+                      <span class="card-rating-score">{{ $mk->tingkat_kesulitan }}/5</span>
+                    </div>
+                    
+                    <p class="card-arsip">{{ $mk->arsip }} arsip (materi, tugas, soal)</p>
+                    <a class="card-btn" href="/matkul?id={{ $mk->id_matkul }}">Lihat Selengkapnya</a>
+                  </div>
+                </div>
+            @empty
+                <p style="color: var(--color-text-muted); font-style: italic; padding-bottom: 20px;">Belum mengakses mata kuliah apapun.</p>
+            @endforelse
+        </div>
 
-        <h3 class="sub-title">Forum</h3>
-        <div class="forum-grid" id="forum-list"></div>
+        <h3 class="sub-title">Forum Terbaru</h3>
+        <div class="forum-grid" id="forum-list">
+            @forelse ($forumTerbaru as $post)
+                <div class="forum-card" data-id="{{ $post->id_topik }}">
+                  <div class="forum-card-header">
+                    <div class="forum-avatar">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                      </svg>
+                    </div>
+                    <span class="forum-username">{{ $post->is_anonim ? 'Anonim' : $post->username }}</span>
+                    <span class="forum-badge">{{ $post->tag }}</span>
+                  </div>
+                  <p class="forum-body">{{ Str::limit($post->pesan_topik, 120) }}</p>
+                </div>
+            @empty
+                <p style="color: var(--color-text-muted); font-style: italic;">Belum ada topik forum terbaru.</p>
+            @endforelse
+        </div>
       </section>
 
     </main>

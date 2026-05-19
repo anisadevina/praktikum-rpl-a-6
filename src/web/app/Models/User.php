@@ -15,6 +15,8 @@ class User extends Authenticatable
     // 2. Beritahu Laravel bahwa Primary Key kamu BUKAN 'id', melainkan 'id_user'
     protected $primaryKey = 'id_user';
 
+    public $timestamps = false;
+
     // 3. Jika id_user adalah auto incrementing integer
     public $incrementing = true;
     protected $keyType = 'int';
