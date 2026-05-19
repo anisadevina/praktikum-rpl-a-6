@@ -14,10 +14,28 @@ const PAGE_PATHS = {
 // ─── Dummy Data ───────────────────────────────────────────────────────────────
 
 const RECENT_MATKUL = [
-    { id: 1, nama: "Rekayasa Perangkat Lunak", tingkat: "Menengah", rating: 4.5, arsip: 120 },
+    {
+        id: 1,
+        nama: "Rekayasa Perangkat Lunak",
+        tingkat: "Menengah",
+        rating: 4.5,
+        arsip: 120,
+    },
     { id: 2, nama: "Basis Data", tingkat: "Mudah", rating: 4.2, arsip: 85 },
-    { id: 3, nama: "Algoritma & Pemrograman", tingkat: "Sulit", rating: 4.7, arsip: 200 },
-    { id: 4, nama: "Jaringan Komputer", tingkat: "Menengah", rating: 4.0, arsip: 60 },
+    {
+        id: 3,
+        nama: "Algoritma & Pemrograman",
+        tingkat: "Sulit",
+        rating: 4.7,
+        arsip: 200,
+    },
+    {
+        id: 4,
+        nama: "Jaringan Komputer",
+        tingkat: "Menengah",
+        rating: 4.0,
+        arsip: 60,
+    },
 ];
 
 const RECENT_FORUM = [
@@ -67,8 +85,6 @@ function setupSidebarActive() {
         });
     });
 }
-
-// ─── Render Functions ─────────────────────────────────────────────────────────
 
 function renderMatkulCards() {
     const container = document.getElementById("matkul-grid");
@@ -161,9 +177,22 @@ function setupSearch() {
 // ─── Init ─────────────────────────────────────────────────────────────────────
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Guard dan logout sekarang ditangani Laravel, tidak perlu sessionStorage
     setupSidebarActive();
     renderMatkulCards();
     renderForumCards();
     setupSearch();
+
+    // ── Tombol Keluar ──
+    const btnKeluar = document.getElementById("btn-keluar");
+    if (btnKeluar) {
+        btnKeluar.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            // Bersihkan session browser
+            sessionStorage.removeItem("loggedUser");
+
+            // Jalankan logout di server Laravel
+            document.getElementById("logout-form").submit();
+        });
+    }
 });
