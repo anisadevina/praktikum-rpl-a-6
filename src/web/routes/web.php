@@ -7,6 +7,10 @@ Route::get('/', function () {
     return view('login');
 })->name('login');
 
+Route::get('/login', function () {
+    return view('login');
+})->name('login.page');
+
 Route::get('/register', function () {
     return view('register');
 })->name('register');
@@ -14,3 +18,7 @@ Route::get('/register', function () {
 Route::post('/login', [authController::class, 'login'])->name('login.proses');
 Route::post('/register', [authController::class, 'register'])->name('register.proses');
 Route::post('/logout', [authController::class, 'logout'])->name('logout');
+
+Route::get('/beranda', function () {
+    return view('beranda');
+})->name('beranda')->middleware('auth');
