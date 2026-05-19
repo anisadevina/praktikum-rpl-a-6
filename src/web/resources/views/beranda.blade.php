@@ -11,8 +11,8 @@
 
 <div class="app-layout">
 
-<!-- Sidebar -->
-    <aside class="sidebar">
+  <!-- Sidebar -->
+  <aside class="sidebar">
 
     <div class="sidebar-logo">
       <div class="sidebar-logo-icon">
@@ -96,24 +96,27 @@
     </nav>
 
     <div class="sidebar-footer">
-      <div class="nav-item" id="btn-keluar">
-        <div class="nav-item-left">
-          <svg viewBox="0 0 24 24">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-            <polyline points="16 17 21 12 16 7"/>
-            <line x1="21" y1="12" x2="9" y2="12"/>
+      <form method="POST" action="{{ route('logout') }}" id="form-logout">
+        @csrf
+        <div class="nav-item" id="btn-keluar" onclick="document.getElementById('form-logout').submit()">
+          <div class="nav-item-left">
+            <svg viewBox="0 0 24 24">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span>Keluar</span>
+          </div>
+          <svg class="nav-chevron" viewBox="0 0 24 24">
+            <polyline points="9 18 15 12 9 6"/>
           </svg>
-          <span>Keluar</span>
         </div>
-        <svg class="nav-chevron" viewBox="0 0 24 24">
-          <polyline points="9 18 15 12 9 6"/>
-        </svg>
-      </div>
+      </form>
     </div>
 
   </aside>
 
-<!-- Main -->
+  <!-- Main -->
   <div class="main-content">
 
     <header class="topbar">
@@ -142,10 +145,14 @@
 
     <main class="page-scroll">
 
-     <!-- Header -->
+      <!-- Header -->
       <section class="hero-banner">
         <h1 class="hero-greeting">
+<<<<<<< HEAD
           Halo, <em id="hero-username">{{ $user }}</em>!
+=======
+          Halo, <em>{{ Auth::user()->username }}</em>!
+>>>>>>> de0acecb6c71ea9666cd359c079a37d1ae33e4cb
         </h1>
         <p class="hero-subtitle">Selamat datang di Study Scope</p>
         <p class="hero-desc">

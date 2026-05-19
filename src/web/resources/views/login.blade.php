@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login — Study Scope</title>
-  <link rel="stylesheet" href="../../styles/global.css" />
-  <link rel="stylesheet" href="login.css" />
+  <link rel="stylesheet" href="{{ asset('style/global.css') }}" />
+  <link rel="stylesheet" href="{{ asset('style/login.css') }}" />
 </head>
 <body>
   <div class="auth-wrapper">
@@ -28,7 +28,14 @@
       </div>
 
       <!-- Form -->
-      <form class="auth-form" id="loginForm" novalidate>
+      <form class="auth-form" id="loginForm" method="POST" action="{{ route('login.proses') }}">
+        @csrf
+
+        @if (session('success'))
+          <span style="color:#cccccc; display:block; margin-bottom:8px">
+            {{ session('success') }}
+          </span>
+        @endif
 
         <div class="form-group">
           <label for="username">Username</label>
@@ -38,9 +45,11 @@
             name="username"
             placeholder="Masukkan Username"
             autocomplete="username"
-            required
+            value="{{ old('username') }}"
           />
-          <span class="field-error" id="usernameError"></span>
+          <span class="field-error" id="usernameError">
+            @error('username'){{ $message }}@enderror
+          </span>
         </div>
 
         <div class="form-group">
@@ -52,7 +61,6 @@
               name="password"
               placeholder="••••••••"
               autocomplete="current-password"
-              required
             />
             <button type="button" class="toggle-password" aria-label="Tampilkan password">
               <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
@@ -62,20 +70,20 @@
               </svg>
             </button>
           </div>
-          <span class="field-error" id="passwordError"></span>
+          <span class="field-error" id="passwordError">
+            @error('password'){{ $message }}@enderror
+          </span>
         </div>
-
-        <span class="form-error" id="formError"></span>
 
         <div class="auth-actions">
           <button type="submit" class="btn btn-primary">Masuk</button>
-          <a href="register.html" class="btn btn-secondary">Daftar</a>
+          <a href="{{ route('register') }}" class="btn btn-secondary">Daftar</a>
         </div>
 
       </form>
     </div>
   </div>
 
-  <script src="login.js"></script>
+  <script src="{{ asset('script/login.js') }}"></script>
 </body>
 </html>
