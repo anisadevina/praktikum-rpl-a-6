@@ -139,7 +139,7 @@
             <circle cx="12" cy="7" r="4"/>
           </svg>
         </div>
-        <span class="topbar-username" id="topbar-username">{{ $user }}</span>
+        <span class="topbar-username" id="topbar-username">{{ $user->username ?? 'Guest' }}</span>
       </div>
     </header>
 
@@ -148,11 +148,7 @@
       <!-- Header -->
       <section class="hero-banner">
         <h1 class="hero-greeting">
-<<<<<<< HEAD
-          Halo, <em id="hero-username">{{ $user }}</em>!
-=======
-          Halo, <em>{{ Auth::user()->username }}</em>!
->>>>>>> de0acecb6c71ea9666cd359c079a37d1ae33e4cb
+          Halo, <em>{{ $user->username ?? 'Guest' }}</em>!
         </h1>
         <p class="hero-subtitle">Selamat datang di Study Scope</p>
         <p class="hero-desc">

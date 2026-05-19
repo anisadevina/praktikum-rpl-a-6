@@ -86,24 +86,6 @@ function setupSidebarActive() {
     });
 }
 
-// ─── Render Functions ─────────────────────────────────────────────────────────
-
-// tidak perlu fungsi ini
-// function renderGreeting() {
-//     const heroEl = document.getElementById("hero-username");
-//     const topbarEl = document.getElementById("topbar-username");
-//     // Ambil username dari sessionStorage (disimpan saat login)
-//     const stored = sessionStorage.getItem("loggedUser");
-//     if (stored) {
-//         try {
-//             const user = JSON.parse(stored);
-//             if (user.username) CURRENT_USER.username = user.username;
-//         } catch (_) {}
-//     }
-//     if (heroEl) heroEl.textContent = CURRENT_USER.username;
-//     if (topbarEl) topbarEl.textContent = CURRENT_USER.username;
-// }
-
 function renderMatkulCards() {
     const container = document.getElementById("matkul-grid");
     if (!container) return;
@@ -195,12 +177,6 @@ function setupSearch() {
 // ─── Init ─────────────────────────────────────────────────────────────────────
 
 document.addEventListener("DOMContentLoaded", () => {
-    // ── Guard: hanya bisa masuk beranda setelah login ──
-    // if (!sessionStorage.getItem("loggedUser")) {
-    //     window.location.href = "{{../auth/login.html}}";
-    //     return;
-    // }
-
     setupSidebarActive();
     renderMatkulCards();
     renderForumCards();

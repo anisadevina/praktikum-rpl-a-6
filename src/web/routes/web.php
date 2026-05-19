@@ -1,31 +1,20 @@
 <?php
 
 use App\Http\Controllers\authController;
-use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/login', function () {
+Route::get('/', function () {
     return view('login');
 })->name('login');
-
-Route::get('/login', function () {
-    return view('login');
-})->name('login.page');
 
 Route::get('/register', function () {
     return view('register');
 })->name('register');
-
-Route::get('beranda', function () {
-    $user = 'hana';
-    return view('beranda', compact('user'));
-    // return view('beranda');
-})->name('beranda'); //->middleware('auth');
 
 Route::post('/login', [authController::class, 'login'])->name('login.proses');
 Route::post('/register', [authController::class, 'register'])->name('register.proses');
 Route::post('/logout', [authController::class, 'logout'])->name('logout');
 
 Route::get('/beranda', function () {
-    return view('beranda');
+    return view('beranda', ['user' => auth()->user()]);
 })->name('beranda')->middleware('auth');
