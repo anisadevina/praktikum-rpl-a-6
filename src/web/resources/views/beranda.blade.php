@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Beranda — Study Scope</title>
-  <link rel="stylesheet" href="../../styles/global.css" />
-  <link rel="stylesheet" href="beranda.css" />
+  <link rel="stylesheet" href="{{ asset('style/global.css') }}" />
+  <link rel="stylesheet" href="{{ asset('style/beranda.css') }}" />
 </head>
 <body>
 
@@ -136,7 +136,7 @@
             <circle cx="12" cy="7" r="4"/>
           </svg>
         </div>
-        <span class="topbar-username" id="topbar-username">nama pengguna</span>
+        <span class="topbar-username" id="topbar-username">{{ $user }}</span>
       </div>
     </header>
 
@@ -145,7 +145,7 @@
      <!-- Header -->
       <section class="hero-banner">
         <h1 class="hero-greeting">
-          Halo, <em id="hero-username">nama pengguna</em>!
+          Halo, <em id="hero-username">{{ $user }}</em>!
         </h1>
         <p class="hero-subtitle">Selamat datang di Study Scope</p>
         <p class="hero-desc">
@@ -170,6 +170,10 @@
 
 </div>
 
-<script src="beranda.js"></script>
+<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
+</form>
+
+<script src="{{ asset('script/beranda.js') }}"></script>
 </body>
 </html>

@@ -1,15 +1,22 @@
 <?php
 
 use App\Http\Controllers\authController;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+Route::get('/login', function () {
     return view('login');
 })->name('login');
 
 Route::get('/register', function () {
     return view('register');
 })->name('register');
+
+Route::get('beranda', function () {
+    $user = 'hana';
+    return view('beranda', compact('user'));
+    // return view('beranda');
+})->name('beranda'); //->middleware('auth');
 
 Route::post('/login', [authController::class, 'login'])->name('login.proses');
 Route::post('/register', [authController::class, 'register'])->name('register.proses');

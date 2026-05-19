@@ -103,20 +103,21 @@ function setupSidebarActive() {
 
 // ─── Render Functions ─────────────────────────────────────────────────────────
 
-function renderGreeting() {
-    const heroEl = document.getElementById("hero-username");
-    const topbarEl = document.getElementById("topbar-username");
-    // Ambil username dari sessionStorage (disimpan saat login)
-    const stored = sessionStorage.getItem("loggedUser");
-    if (stored) {
-        try {
-            const user = JSON.parse(stored);
-            if (user.username) CURRENT_USER.username = user.username;
-        } catch (_) {}
-    }
-    if (heroEl) heroEl.textContent = CURRENT_USER.username;
-    if (topbarEl) topbarEl.textContent = CURRENT_USER.username;
-}
+// tidak perlu fungsi ini
+// function renderGreeting() {
+//     const heroEl = document.getElementById("hero-username");
+//     const topbarEl = document.getElementById("topbar-username");
+//     // Ambil username dari sessionStorage (disimpan saat login)
+//     const stored = sessionStorage.getItem("loggedUser");
+//     if (stored) {
+//         try {
+//             const user = JSON.parse(stored);
+//             if (user.username) CURRENT_USER.username = user.username;
+//         } catch (_) {}
+//     }
+//     if (heroEl) heroEl.textContent = CURRENT_USER.username;
+//     if (topbarEl) topbarEl.textContent = CURRENT_USER.username;
+// }
 
 function renderMatkulCards() {
     const container = document.getElementById("matkul-grid");
@@ -213,10 +214,10 @@ function setupSearch() {
 
 document.addEventListener("DOMContentLoaded", () => {
     // ── Guard: hanya bisa masuk beranda setelah login ──
-    if (!sessionStorage.getItem("loggedUser")) {
-        window.location.href = "../auth/login.html";
-        return;
-    }
+    // if (!sessionStorage.getItem("loggedUser")) {
+    //     window.location.href = "{{../auth/login.html}}";
+    //     return;
+    // }
 
     setupSidebarActive();
     renderGreeting();
@@ -227,9 +228,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // ── Tombol Keluar ──
     const btnKeluar = document.getElementById("btn-keluar");
     if (btnKeluar) {
-        btnKeluar.addEventListener("click", () => {
+        btnKeluar.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            // Bersihkan session browser
             sessionStorage.removeItem("loggedUser");
-            window.location.href = "../auth/login.html";
+
+            // Jalankan logout di server Laravel
+            document.getElementById("logout-form").submit();
         });
     }
 });
