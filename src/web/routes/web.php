@@ -49,3 +49,22 @@ Route::get('/beranda', function () {
 
 Route::get('/search', [authController::class, 'search'])->name('search')->middleware('auth');
 Route::get('/matkul', [authController::class, 'matkul'])->name('matkul')->middleware('auth');
+
+Route::get('/matkul/detail', function (\Illuminate\Http\Request $request) {
+    $id_matkul = $request->query('id');
+    $user = auth()->user();
+
+    if ($id_matkul && $user) {
+        DB::table('riwayat_akses')->updateOrInsert(
+            [
+                'id_user' => $user->id_user,
+                'id_matkul' => $id_matkul
+            ],
+            [
+                'waktu_akses' => \Carbon\Carbon::now()
+            ]
+        );
+    }
+    return "Berhasil dicatat! Kamu sedang melihat Matkul ID: " . $id_matkul . ". Cek berandamu sekarang!";
+
+})->name('matkul.detail')->middleware('auth');

@@ -180,7 +180,7 @@
                     </div>
                     
                     <p class="card-arsip">{{ $mk->arsip }} arsip (materi, tugas, soal)</p>
-                    <a class="card-btn" href="#">Lihat Selengkapnya</a>
+                    <a class="card-btn" href="{{ url('/matkul/detail?id=' . $mk->id_matkul) }}">Lihat Selengkapnya</a>
                   </div>
                 </div>
             @empty

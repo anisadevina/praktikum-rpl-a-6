@@ -186,7 +186,9 @@ function showSearchResults(query) {
     // Sembunyikan hero dan forum
     document.querySelector(".hero-banner").style.display = "none";
     document.querySelector(".section-title").style.display = "none";
-    document.querySelectorAll(".sub-title").forEach(el => el.style.display = "none");
+    document
+        .querySelectorAll(".sub-title")
+        .forEach((el) => (el.style.display = "none"));
     document.getElementById("forum-list").style.display = "none";
 
     // Tampilkan judul hasil pencarian
@@ -201,9 +203,9 @@ function showSearchResults(query) {
     searchTitle.textContent = `Hasil pencarian: "${query}"`;
 
     fetch(`/search?q=${encodeURIComponent(query)}`)
-        .then(res => res.json())
-        .then(data => renderSearchResults(data))
-        .catch(err => console.error("Search error:", err));
+        .then((res) => res.json())
+        .then((data) => renderSearchResults(data))
+        .catch((err) => console.error("Search error:", err));
 }
 
 function renderSearchResults(results) {
@@ -215,7 +217,9 @@ function renderSearchResults(results) {
         return;
     }
 
-    container.innerHTML = results.map(mk => `
+    container.innerHTML = results
+        .map(
+            (mk) => `
         <div class="matkul-card" data-id="${mk.id_matkul}">
           <div class="card-thumbnail">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -231,10 +235,12 @@ function renderSearchResults(results) {
               <span class="card-rating-score">${mk.tingkat_kesulitan}/5</span>
             </div>
             <p class="card-arsip">${mk.arsip} arsip (materi, tugas, soal)</p>
-            <a class="card-btn" href="#">Lihat Selengkapnya</a>
+            <a class="card-btn" href="/matkul/detail?id=${mk.id_matkul}">Lihat Selengkapnya</a>
           </div>
         </div>
-    `).join("");
+    `,
+        )
+        .join("");
 }
 
 function resetToHome() {
@@ -245,7 +251,9 @@ function resetToHome() {
     // Tampilkan kembali semua elemen beranda
     document.querySelector(".hero-banner").style.display = "";
     document.querySelector(".section-title").style.display = "";
-    document.querySelectorAll(".sub-title").forEach(el => el.style.display = "");
+    document
+        .querySelectorAll(".sub-title")
+        .forEach((el) => (el.style.display = ""));
     document.getElementById("forum-list").style.display = "";
 
     // Hapus judul hasil pencarian
