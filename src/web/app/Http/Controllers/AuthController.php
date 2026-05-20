@@ -86,4 +86,36 @@ class authController extends Controller
         return redirect('/')->with('success', 'Kamu telah berhasil logout.');
 
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('q', '');
+
+        $matkul = DB::table('mata_kuliah')
+            ->where('nama_matkul', 'like', '%' . $query . '%')
+            ->get()
+            ->map(function ($item) {
+                $item->arsip = DB::table('dokumen')->where('id_matkul', $item->id_matkul)->count();
+                return $item;
+            });
+
+        return response()->json($matkul);
+    }
+
+    public function matkul(Request $request)
+    {
+        $user = auth()->user();
+        $semuaMatkul = DB::table('mata_kuliah')
+            ->get()
+            ->map(function ($item) {
+                $item->arsip = DB::table('dokumen')->where('id_matkul', $item->id_matkul)->count();
+                return $item;
+            });
+
+        return view('matkul', [
+            'user' => $user,
+            'semuaMatkul' => $semuaMatkul,
+        ]);
+    }
+
 }
