@@ -46,3 +46,6 @@ Route::get('/beranda', function () {
         'forumTerbaru' => $forumTerbaru,
     ]);
 })->name('beranda')->middleware('auth');
+
+Route::get('/search', [authController::class, 'search'])->name('search')->middleware('auth');
+Route::get('/matkul', [authController::class, 'matkul'])->name('matkul')->middleware('auth');
