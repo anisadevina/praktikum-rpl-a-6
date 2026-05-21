@@ -121,7 +121,9 @@
 
     <main class="page-scroll">
       <section>
-        <h2 class="section-title" id="page-title">Semua Mata Kuliah</h2>
+        <h2 class="section-title" id="page-title">
+            {{ $query ? 'Hasil pencarian: "' . $query . '"' : 'Semua Mata Kuliah' }}
+        </h2>
         <div class="cards-grid" id="matkul-grid">
           @foreach ($semuaMatkul as $mk)
             <div class="matkul-card" data-id="{{ $mk->id_matkul }}">

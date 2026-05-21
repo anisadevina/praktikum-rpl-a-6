@@ -31,17 +31,24 @@ function setupSearch() {
     const input = document.getElementById("search-input");
     if (!input) return;
 
+    const params = new URLSearchParams(window.location.search);
+    const currentQuery = params.get('q');
+    if (currentQuery) input.value = currentQuery;
+
     input.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
             const query = input.value.trim();
-            if (!query) return;
-            showSearchResults(query);
+            if (!query) {
+                window.location.href = '/matkul';
+                return;
+            }
+            window.location.href = `/matkul?q=${encodeURIComponent(query)}`;
         }
     });
 
     input.addEventListener("input", () => {
         if (input.value.trim() === "") {
-            resetToMatkul();
+            window.location.href = '/matkul';
         }
     });
 }

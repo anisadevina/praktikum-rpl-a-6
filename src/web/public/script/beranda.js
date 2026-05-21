@@ -167,14 +167,7 @@ function setupSearch() {
         if (e.key === "Enter") {
             const query = input.value.trim();
             if (!query) return;
-            showSearchResults(query);
-        }
-    });
-
-    // Saat input dikosongkan, kembali ke tampilan beranda normal
-    input.addEventListener("input", () => {
-        if (input.value.trim() === "") {
-            resetToHome();
+            window.location.href = `/matkul?q=${encodeURIComponent(query)}`;
         }
     });
 }
