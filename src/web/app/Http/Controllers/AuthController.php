@@ -105,7 +105,12 @@ class authController extends Controller
     public function matkul(Request $request)
     {
         $user = auth()->user();
+        $query = $request->input('q', '');
+
         $semuaMatkul = DB::table('mata_kuliah')
+            ->when($query, function ($q) use ($query) {
+                $q->where('nama_matkul', 'like', '%' . $query . '%');
+            })
             ->get()
             ->map(function ($item) {
                 $item->arsip = DB::table('dokumen')->where('id_matkul', $item->id_matkul)->count();
@@ -115,6 +120,7 @@ class authController extends Controller
         return view('matkul', [
             'user' => $user,
             'semuaMatkul' => $semuaMatkul,
+            'query' => $query,
         ]);
     }
 
