@@ -14,7 +14,7 @@
 - Verifikasi unggahan oleh admin
 
 ## Could-have
-- Notifikasi balasan di forum kepada penanya  
+- Menghapus komentar tidak pantas  
 
 ## Won’t-have
 - Memilih mode tampilan (light/dark mode)  
