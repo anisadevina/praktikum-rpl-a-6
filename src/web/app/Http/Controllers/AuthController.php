@@ -58,7 +58,24 @@ class authController extends Controller
 
     public function login(Request $request)
     {
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ], [
+            'username.required' => 'Username wajib diisi.',
+            'password.required' => 'Password wajib diisi.',
+        ]);
 
+        $credentials = $request->only('username', 'password');
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended('/beranda');
+        }
+
+        return back()->withErrors([
+            'username' => 'Username atau password salah.',
+        ])->withInput($request->only('username'));
     }
 
     public function logout(Request $request)
@@ -66,7 +83,45 @@ class authController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login')->with('success', 'Kamu telah berhasil logout.');
+        return redirect('/')->with('success', 'Kamu telah berhasil logout.');
 
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('q', '');
+
+        $matkul = DB::table('mata_kuliah')
+            ->where('nama_matkul', 'like', '%' . $query . '%')
+            ->get()
+            ->map(function ($item) {
+                $item->arsip = DB::table('dokumen')->where('id_matkul', $item->id_matkul)->count();
+                return $item;
+            });
+
+        return response()->json($matkul);
+    }
+
+    public function matkul(Request $request)
+    {
+        $user = auth()->user();
+        $query = $request->input('q', '');
+
+        $semuaMatkul = DB::table('mata_kuliah')
+            ->when($query, function ($q) use ($query) {
+                $q->where('nama_matkul', 'like', '%' . $query . '%');
+            })
+            ->get()
+            ->map(function ($item) {
+                $item->arsip = DB::table('dokumen')->where('id_matkul', $item->id_matkul)->count();
+                return $item;
+            });
+
+        return view('matkul', [
+            'user' => $user,
+            'semuaMatkul' => $semuaMatkul,
+            'query' => $query,
+        ]);
+    }
+
 }
