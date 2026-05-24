@@ -55,4 +55,27 @@ class authController extends Controller
 
         return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan login.');
     }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ], [
+            'username.required' => 'Username wajib diisi.',
+            'password.required' => 'Password wajib diisi.',
+        ]);
+
+        $credentials = $request->only('username', 'password');
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended('/beranda');
+        }
+
+        return back()->withErrors([
+            'username' => 'Username atau password salah.',
+        ])->withInput($request->only('username'));
+    }
+
 }
