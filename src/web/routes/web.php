@@ -49,3 +49,4 @@ Route::get('/beranda', function () {
 
 Route::get('/search', [authController::class, 'search'])->name('search')->middleware('auth');
 Route::get('/matkul', [authController::class, 'matkul'])->name('matkul')->middleware('auth');
+
