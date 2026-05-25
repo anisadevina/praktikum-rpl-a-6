@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Detail Mata Kuliah — Study Scope</title>
-  <link rel="stylesheet" href="../../styles/global.css" />
-  <link rel="stylesheet" href="../beranda/beranda.css" />
-  <link rel="stylesheet" href="detailMatkul.css" />
+  <link rel="stylesheet" href="{{ asset('style/global.css') }}" />
+  <link rel="stylesheet" href="{{ asset('style/beranda.css') }}" />
+  <link rel="stylesheet" href="{{ asset('style/detailMatkul.css') }}" />
 </head>
 <body>
 
@@ -137,7 +137,7 @@
             <circle cx="12" cy="7" r="4"/>
           </svg>
         </div>
-        <span class="topbar-username" id="topbar-username">nama pengguna</span>
+        <span class="topbar-username" id="topbar-username">{{ $user->username ?? 'Guest' }}</span>
       </div>
     </header>
 
@@ -149,17 +149,14 @@
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
           <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
         </svg>
-        <span id="breadcrumb-text">Mata Kuliah - Pemrograman Web</span>
+        <span id="breadcrumb-text">Mata Kuliah - {{ $matkul->nama_matkul }}</span>
       </div>
 
       <!-- Hero Detail -->
       <div class="detail-hero">
-        <h1 class="detail-hero-title" id="matkul-title">Pemrograman Web</h1>
+        <h1 class="detail-hero-title" id="matkul-title">{{ $matkul->nama_matkul }}</h1>
         <p class="detail-hero-desc" id="matkul-desc">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa mi.
-          Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula
-          consectetur, ultrices mauris. Maecenas vitae mattis tellus. Nullam quis imperdiet
-          augue. Vestibulum auctor ornare leo, non suscipit magna.
+          {{ $matkul->deskripsi ?? 'Belum ada deskripsi untuk mata kuliah ini.' }}
         </p>
 
         <div class="detail-info-grid">
@@ -175,12 +172,9 @@
               Fokus materi dari mata kuliah terkait
             </div>
             <ul class="detail-fokus-list" id="fokus-list">
-              <li>Fokus materi 1</li>
-              <li>Fokus materi 2</li>
-              <li>Fokus materi 3</li>
-              <li>Fokus materi 4</li>
-              <li>Fokus materi 5</li>
-              <li>Fokus materi 6</li>
+              <li>Berisi materi mata kuliah {{ $matkul->nama_matkul }}</li>
+              <li>Berisi soal ujian</li>
+              <li>Berisi latihan soal</li>
             </ul>
           </div>
 
@@ -196,10 +190,11 @@
             </div>
             <div class="detail-rating-wrap">
               <span class="detail-rating-star">★</span>
-              <span class="detail-rating-score" id="matkul-rating">4.2</span>
+              <span class="detail-rating-score" id="matkul-rating">{{ $matkul->tingkat_kesulitan }}</span>
               <span class="detail-rating-max">/5.0</span>
             </div>
-            <p class="detail-rating-sub" id="matkul-rating-sub">Cukup sulit – dinilai 34 siswa</p>
+
+            <p class="detail-rating-sub" id="matkul-rating-sub">{{ $teksKesulitan }}</p>
           </div>
 
           <!-- Card 3: Jumlah Arsip -->
@@ -212,7 +207,7 @@
               </svg>
               Jumlah arsip tersedia (tugas, materi, dan soal)
             </div>
-            <p class="detail-arsip-count" id="matkul-arsip-count">23</p>
+            <p class="detail-arsip-count" id="matkul-arsip-count">{{ $jumlahArsip }}</p>
             <p class="detail-arsip-sub">Arsip tersimpan</p>
           </div>
 
@@ -228,11 +223,11 @@
           <span class="arsip-filter-label">Filter</span>
           <div class="arsip-filter-wrapper">
             <select class="arsip-filter-select" id="filter-tahun">
-              <option value="">Tahun</option>
-              <option value="2024">2024</option>
-              <option value="2023">2023</option>
-              <option value="2022">2022</option>
-              <option value="2021">2021</option>
+              <option value=""> Semua Tahun</option>
+              <option value="2024"{{ request('tahun') == '2024' ? 'selected' : '' }}>2024</option>
+              <option value="2023"{{ request('tahun') == '2023' ? 'selected' : '' }}>2023</option>
+              <option value="2022"{{ request('tahun') == '2022' ? 'selected' : '' }}>2022</option>
+              <option value="2021"{{ request('tahun') == '2021' ? 'selected' : '' }}>2021</option>
             </select>
             <svg class="filter-chevron" viewBox="0 0 24 24">
               <polyline points="6 9 12 15 18 9"/>
@@ -243,8 +238,8 @@
         <!-- List Arsip -->
         <div class="arsip-list" id="arsip-list">
 
-          <!-- Dummy item, nanti ganti @foreach blade -->
-          <div class="arsip-item" data-id="1">
+          @forelse ($daftarArsip as $arsip)
+          <div class="arsip-item" data-id="{{ $arsip->id_dokumen ?? $arsip->id }}">
             <div class="arsip-icon">
               <svg viewBox="0 0 24 24">
                 <path d="M8 17l4 4 4-4"/>
@@ -253,84 +248,24 @@
               </svg>
             </div>
             <div class="arsip-info">
-              <span class="arsip-name">Soal UAS Organisasi Sistem Komputer</span>
+              <span class="arsip-name">{{ $arsip->nama_dokumen ?? $arsip->nama }}r</span>
               <div class="arsip-meta">
-                <span class="arsip-badge">2024</span>
-                <span class="arsip-date">Diunggah pada 23 Mei 2026</span>
+                <span class="arsip-badge">{{ $arsip->tahun }}</span>
+                <span class="arsip-date">Diunggah pada {{ $arsip->waktu_unggah ?? $arsip->created_at }}</span>
               </div>
             </div>
-            <div class="arsip-bookmark" data-id="1">
+            <div class="arsip-bookmark" data-id="{{ $arsip->id_dokumen ?? $arsip->id }}">
               <svg viewBox="0 0 24 24">
                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
               </svg>
             </div>
           </div>
 
-          <div class="arsip-item" data-id="2">
-            <div class="arsip-icon">
-              <svg viewBox="0 0 24 24">
-                <path d="M8 17l4 4 4-4"/>
-                <path d="M12 12v9"/>
-                <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/>
-              </svg>
-            </div>
-            <div class="arsip-info">
-              <span class="arsip-name">Soal UAS Organisasi Sistem Komputer</span>
-              <div class="arsip-meta">
-                <span class="arsip-badge">2024</span>
-                <span class="arsip-date">Diunggah pada 23 Mei 2026</span>
-              </div>
-            </div>
-            <div class="arsip-bookmark" data-id="2">
-              <svg viewBox="0 0 24 24">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-              </svg>
-            </div>
-          </div>
-
-          <div class="arsip-item" data-id="3">
-            <div class="arsip-icon">
-              <svg viewBox="0 0 24 24">
-                <path d="M8 17l4 4 4-4"/>
-                <path d="M12 12v9"/>
-                <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/>
-              </svg>
-            </div>
-            <div class="arsip-info">
-              <span class="arsip-name">Soal UAS Organisasi Sistem Komputer</span>
-              <div class="arsip-meta">
-                <span class="arsip-badge">2024</span>
-                <span class="arsip-date">Diunggah pada 23 Mei 2026</span>
-              </div>
-            </div>
-            <div class="arsip-bookmark" data-id="3">
-              <svg viewBox="0 0 24 24">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-              </svg>
-            </div>
-          </div>
-
-          <div class="arsip-item" data-id="4">
-            <div class="arsip-icon">
-              <svg viewBox="0 0 24 24">
-                <path d="M8 17l4 4 4-4"/>
-                <path d="M12 12v9"/>
-                <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/>
-              </svg>
-            </div>
-            <div class="arsip-info">
-              <span class="arsip-name">Soal UAS Organisasi Sistem Komputer</span>
-              <div class="arsip-meta">
-                <span class="arsip-badge">2024</span>
-                <span class="arsip-date">Diunggah pada 23 Mei 2026</span>
-              </div>
-            </div>
-            <div class="arsip-bookmark" data-id="4">
-              <svg viewBox="0 0 24 24">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-              </svg>
-            </div>
-          </div>
+          @empty
+          <p style="color: var(--color-text-muted); font-style: italic; padding: 20px 0;">
+          Belum ada arsip materi atau soal untuk mata kuliah ini.
+          </p>
+          @endforelse
 
         </div>
       </section>
@@ -340,6 +275,6 @@
 
 </div>
 
-<script src="detailMatkul.js"></script>
+<script src="{{ asset('script/detailMatkul.js') }}"></script>
 </body>
 </html>

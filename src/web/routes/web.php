@@ -54,7 +54,13 @@ Route::get('/matkul/detail', function (\Illuminate\Http\Request $request) {
     $id_matkul = $request->query('id');
     $user = auth()->user();
 
-    if ($id_matkul && $user) {
+    // Jika tidak ada ID, kembalikan ke beranda
+    if (!$id_matkul) {
+        return redirect('/beranda');
+    }
+
+    // Catat riwayat akses (Seperti sebelumnya)
+    if ($user) {
         DB::table('riwayat_akses')->updateOrInsert(
             [
                 'id_user' => $user->id_user,
@@ -65,6 +71,54 @@ Route::get('/matkul/detail', function (\Illuminate\Http\Request $request) {
             ]
         );
     }
-    return "Berhasil dicatat! Kamu sedang melihat Matkul ID: " . $id_matkul . ". Cek berandamu sekarang!";
+
+    //Ambil data Mata Kuliah dari database
+    $matkul = DB::table('mata_kuliah')->where('id_matkul', $id_matkul)->first();
+
+    // Jika matkul tidak ditemukan di database, kembalikan ke beranda
+    if (!$matkul) {
+        return redirect('/beranda');
+    }
+    // mengonversi tingkat kesulitan ke teks
+    $skor = $matkul->tingkat_kesulitan;
+    $teksKesulitan = 'Belum dinilai';
+
+    if ($skor >= 1.00 && $skor < 2.00) {
+        $teksKesulitan = 'Materi cenderung sulit sekali';
+    } elseif ($skor >= 2.00 && $skor < 3.00) {
+        $teksKesulitan = 'Materi cenderung sulit';
+    } elseif ($skor >= 3.00 && $skor < 4.00) {
+        $teksKesulitan = 'Materi cenderung sedang';
+    } elseif ($skor >= 4.00 && $skor < 5.00) {
+        $teksKesulitan = 'Materi cenderung mudah';
+    } elseif ($skor >= 5.00) {
+        $teksKesulitan = 'Materi cenderung mudah sekali';
+    }
+
+    // Tangkap parameter 'tahun' dari URL jika ada
+    $tahunFilter = $request->query('tahun');
+
+    // Buat "kerangka" query dasar untuk arsip matkul ini
+    $queryArsip = DB::table('dokumen')->where('id_matkul', $id_matkul);
+
+    // Jika user memilih tahun (parameter tahun tidak kosong), tambahkan filter
+    if (!empty($tahunFilter)) {
+        $queryArsip->where('tahun_dokumen', $tahunFilter);
+    }
+
+    // Eksekusi query untuk mendapatkan jumlah dan daftar arsip
+    $jumlahArsip = $queryArsip->count();
+    $daftarArsip = $queryArsip->get();
+
+    // Kirim data ke view detailMatkul
+    return view('detailMatkul', [
+        'user' => $user,
+        'matkul' => $matkul,
+        'jumlahArsip' => $jumlahArsip,
+        'daftarArsip' => $daftarArsip,
+        'teksKesulitan' => $teksKesulitan
+    ]);
+
+
 
 })->name('matkul.detail')->middleware('auth');
