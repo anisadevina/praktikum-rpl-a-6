@@ -1,7 +1,3 @@
-/**
- * STUDY SCOPE — Beranda Page Script
- */
-
 // ─── Konfigurasi Path Halaman ────────────────────────────────────────────────
 const PAGE_PATHS = {
     beranda: "/beranda",

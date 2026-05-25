@@ -24,7 +24,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             MataKuliahSeeder::class,
-            RiwayatAksesSeeder::class,
         ]);
     }
 }
