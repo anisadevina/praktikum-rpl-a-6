@@ -38,20 +38,24 @@
 }
 
 .detail-hero::before {
-    content: '';
+    content: "";
     position: absolute;
-    top: -50px; right: -50px;
-    width: 220px; height: 220px;
+    top: -50px;
+    right: -50px;
+    width: 220px;
+    height: 220px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.05);
     pointer-events: none;
 }
 
 .detail-hero::after {
-    content: '';
+    content: "";
     position: absolute;
-    bottom: -60px; right: 100px;
-    width: 180px; height: 180px;
+    bottom: -60px;
+    right: 100px;
+    width: 180px;
+    height: 180px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.03);
     pointer-events: none;
@@ -83,7 +87,9 @@
 }
 
 @media (max-width: 860px) {
-    .detail-info-grid { grid-template-columns: 1fr; }
+    .detail-info-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .detail-info-card {
@@ -270,7 +276,9 @@
     align-items: center;
     gap: 16px;
     cursor: pointer;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    transition:
+        border-color 0.15s,
+        box-shadow 0.15s;
 }
 
 .arsip-item:hover {
@@ -359,7 +367,9 @@
     stroke-width: 1.8;
     stroke-linecap: round;
     stroke-linejoin: round;
-    transition: stroke 0.15s, fill 0.15s;
+    transition:
+        stroke 0.15s,
+        fill 0.15s;
 }
 
 .arsip-bookmark.bookmarked svg {
