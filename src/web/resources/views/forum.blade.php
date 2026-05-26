@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Scope - Forum</title>
+    <link rel="stylesheet" href="{{ asset('style/forum.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="app-container">
+    <aside class="sidebar">
+        <div class="logo-section">
+            <svg class="logo-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="4" width="18" height="16" rx="3" stroke="#1E1E1E" stroke-width="2.5"/>
+                <circle cx="8.5" cy="9.5" r="1.5" fill="#1E1E1E"/>
+                <path d="M4 18L9 12L13 16L17 11L20.5 16.5" stroke="#1E1E1E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <h2>Study Scope</h2>
+        </div>
+        
+        <nav class="sidebar-menu">
+            <a href="{{ route('beranda') }}" class="menu-item">
+                <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 12h-6l-2 3h-4l-2-3H2"/>
+                    <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
+                </svg>
+                Beranda
+                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+            <a href="{{ route('matkul') }}" class="menu-item">
+                <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                </svg>
+                Mata Kuliah
+                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+            <a href="{{ route('forum') }}" class="menu-item active">
+                <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+                Forum
+                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+            <div class="sidebar-separator"></div>
+            <a href="#" class="menu-item">
+                <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                Unggah
+                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+            <a href="#" class="menu-item">
+                <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                </svg>
+                Arsip
+                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <form action="{{ route('logout') }}" method="POST" style="margin:0;">
+                @csrf
+                <button type="submit" class="menu-item logout" style="width:100%; background:none; border:none; cursor:pointer; display:flex; align-items:center;">
+                    <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Keluar
+                    <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <div class="main-layout-wrapper">
+        <header class="top-bar">
+            <div class="search-container">
+                <svg class="search-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1E1E1E" stroke-width="2.5">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input type="text" placeholder="Cari mata kuliah">
+            </div>
+            <div class="user-profile">
+                <div class="profile-avatar">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </div>
+                <span class="username">{{ $user->username }}</span>
+            </div>
+        </header>
+
+        <div class="scrollable-content-area">
+
+            {{-- HALAMAN DAFTAR FORUM --}}
+            <section id="forum-view" class="page-view-container">
+                <div class="forum-header">
+                    <div class="header-text">
+                        <h1>FORUM</h1>
+                        <p>Buat topik yang ingin dibicarakan, dan mulai berinteraksi dengan semua orang.</p>
+                    </div>
+                    <button class="btn-create-topic" id="btn-go-to-create">+ Buat Topik</button>
+                </div>
+
+                <h3 class="section-title">Terbaru</h3>
+
+                <div id="forum-feed-container" class="feed-wrapper">
+                    @forelse($topik as $t)
+                    <div class="topic-card" id="topik-{{ $t->id_topik }}">
+                        <div class="topic-meta">
+                            <div class="card-avatar">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E1E1E" stroke-width="2.5">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                                </svg>
+                            </div>
+                            <span class="card-username">{{ $t->is_anonim ? 'Anonim' : $t->username }}</span>
+                            <span class="badge badge-category">{{ $t->tag == 'tanya jawab' ? 'Tanya Jawab Soal' : 'General' }}</span>
+                        </div>
+                        <p class="topic-text">{{ $t->pesan_topik }}</p>
+                        <span class="time-stamp">{{ \Carbon\Carbon::parse($t->waktu_topik)->diffForHumans() }}</span>
+
+                        <div class="topic-actions">
+                            <button class="action-link btn-trigger-reply">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
+                                Balas
+                            </button>
+                            <button class="action-link">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                {{ $t->jumlah_balasan }}
+                            </button>
+                        </div>
+
+                        <hr class="card-divider">
+
+                        <div class="dropdown-toggle">
+                            <span class="toggle-text">Lihat Semua Jawaban</span>
+                            <svg class="toggle-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+
+                        <div class="replies-thread-container hidden">
+                            <div class="replies-list">
+                                @foreach($t->balasan as $b)
+                                <div class="reply-branch">
+                                    <div class="reply-card" data-id-topik="{{ $t->id_topik }}">
+                                        <div class="reply-meta">
+                                            <div class="card-avatar mini">
+                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1E1E1E" stroke-width="2.5">
+                                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                                                </svg>
+                                            </div>
+                                            <strong>{{ $b->is_anonim ? 'Anonim' : $b->username }}</strong>
+                                        </div>
+                                        <p class="reply-body-text">{{ $b->pesan_balasan }}</p>
+                                    </div>
+                                    <div class="sub-replies-list"></div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <form action="{{ route('forum.balasan') }}" method="POST" class="reply-form-input main-topic-input hidden">
+                            @csrf
+                            <input type="hidden" name="id_topik" value="{{ $t->id_topik }}">
+                            <div class="card-avatar mini">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1E1E1E" stroke-width="2.5">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                                </svg>
+                            </div>
+                            <input type="text" name="pesan_balasan" placeholder="Tulis balasan Anda...">
+                            <button type="submit" class="btn-send-message-submit">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                            </button>
+                        </form>
+                    </div>
+                    @empty
+                    <p style="color:#888; text-align:center; padding:2rem;">Belum ada topik. Jadilah yang pertama membuat topik!</p>
+                    @endforelse
+                </div>
+            </section>
+
+            {{-- HALAMAN BUAT TOPIK --}}
+            <section id="create-topic-view" class="page-view-container hidden">
+                <div class="forum-header">
+                    <div class="header-text">
+                        <h1>FORUM</h1>
+                        <p>Buat topik yang ingin kamu bicarakan, dan mulai berinteraksi dengan semua orang.</p>
+                    </div>
+                </div>
+
+                <div class="create-card">
+                    <h2>Buat Topik Baru</h2>
+                    <form action="{{ route('forum.topik') }}" method="POST" id="form-buat-topik" autocomplete="off">
+                        @csrf
+                        <div class="form-group">
+                            <label>Pilih Kategori</label>
+                            <div class="category-options">
+                                <button type="button" class="category-btn active" data-cat="tanya jawab">Tanya Jawab Soal</button>
+                                <button type="button" class="category-btn" data-cat="general">General</button>
+                            </div>
+                            <input type="hidden" name="tag" id="input-tag" value="tanya jawab">
+                        </div>
+                        <div class="form-group">
+                            <label>Pesan</label>
+                            <textarea id="topic-message" name="pesan_topik" placeholder="Tulis pertanyaan atau topik Anda di sini...." maxlength="2000" autocomplete="off"></textarea>
+                            <div class="char-counter" id="char-counter">0/2000</div>
+                            @error('pesan_topik')
+                                <span style="color:red; font-size:13px;">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-bottom">
+                            <div class="privacy-setting">
+                                <label>Tampilkan Sebagai</label>
+                                <div class="radio-group">
+                                    <label class="radio-label">
+                                        <input type="radio" name="is_anonim" value="0" checked>
+                                        <span class="radio-text">
+                                            <strong>Nama pengguna Saya</strong><br><small>Username Anda ditampilkan di topik ini</small>
+                                        </span>
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="is_anonim" value="1">
+                                        <span class="radio-text">
+                                            <strong>Anonim</strong><br><small>Nama Anda disembunyikan di topik ini</small>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn-cancel" id="btn-cancel-create">Batal</button>
+                                <button type="submit" class="btn-submit">Unggah</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</div>
+
+<script src="{{ asset('script/forum.js') }}"></script>
+</body>
+</html>  

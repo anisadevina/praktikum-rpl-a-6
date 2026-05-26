@@ -434,42 +434,6 @@ html, body {
     z-index: 1;
 }
 
-/* JAWABAN KELUHAN 2: Kontainer Anak Komen Menjorok Kedalam (Nested List) */
-.sub-replies-list {
-    margin-left: 36px; /* Otomatis menggeser semua anak balasan ke kanan */
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-top: 16px;
-    position: relative;
-}
-
-/* Garis vertikal kontinu khusus area anak */
-.sub-replies-list::before {
-    content: "";
-    position: absolute;
-    left: -20px;
-    top: -16px;
-    width: 2px;
-    height: calc(100% - 20px);
-    background-color: rgba(255, 255, 255, 0.35);
-    z-index: 1;
-}
-
-/* Kait bengkok lengkung dari rel anak ke card anak */
-.sub-replies-list .reply-branch::before {
-    content: "";
-    position: absolute;
-    left: -20px;
-    top: 24px;
-    width: 20px;
-    height: 12px;
-    border-left: 2px solid rgba(255, 255, 255, 0.35);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.35);
-    border-bottom-left-radius: 8px;
-    z-index: 1;
-}
-
 /* FORM INPUT BALASAN */
 .reply-form-input {
     background-color: var(--color-white);
@@ -493,6 +457,7 @@ html, body {
 /* Form input utama di bagian paling bawah */
 .reply-form-input.main-topic-input {
     margin-left: 36px;
+    margin-top: 16px;
 }
 
 /* Penyelarasan box input dinamis pas muncul di dalam nested */

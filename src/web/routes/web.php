@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\authController;
+use App\Http\Controllers\MatkulController;
+use App\Http\Controllers\ForumController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 
+// -- AUTHEHTIKASI --
 Route::get('/', function () {
     return view('login');
 })->name('login');
@@ -12,12 +15,12 @@ Route::get('/register', function () {
     return view('register');
 })->name('register');
 
-Route::post('/login', [authController::class, 'login'])->name('login.proses');
-Route::post('/register', [authController::class, 'register'])->name('register.proses');
-Route::post('/logout', [authController::class, 'logout'])->name('logout');
+Route::post('/login', [AuthController::class, 'login'])->name('login.proses');
+Route::post('/register', [AuthController::class, 'register'])->name('register.proses');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// -- BERANDA --
 Route::get('/beranda', function () {
-    // return view('beranda', ['user' => auth()->user()]);
     $user = auth()->user();
 
     // ambil 4 mata kuliah terakhir yang diakses oleh user
@@ -47,8 +50,9 @@ Route::get('/beranda', function () {
     ]);
 })->name('beranda')->middleware('auth');
 
-Route::get('/search', [authController::class, 'search'])->name('search')->middleware('auth');
-Route::get('/matkul', [authController::class, 'matkul'])->name('matkul')->middleware('auth');
+// -- MATKUL --
+Route::get('/search', [MatkulController::class, 'search'])->name('search')->middleware('auth');
+Route::get('/matkul', [MatkulController::class, 'matkul'])->name('matkul')->middleware('auth');
 
 Route::get('/matkul/detail', function (\Illuminate\Http\Request $request) {
     $id_matkul = $request->query('id');
@@ -59,7 +63,7 @@ Route::get('/matkul/detail', function (\Illuminate\Http\Request $request) {
         return redirect('/beranda');
     }
 
-    // Catat riwayat akses (Seperti sebelumnya)
+    // Catat riwayat akses 
     if ($user) {
         DB::table('riwayat_akses')->updateOrInsert(
             [
@@ -119,6 +123,9 @@ Route::get('/matkul/detail', function (\Illuminate\Http\Request $request) {
         'teksKesulitan' => $teksKesulitan
     ]);
 
-
-
 })->name('matkul.detail')->middleware('auth');
+
+// -- FORUM --
+Route::get('/forum', [ForumController::class, 'forum'])->name('forum')->middleware('auth');
+Route::post('/forum/topik', [ForumController::class, 'buatTopik'])->name('forum.topik')->middleware('auth');
+Route::post('/forum/balasan', [ForumController::class, 'buatBalasan'])->name('forum.balasan')->middleware('auth');
