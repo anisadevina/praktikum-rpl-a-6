@@ -18,6 +18,17 @@ function setupBack() {
     const btn = document.getElementById("btn-back");
     if (!btn) return;
     btn.addEventListener("click", () => {
+        // Ambil data dari elemen yang sudah ada di halaman
+        const matkulData = {
+            id: new URLSearchParams(window.location.search).get("id"),
+            nama: document.getElementById("matkul-title").textContent,
+            tingkat: document.getElementById("matkul-rating").textContent,
+            arsip: document.getElementById("matkul-arsip-count").textContent,
+        };
+
+        // Simpan ke session Storage agar bisa dibaca oleh halaman matkul
+        sessionStorage.setItem("lastVisitedMatkul", JSON.stringify(matkulData));
+
         if (document.referrer) {
             history.back();
         } else {
