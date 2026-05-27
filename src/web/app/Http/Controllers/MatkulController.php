@@ -1,0 +1,114 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
+class MatkulController extends Controller
+{
+    public function index(Request $request)
+    {
+        $user = auth()->user();
+        $query = $request->input('q', '');
+
+        // 1. Ambil matkul terakhir dilihat (Tetap limit 4)
+        $mataKuliahTerakhir = DB::table('riwayat_akses')
+            ->join('mata_kuliah', 'riwayat_akses.id_matkul', '=', 'mata_kuliah.id_matkul')
+            ->where('riwayat_akses.id_user', $user->id_user)
+            ->select('mata_kuliah.*')
+            ->orderBy('riwayat_akses.waktu_akses', 'desc')
+            ->limit(4)
+            ->get()
+            ->map(function ($item) {
+                $item->arsip = DB::table('dokumen')->where('id_matkul', $item->id_matkul)->count();
+                return $item;
+            });
+
+        // 2. Ambil semua matkul dengan PAGINATION (10 per halaman)
+        $semuaMatkul = DB::table('mata_kuliah')
+            ->when($query, function ($q) use ($query) {
+                $q->where('nama_matkul', 'like', '%' . $query . '%');
+            })
+            ->paginate(12); // <--- Mengganti get() menjadi paginate(10)
+
+        // 3. Sisipkan jumlah arsip ke data yang sudah di-paginate
+        $semuaMatkul->getCollection()->transform(function ($item) {
+            $item->arsip = DB::table('dokumen')->where('id_matkul', $item->id_matkul)->count();
+            return $item;
+        });
+
+        return view('matkul', compact('user', 'mataKuliahTerakhir', 'semuaMatkul', 'query'));
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('q', '');
+
+        $matkul = DB::table('mata_kuliah')
+            ->where('nama_matkul', 'like', '%' . $query . '%')
+            ->get()
+            ->map(function ($item) {
+                $item->arsip = DB::table('dokumen')->where('id_matkul', $item->id_matkul)->count();
+                return $item;
+            });
+
+        return response()->json($matkul);
+    }
+
+    public function detail(Request $request)
+    {
+        $id_matkul = $request->query('id');
+        $user = auth()->user();
+
+        if (!$id_matkul) {
+            return redirect('/beranda');
+        }
+
+        $this->catatRiwayatAkses($user->id_user, $id_matkul);
+
+        $matkul = DB::table('mata_kuliah')->where('id_matkul', $id_matkul)->first();
+
+        if (!$matkul) {
+            return redirect('/beranda');
+        }
+
+        $teksKesulitan = $this->konversiTingkatKesulitan($matkul->tingkat_kesulitan);
+
+        $tahunFilter = $request->query('tahun');
+        $queryArsip = DB::table('dokumen')->where('id_matkul', $id_matkul);
+
+        if (!empty($tahunFilter)) {
+            $queryArsip->where('tahun_dokumen', $tahunFilter);
+        }
+
+        $jumlahArsip = $queryArsip->count();
+        $daftarArsip = $queryArsip->get();
+
+        return view('detailMatkul', compact('user', 'matkul', 'jumlahArsip', 'daftarArsip', 'teksKesulitan'));
+    }
+
+    // --- Private Methods (Membantu agar fungsi detail tetap kurus) ---
+
+    private function catatRiwayatAkses($id_user, $id_matkul)
+    {
+        DB::table('riwayat_akses')->updateOrInsert(
+            ['id_user' => $id_user, 'id_matkul' => $id_matkul],
+            ['waktu_akses' => Carbon::now()]
+        );
+    }
+
+    private function konversiTingkatKesulitan($skor)
+    {
+        if ($skor >= 1.00 && $skor < 2.00)
+            return 'Materi cenderung sulit sekali';
+        if ($skor >= 2.00 && $skor < 3.00)
+            return 'Materi cenderung sulit';
+        if ($skor >= 3.00 && $skor < 4.00)
+            return 'Materi cenderung sedang';
+        if ($skor >= 4.00 && $skor < 5.00)
+            return 'Materi cenderung mudah';
+        return 'Materi cenderung mudah sekali';
+    }
+}
