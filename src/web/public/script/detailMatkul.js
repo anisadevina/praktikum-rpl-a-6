@@ -2,7 +2,7 @@
  * STUDY SCOPE — Detail Mata Kuliah Page Script
  */
 
-// ─── Konfigurasi Path ─────────────────────────────────────────────────────────
+// Konfigurasi Path
 const PAGE_PATHS = {
     beranda: "/beranda",
     matkul: "/matkul",
@@ -13,7 +13,20 @@ const PAGE_PATHS = {
 
 const ACTIVE_PAGE = "matkul";
 
-// ─── Sidebar Aktif ────────────────────────────────────────────────────────────
+// Tombol Back
+function setupBack() {
+    const btn = document.getElementById("btn-back");
+    if (!btn) return;
+    btn.addEventListener("click", () => {
+        if (document.referrer) {
+            history.back();
+        } else {
+            window.location.href = PAGE_PATHS.matkul;
+        }
+    });
+}
+
+// Sidebar aktif
 function setupSidebarActive() {
     const navItems = document.querySelectorAll(".nav-item[data-page]");
     navItems.forEach((item) => {
@@ -30,7 +43,7 @@ function setupSidebarActive() {
     });
 }
 
-// ─── Username dari session ────────────────────────────────────────────────────
+// Username Session
 function renderUsername() {
     const el = document.getElementById("topbar-username");
     if (!el) return;
@@ -43,7 +56,7 @@ function renderUsername() {
     }
 }
 
-// ─── Search ───────────────────────────────────────────────────────────────────
+// Search bar
 function setupSearch() {
     const input = document.getElementById("search-input");
     if (!input) return;
@@ -56,7 +69,7 @@ function setupSearch() {
     });
 }
 
-// ─── Filter Tahun ─────────────────────────────────────────────────────────────
+// Filter tahun
 function setupFilter() {
     const select = document.getElementById("filter-tahun");
     if (!select) return;
@@ -77,7 +90,7 @@ function setupFilter() {
     });
 }
 
-// ─── Bookmark Toggle ──────────────────────────────────────────────────────────
+// Bookmark toggke
 function setupBookmarks() {
     document.querySelectorAll(".arsip-bookmark").forEach((btn) => {
         btn.addEventListener("click", (e) => {
@@ -91,7 +104,7 @@ function setupBookmarks() {
     });
 }
 
-// ─── Klik Item Arsip ──────────────────────────────────────────────────────────
+// Klik item arsip
 function setupArsipItems() {
     document.querySelectorAll(".arsip-item").forEach((item) => {
         item.addEventListener("click", (e) => {
@@ -105,7 +118,7 @@ function setupArsipItems() {
     });
 }
 
-// ─── Tombol Keluar ────────────────────────────────────────────────────────────
+// Tombol Keluar
 function setupLogout() {
     const btnKeluar = document.getElementById("btn-keluar");
     if (!btnKeluar) return;
@@ -121,7 +134,7 @@ function setupLogout() {
     });
 }
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
+// Init - DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
     setupSidebarActive();
     renderUsername();
@@ -130,4 +143,5 @@ document.addEventListener("DOMContentLoaded", () => {
     setupBookmarks();
     setupArsipItems();
     setupLogout();
+    setupBack();
 });

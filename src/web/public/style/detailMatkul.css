@@ -2,7 +2,39 @@
    Detail Mata Kuliah Page — Study Scope
    ============================================= */
 
-/* ─── Breadcrumb ──────────────────────────── */
+/* Tombol back */
+   .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 7px 16px;
+    font-size: var(--text-small);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    margin-bottom: 12px;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-back:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.btn-back svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Breadcrumb */
 .breadcrumb {
     display: inline-flex;
     align-items: center;

@@ -143,6 +143,14 @@
 
     <main class="page-scroll">
 
+      <!-- back button -->
+    <button class="btn-back" id="btn-back">
+      <svg viewBox="0 0 24 24">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+     Kembali
+    </button>
+
       <!-- Breadcrumb -->
       <div class="breadcrumb">
         <svg viewBox="0 0 24 24">
