@@ -13,9 +13,12 @@ Route::get('/register', function () {
     return view('register');
 })->name('register');
 
+
+
 Route::post('/login', [AuthController::class, 'login'])->name('login.proses');
 Route::post('/register', [AuthController::class, 'register'])->name('register.proses');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 
 // Kelompokkan rute yang butuh middleware 'auth'
 Route::middleware('auth')->group(function () {
@@ -24,4 +27,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/search', [MatkulController::class, 'search'])->name('search');
     Route::get('/matkul', [MatkulController::class, 'index'])->name('matkul');
     Route::get('/matkul/detail', [MatkulController::class, 'detail'])->name('matkul.detail');
+
+    Route::get('/arsip/dokumen/{id}', function ($id) {
+    return view('detailDokumen', [
+        'dokumen' => [
+            'nama'     => 'Soal UAS Organisasi Sistem Komputer',
+            'tahun'    => '2024',
+            'tanggal'  => '23 Mei 2026',
+            'file_url' => '',
+        ],
+    ]);
+})->name('arsip.dokumen'); // dari jeje (dummy)
+
 });
