@@ -28,14 +28,8 @@
       </div>
 
       <!-- Form -->
-      <form class="auth-form" id="loginForm" method="POST" action="{{ route('login.proses') }}">
+      <form class="auth-form" id="loginForm">
         @csrf
-
-        @if (session('success'))
-          <span style="color:#cccccc; display:block; margin-bottom:8px">
-            {{ session('success') }}
-          </span>
-        @endif
 
         <div class="form-group">
           <label for="username">Username</label>
@@ -47,9 +41,7 @@
             autocomplete="username"
             value="{{ old('username') }}"
           />
-          <span class="field-error" id="usernameError">
-            @error('username'){{ $message }}@enderror
-          </span>
+          <span class="field-error" id="usernameError"></span>
         </div>
 
         <div class="form-group">
@@ -70,10 +62,10 @@
               </svg>
             </button>
           </div>
-          <span class="field-error" id="passwordError">
-            @error('password'){{ $message }}@enderror
-          </span>
+          <span class="field-error" id="passwordError"></span>
         </div>
+
+        <span class="form-error" id="formError" style="display: block; text-align: center; margin-bottom: 16px;"></span>
 
         <div class="auth-actions">
           <button type="submit" class="btn btn-primary">Masuk</button>

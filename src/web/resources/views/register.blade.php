@@ -29,7 +29,7 @@
       </div>
 
       <!-- Form -->
-      <form action="{{ route('register.proses') }}" method="POST" class="auth-form" id="registerForm" novalidate>
+      <form class="auth-form" id="registerForm" novalidate>
         @csrf
         <div class="form-group">
           <label for="username">Username</label>
@@ -42,7 +42,7 @@
             value="{{ old('username') }}"
             required
           />
-          <span class="field-error" id="usernameError">@error('username') {{ $message }} @enderror</span>
+          <span class="field-error" id="usernameError"></span>
         </div>
 
         <div class="form-group">
@@ -55,21 +55,21 @@
             value="{{ old('nim') }}"
             required
           />
-          <span class="field-error" id="nimError">@error('nim') {{ $message }} @enderror</span>
+          <span class="field-error" id="nimError"></span>
         </div>
 
         <div class="form-group">
-          <label for="email">Email</label>
+          <label for="emai_user">Email</label>
           <input
             type="email"
-            id="email"
+            id="email_user"
             name="email_user"
             placeholder="Masukkan email SSO"
             autocomplete="email"
             value="{{ old('email_user') }}"
             required
           />
-          <span class="field-error" id="emailError">@error('email_user') {{ $message }} @enderror</span>
+          <span class="field-error" id="email_userError"></span>
         </div>
 
         <div class="form-group">
@@ -91,7 +91,7 @@
               </svg>
             </button>
           </div>
-          <span class="field-error" id="passwordError">@error('password') {{ $message }} @enderror</span>
+          <span class="field-error" id="passwordError"></span>
         </div>
 
         <span class="form-error" id="formError"></span>
