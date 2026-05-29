@@ -1,10 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\MatkulController;
+use App\Http\Controllers\ForumController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 
+// -- AUTENTIKASI --
 Route::get('/', function () {
     return view('login');
 })->name('login');
@@ -17,11 +20,21 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.proses');
 Route::post('/register', [AuthController::class, 'register'])->name('register.proses');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Kelompokkan rute yang butuh middleware 'auth'
+// -- BERANDA --
 Route::middleware('auth')->group(function () {
     Route::get('/beranda', [BerandaController::class, 'index'])->name('beranda');
-
     Route::get('/search', [MatkulController::class, 'search'])->name('search');
     Route::get('/matkul', [MatkulController::class, 'index'])->name('matkul');
     Route::get('/matkul/detail', [MatkulController::class, 'detail'])->name('matkul.detail');
 });
+
+// -- FORUM --
+Route::get('/forum', [ForumController::class, 'forum'])->name('forum')->middleware('auth');
+Route::post('/forum/topik', [ForumController::class, 'buatTopik'])->name('forum.topik')->middleware('auth');
+Route::post('/forum/balasan', [ForumController::class, 'buatBalasan'])->name('forum.balasan')->middleware('auth');
+
+// -- UNGGAH --
+Route::get('/unggah', function () {
+    $user = auth()->user();
+    return view('unggah', ['user' => $user]);
+})->middleware('auth')->name('unggah');

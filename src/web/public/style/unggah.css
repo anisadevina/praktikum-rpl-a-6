@@ -1,0 +1,421 @@
+/* =============================================
+   UNGGAH PAGE — unggah.css
+   Menggunakan CSS variables dari global.css
+   ============================================= */
+
+.page-view-container {
+    width: 100%;
+    animation: fadeIn 0.25s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Page Header ────────────────────────────── */
+.unggah-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.unggah-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.unggah-title-row svg {
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+    stroke: var(--color-text-primary);
+}
+
+.unggah-title {
+    font-size: var(--text-h1);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    letter-spacing: -0.3px;
+    text-transform: uppercase;
+}
+
+.unggah-subtitle {
+    font-size: var(--text-body);
+    color: var(--color-text-muted);
+    padding-left: 36px;
+}
+
+/* ─── Tombol + Dokumen ───────────────────────── */
+.btn-tambah-dokumen {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--color-accent);
+    color: var(--color-primary-dark);
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    font-size: var(--text-body);
+    font-family: var(--font-base);
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.15s, transform 0.1s;
+}
+
+.btn-tambah-dokumen svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    stroke: var(--color-primary-dark);
+}
+
+.btn-tambah-dokumen:hover {
+    background-color: var(--color-accent-dark);
+    transform: translateY(-1px);
+}
+
+/* =============================================
+   TABEL DAFTAR UNGGAHAN
+   ============================================= */
+.unggah-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+}
+
+.unggah-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--color-bg-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.unggah-table thead tr {
+    background-color: var(--color-primary-card);
+}
+
+.unggah-table thead th {
+    padding: 14px 20px;
+    text-align: left;
+    font-size: var(--text-body);
+    font-weight: 600;
+    color: var(--color-text-on-green);
+    white-space: nowrap;
+}
+
+.unggah-table tbody tr {
+    border-bottom: 1px solid var(--color-border);
+    transition: background 0.15s;
+}
+
+.unggah-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.unggah-table tbody tr:hover {
+    background-color: var(--color-bg-page);
+}
+
+.unggah-table tbody td {
+    padding: 14px 20px;
+    font-size: var(--text-body);
+    color: var(--color-text-primary);
+    vertical-align: middle;
+}
+
+.td-filename {
+    font-weight: 600;
+}
+
+.td-catatan {
+    font-size: var(--text-small);
+    color: var(--color-text-secondary);
+    font-style: italic;
+}
+
+.td-empty {
+    text-align: center;
+    color: var(--color-text-muted);
+    padding: 48px 20px !important;
+    font-style: italic;
+    font-size: var(--text-body);
+}
+
+/* ─── Status Badge ───────────────────────────── */
+.status-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: var(--radius-full);
+    font-size: var(--text-label);
+    font-weight: 600;
+}
+
+.status-menunggu {
+    background-color: #FEF3C7;
+    color: #92400E;
+}
+
+.status-disetujui {
+    background-color: #D1FAE5;
+    color: #065F46;
+}
+
+.status-ditolak {
+    background-color: #FEE2E2;
+    color: #991B1B;
+}
+
+/* =============================================
+   FORM UNGGAH CARD
+   ============================================= */
+.form-unggah-card {
+    background-color: var(--color-primary-card);
+    border-radius: var(--radius-lg);
+    padding: 28px 30px;
+    box-shadow: var(--shadow-card);
+}
+
+.form-unggah-card,
+.form-unggah-card * {
+    color: var(--color-text-on-green);
+}
+
+.form-unggah-title {
+    font-size: var(--text-h2);
+    font-weight: 700;
+    margin-bottom: 22px;
+}
+
+/* ─── Form Layout ────────────────────────────── */
+.form-row-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 600px) {
+    .form-row-two { grid-template-columns: 1fr; }
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    font-size: var(--text-body);
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--color-text-on-green);
+}
+
+/* ─── Select ─────────────────────────────────── */
+.select-wrapper {
+    position: relative;
+}
+
+.form-select {
+    width: 100%;
+    padding: 11px 40px 11px 16px;
+    border: none;
+    border-radius: var(--radius-full);
+    background-color: var(--color-bg-card);
+    color: var(--color-text-primary);
+    font-size: var(--text-body);
+    font-family: var(--font-base);
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    cursor: pointer;
+    transition: box-shadow 0.15s;
+}
+
+.form-select option {
+    background-color: #ffffff;
+    color: #1a1a1a;
+}
+
+.form-select:focus {
+    box-shadow: 0 0 0 3px rgba(200, 232, 106, 0.4);
+}
+
+.select-caret {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px !important;
+    height: 16px !important;
+    stroke: var(--color-text-muted);
+    pointer-events: none;
+}
+
+/* ─── Text Input ─────────────────────────────── */
+.form-input {
+    width: 100%;
+    padding: 11px 16px;
+    border: none;
+    border-radius: var(--radius-full);
+    background-color: var(--color-bg-card);
+    color: var(--color-text-primary);
+    font-size: var(--text-body);
+    font-family: var(--font-base);
+    outline: none;
+    transition: box-shadow 0.15s;
+}
+
+.form-input:focus {
+    box-shadow: 0 0 0 3px rgba(200, 232, 106, 0.4);
+}
+
+.form-input::placeholder {
+    color: var(--color-text-muted);
+}
+
+/* ─── Dropzone ───────────────────────────────── */
+.dropzone-area {
+    width: 100%;
+    min-height: 120px;
+    border: 2px dashed rgba(255, 255, 255, 0.4);
+    border-radius: var(--radius-md);
+    background-color: rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.dropzone-area:hover,
+.dropzone-area.dragover {
+    border-color: var(--color-accent);
+    background-color: rgba(200, 232, 106, 0.1);
+}
+
+.dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 20px;
+    gap: 6px;
+    min-height: 120px;
+}
+
+.dropzone-content svg {
+    width: 32px !important;
+    height: 32px !important;
+    stroke: rgba(255, 255, 255, 0.6);
+}
+
+.dropzone-content p {
+    font-size: var(--text-body);
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+}
+
+.dropzone-content span {
+    display: none; /* Maks label dipindah ke bawah dropzone */
+}
+
+.dropzone-hint {
+    font-size: var(--text-label);
+    color: rgba(255, 255, 255, 0.5);
+    display: block;
+    margin-top: 5px;
+}
+
+.dropzone-selected {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    min-height: 120px;
+    justify-content: center;
+}
+
+.dropzone-selected svg {
+    width: 28px !important;
+    height: 28px !important;
+    stroke: var(--color-accent);
+    flex-shrink: 0;
+}
+
+.dropzone-selected p {
+    font-size: var(--text-body);
+    font-weight: 600;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.btn-hapus-file {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: var(--color-text-on-green);
+    font-size: var(--text-label);
+    font-family: var(--font-base);
+    padding: 5px 12px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s;
+}
+
+.btn-hapus-file:hover {
+    background: rgba(255, 255, 255, 0.28);
+}
+
+/* ─── Form Actions ───────────────────────────── */
+.form-unggah-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-batal-unggah {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--color-text-on-green);
+    border: none;
+    padding: 10px 24px;
+    border-radius: var(--radius-full);
+    font-size: var(--text-body);
+    font-weight: 500;
+    font-family: var(--font-base);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btn-batal-unggah:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-unggah-submit {
+    background-color: #2263FF;
+    color: #ffffff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: var(--radius-full);
+    font-size: var(--text-body);
+    font-weight: 700;
+    font-family: var(--font-base);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+}
+
+.btn-unggah-submit:hover {
+    background-color: #1a50d4;
+    transform: translateY(-1px);
+}
+
+/* ─── Utility ────────────────────────────────── */
+.hidden {
+    display: none !important;
+}
