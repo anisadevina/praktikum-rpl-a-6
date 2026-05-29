@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/matkul/detail', [MatkulController::class, 'detail'])->name('matkul.detail');
 
     Route::get('/arsip/dokumen/{id}', function ($id) {
-    return view('detailDokumen', [
+    return view('lihat-dokumen', [
         'dokumen' => [
             'nama'     => 'Soal UAS Organisasi Sistem Komputer',
             'tahun'    => '2024',
