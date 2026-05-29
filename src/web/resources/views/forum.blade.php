@@ -3,107 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Scope - Forum</title>
+    <title>Forum — Study Scope</title>
+    <link rel="stylesheet" href="{{ asset('style/global.css') }}">
+    <link rel="stylesheet" href="{{ asset('style/beranda.css') }}">
     <link rel="stylesheet" href="{{ asset('style/forum.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="app-container">
+<div class="app-layout">
+
     <aside class="sidebar">
-        <div class="logo-section">
-            <svg class="logo-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="3" y="4" width="18" height="16" rx="3" stroke="#1E1E1E" stroke-width="2.5"/>
-                <circle cx="8.5" cy="9.5" r="1.5" fill="#1E1E1E"/>
-                <path d="M4 18L9 12L13 16L17 11L20.5 16.5" stroke="#1E1E1E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <h2>Study Scope</h2>
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+            </div>
+            <span class="sidebar-logo-name">Study Scope</span>
         </div>
-        
-        <nav class="sidebar-menu">
-            <a href="{{ route('beranda') }}" class="menu-item">
-                <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 12h-6l-2 3h-4l-2-3H2"/>
-                    <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
-                </svg>
-                Beranda
-                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+
+        <nav class="sidebar-nav">
+            <a href="{{ route('beranda') }}" class="nav-item" data-page="beranda">
+                <div class="nav-item-left">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+                    <span>Beranda</span>
+                </div>
+                <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
             </a>
-            <a href="{{ route('matkul') }}" class="menu-item">
-                <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-                </svg>
-                Mata Kuliah
-                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            <a href="{{ route('matkul') }}" class="nav-item" data-page="matkul">
+                <div class="nav-item-left">
+                    <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    <span>Mata Kuliah</span>
+                </div>
+                <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
             </a>
-            <a href="{{ route('forum') }}" class="menu-item active">
-                <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                </svg>
-                Forum
-                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            <a href="{{ route('forum') }}" class="nav-item active" data-page="forum">
+                <div class="nav-item-left">
+                    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    <span>Forum</span>
+                </div>
+                <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
             </a>
-            <div class="sidebar-separator"></div>
-            <a href="#" class="menu-item">
-                <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="17 8 12 3 7 8"/>
-                    <line x1="12" y1="3" x2="12" y2="15"/>
-                </svg>
-                Unggah
-                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-            </a>
-            <a href="#" class="menu-item">
-                <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                </svg>
-                Arsip
-                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-            </a>
+            <div class="nav-item" data-page="unggah">
+                <div class="nav-item-left">
+                    <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                    <span>Unggah</span>
+                </div>
+                <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div class="nav-item" data-page="arsip">
+                <div class="nav-item-left">
+                    <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                    <span>Arsip</span>
+                </div>
+                <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
         </nav>
-        
+
         <div class="sidebar-footer">
-            <form action="{{ route('logout') }}" method="POST" style="margin:0;">
+            <form method="POST" action="{{ route('logout') }}" id="form-logout">
                 @csrf
-                <button type="submit" class="menu-item logout" style="width:100%; background:none; border:none; cursor:pointer; display:flex; align-items:center;">
-                    <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                        <polyline points="16 17 21 12 16 7"/>
-                        <line x1="21" y1="12" x2="9" y2="12"/>
-                    </svg>
-                    Keluar
-                    <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                </button>
+                <div class="nav-item" onclick="document.getElementById('form-logout').submit()" style="cursor:pointer;">
+                    <div class="nav-item-left">
+                        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        <span>Keluar</span>
+                    </div>
+                    <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+                </div>
             </form>
         </div>
     </aside>
 
-    <div class="main-layout-wrapper">
-        <header class="top-bar">
-            <div class="search-container">
-                <svg class="search-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1E1E1E" stroke-width="2.5">
-                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                </svg>
-                <input type="text" placeholder="Cari mata kuliah">
+    <div class="main-content">
+        <header class="topbar">
+            <div class="search-bar">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" placeholder="Cari topik forum" autocomplete="off"/>
             </div>
-            <div class="user-profile">
-                <div class="profile-avatar">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                    </svg>
+            <div class="topbar-user">
+                <div class="topbar-avatar">
+                    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </div>
-                <span class="username">{{ $user->username }}</span>
+                <span class="topbar-username">{{ $user->username }}</span>
             </div>
         </header>
 
-        <div class="scrollable-content-area">
+        <main class="page-scroll">
 
             {{-- HALAMAN DAFTAR FORUM --}}
             <section id="forum-view" class="page-view-container">
                 <div class="forum-header">
                     <div class="header-text">
-                        <h1>FORUM</h1>
+                        <h1>Forum</h1>
                         <p>Buat topik yang ingin dibicarakan, dan mulai berinteraksi dengan semua orang.</p>
                     </div>
                     <button class="btn-create-topic" id="btn-go-to-create">+ Buat Topik</button>
@@ -189,7 +180,7 @@
             <section id="create-topic-view" class="page-view-container hidden">
                 <div class="forum-header">
                     <div class="header-text">
-                        <h1>FORUM</h1>
+                        <h1>Forum</h1>
                         <p>Buat topik yang ingin kamu bicarakan, dan mulai berinteraksi dengan semua orang.</p>
                     </div>
                 </div>
@@ -241,10 +232,11 @@
                 </div>
             </section>
 
-        </div>
+        </main>
     </div>
+
 </div>
 
 <script src="{{ asset('script/forum.js') }}"></script>
 </body>
-</html>  
+</html>
