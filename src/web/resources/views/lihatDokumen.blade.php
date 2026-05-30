@@ -6,7 +6,7 @@
   <title>{{ $dokumen['nama'] ?? 'Lihat Dokumen' }} — Study Scope</title>
   <link rel="stylesheet" href="{{ asset('style/global.css') }}" />
   <link rel="stylesheet" href="{{ asset('style/beranda.css') }}" />
-  <link rel="stylesheet" href="{{ asset('style/lihat-dokumen.css') }}" />
+  <link rel="stylesheet" href="{{ asset('style/lihatDokumen.css') }}" />
 </head>
 <body>
 
@@ -192,6 +192,6 @@
   @csrf
 </form>
 
-<script src="{{ asset('script/lihat-dokumen.js') }}"></script>
+<script src="{{ asset('script/lihatDokumen.js') }}"></script>
 </body>
 </html>
