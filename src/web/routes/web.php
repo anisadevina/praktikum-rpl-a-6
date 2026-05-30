@@ -36,5 +36,11 @@ Route::post('/forum/balasan', [ForumController::class, 'buatBalasan'])->name('fo
 // -- UNGGAH --
 Route::get('/unggah', function () {
     $user = auth()->user();
-    return view('unggah', ['user' => $user]);
+    $mataKuliah = DB::table('mata_kuliah')->orderBy('nama_matkul')->get();
+    $dosen = DB::table('dosen')->orderBy('nama_dosen')->get();
+    return view('unggah', [
+        'user' => $user,
+        'mataKuliah' => $mataKuliah,
+        'dosen' => $dosen,
+    ]);
 })->middleware('auth')->name('unggah');

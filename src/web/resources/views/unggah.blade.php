@@ -187,12 +187,9 @@
                                 <div class="select-wrapper">
                                     <select name="id_matkul" class="form-select" required>
                                         <option value="" disabled selected>Pilih Mata Kuliah</option>
-                                        {{-- Nanti @foreach $mataKuliah dari BE --}}
-                                        <option value="1">Kalkulus I</option>
-                                        <option value="2">Matematika Diskrit</option>
-                                        <option value="3">Metode Numerik</option>
-                                        <option value="4">Fisika</option>
-                                        <option value="5">Bahasa Indonesia</option>
+                                        @foreach($mataKuliah as $mk)
+                                            <option value="{{ $mk->id_matkul }}">{{ $mk->nama_matkul }}</option>
+                                        @endforeach
                                     </select>
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="select-caret">
                                         <polyline points="6 9 12 15 18 9"/>
@@ -223,9 +220,9 @@
                             <div class="select-wrapper">
                                 <select name="id_dosen" class="form-select" required>
                                     <option value="" disabled selected>Pilih Dosen</option>
-                                    <option value="1">Nama Dosen 1</option>
-                                    <option value="2">Nama Dosen 2</option>
-                                    <option value="3">Nama Dosen 3</option>
+                                    @foreach($dosen as $d)
+                                        <option value="{{ $d->id_dosen }}">{{ $d->nama_dosen }}</option>
+                                    @endforeach
                                 </select>
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="select-caret">
                                     <polyline points="6 9 12 15 18 9"/>
