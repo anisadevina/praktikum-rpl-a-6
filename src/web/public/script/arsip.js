@@ -1,4 +1,4 @@
-// Konfigurasi path
+// Konfigurasi Path 
 const PAGE_PATHS = {
     beranda: "/beranda",
     matkul: "/matkul",
@@ -9,7 +9,7 @@ const PAGE_PATHS = {
 
 const ACTIVE_PAGE = "arsip";
 
-// Sidebar Aktif 
+// Sidebar Aktif
 function setupSidebarActive() {
     const navItems = document.querySelectorAll(".nav-item[data-page]");
     navItems.forEach((item) => {
@@ -39,7 +39,7 @@ function renderUsername() {
     }
 }
 
-// Search 
+// Search
 function setupSearch() {
     const input = document.getElementById("search-input");
     if (!input) return;
@@ -52,7 +52,7 @@ function setupSearch() {
     });
 }
 
-// Filter Tahun 
+// Filter Tahun
 function setupFilter() {
     const select = document.getElementById("filter-tahun");
     if (!select) return;
@@ -84,21 +84,51 @@ function setupArsipItems() {
     });
 }
 
-// Bookmark Toggle 
+// Bookmark Toggle
 function setupBookmarks() {
     document.querySelectorAll(".arsip-bookmark").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
+        btn.addEventListener("click", async (e) => {
             e.stopPropagation();
+
+            const id         = btn.dataset.id;
+            const isBookmark = btn.classList.contains("bookmarked");
+
+            // Optimistic UI — langsung toggle dulu sebelum response
             btn.classList.toggle("bookmarked");
-            const id = btn.dataset.id;
-            // TODO: kirim ke backend untuk simpan/hapus bookmark
-            // fetch(`/arsip/bookmark/${id}`, { method: 'POST', headers: { 'X-CSRF-TOKEN': '...' } })
-            console.log(`Bookmark toggled for arsip id=${id}`);
+
+            try {
+                const response = await fetch(`/arsip/bookmark/${id}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')?.content ?? "",
+                    },
+                    body: JSON.stringify({ bookmarked: !isBookmark }),
+                });
+
+                if (!response.ok) throw new Error("Gagal menyimpan bookmark");
+
+                const data = await response.json();
+
+                // Kalau dari halaman arsip dan di-unbookmark, hapus item dari list
+                if (!data.bookmarked) {
+                    const item = btn.closest(".arsip-item");
+                    if (item) {
+                        item.style.transition = "opacity 0.3s";
+                        item.style.opacity    = "0";
+                        setTimeout(() => item.remove(), 300);
+                    }
+                }
+            } catch (err) {
+                // Rollback toggle kalau gagal
+                btn.classList.toggle("bookmarked");
+                console.error("Bookmark error:", err);
+            }
         });
     });
 }
 
-// Tombol Keluar 
+// Tombol Keluar
 function setupLogout() {
     const btnKeluar = document.getElementById("btn-keluar");
     if (!btnKeluar) return;
@@ -114,7 +144,7 @@ function setupLogout() {
     });
 }
 
-// Init 
+// Init
 document.addEventListener("DOMContentLoaded", () => {
     setupSidebarActive();
     renderUsername();
