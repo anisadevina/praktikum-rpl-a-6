@@ -8,8 +8,6 @@ const PAGE_PATHS = {
 };
 
 // Baca parameter 'prev'
-// 'prev' = URL halaman sebelumnya, di-encode, dikirim saat navigasi ke halaman ini
-// Contoh: /arsip/dokumen/1?prev=%2Fmatkul%2Fdetail%3Fid%3D5
 const PREV_URL = decodeURIComponent(
     new URLSearchParams(window.location.search).get("prev") || ""
 ) || "/arsip"; // fallback ke arsip kalau tidak ada
