@@ -61,20 +61,24 @@
     </nav>
 
     <div class="sidebar-footer">
-      <form method="POST" action="{{ route('logout') }}" id="form-logout">
-        @csrf
-        <div class="nav-item" id="btn-keluar" onclick="document.getElementById('form-logout').submit()">
-          <div class="nav-item-left">
-            <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-            <span>Keluar</span>
-          </div>
-          <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      <div class="nav-item" id="btn-keluar">
+        <div class="nav-item-left">
+          <svg viewBox="0 0 24 24">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          <span>Keluar</span>
         </div>
-      </form>
+        <svg class="nav-chevron" viewBox="0 0 24 24">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </div>
     </div>
   </aside>
 
   <div class="main-content">
+    
     <header class="topbar">
       <div class="search-bar">
         <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -84,7 +88,7 @@
         <div class="topbar-avatar">
           <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </div>
-        <span class="topbar-username">{{ $user->username ?? 'Guest' }}</span>
+        <span class="topbar-username" id="topbar-username">Loading...</span>
       </div>
     </header>
 
@@ -105,74 +109,28 @@
       </section>
 
       <section>
-        <h2 class="section-title" id="page-title" style="display: {{ $query ? 'block' : 'none' }};">
-            {{ $query ? 'Hasil pencarian: "' . $query . '"' : 'Semua Mata Kuliah' }}
-        </h2>
+        <h2 class="section-title" id="page-title" style="display: none;">Loading...</h2>
 
-        @if(!$query)
-            @if(isset($mataKuliahTerakhir) && count($mataKuliahTerakhir) > 0)
-                <h2 class="section-title">Mata Kuliah Terakhir Dilihat</h2>
-                <div class="cards-grid" style="margin-bottom: 40px;">
-                    @foreach ($mataKuliahTerakhir as $mk)
-                        <div class="matkul-card" data-id="{{ $mk->id_matkul }}">
-                          <div class="card-thumbnail">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <rect x="3" y="3" width="18" height="18" rx="2"/>
-                              <circle cx="8.5" cy="8.5" r="1.5"/>
-                              <polyline points="21 15 16 10 5 21"/>
-                            </svg>
-                          </div>
-                          <div class="card-body">
-                            <p class="card-name" title="{{ $mk->nama_matkul }}">{{ $mk->nama_matkul }}</p>
-                            <div class="card-difficulty">Tingkat kesulitan</div>
-                            <div class="card-rating">
-                              <span class="card-rating-star">★</span>
-                              <span class="card-rating-score">{{ $mk->tingkat_kesulitan }}/5</span>
-                            </div>
-                            <p class="card-arsip">{{ $mk->arsip }} arsip (materi, tugas, soal)</p>
-                            <a class="card-btn" href="{{ url('/matkul/detail?id=' . $mk->id_matkul) }}">Lihat Selengkapnya</a>
-                          </div>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
+        <h2 class="section-title" id="title-terakhir" style="display: none;">Mata Kuliah Terakhir Dilihat</h2>
+        <div class="cards-grid" id="matkul-terakhir-grid" style="margin-bottom: 40px;">
+           </div>
 
-            <h2 class="section-title">Mata Kuliah Lain</h2>
-        @endif
+        <h2 class="section-title" id="title-semua" style="display: none;">Mata Kuliah</h2>
+        <div class="cards-grid" id="matkul-semua-grid">
+           </div>
 
-        <div class="cards-grid" id="matkul-grid">
-          @foreach ($semuaMatkul as $mk)
-            <div class="matkul-card" data-id="{{ $mk->id_matkul }}">
-              <div class="card-thumbnail">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="3" y="3" width="18" height="18" rx="2"/>
-                  <circle cx="8.5" cy="8.5" r="1.5"/>
-                  <polyline points="21 15 16 10 5 21"/>
-                </svg>
-              </div>
-              <div class="card-body">
-                <p class="card-name" title="{{ $mk->nama_matkul }}">{{ $mk->nama_matkul }}</p>
-                <div class="card-difficulty">Tingkat kesulitan</div>
-                <div class="card-rating">
-                  <span class="card-rating-star">★</span>
-                  <span class="card-rating-score">{{ $mk->tingkat_kesulitan }}/5</span>
-                </div>
-                <p class="card-arsip">{{ $mk->arsip }} arsip (materi, tugas, soal)</p>
-                <a class="card-btn" href="{{ url('/matkul/detail?id=' . $mk->id_matkul) }}">Lihat Selengkapnya</a>
-              </div>
-            </div>
-          @endforeach
-        </div>
-
-        <div class="pagination-wrapper">
-            {{ $semuaMatkul->withQueryString()->links('pagination::bootstrap-4') }}
-        </div>
+        <div class="pagination-wrapper" id="pagination-container">
+           </div>
 
       </section>
     </main>
   </div>
 
 </div>
+
+<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+  @csrf
+</form>
 
 <script src="{{ asset('script/matkul.js') }}"></script>
 </body>
