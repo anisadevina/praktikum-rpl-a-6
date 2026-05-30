@@ -44,3 +44,26 @@ Route::get('/unggah', function () {
         'dosen' => $dosen,
     ]);
 })->middleware('auth')->name('unggah');
+
+// -- UNGGAH ADMIN --
+Route::get('/unggah/admin', function () {
+    $user = auth()->user();
+    $mataKuliah = DB::table('mata_kuliah')->orderBy('nama_matkul')->get();
+    $dosen = DB::table('dosen')->orderBy('nama_dosen')->get();
+    return view('unggah-admin', ['user' => $user, 'mataKuliah' => $mataKuliah, 'dosen' => $dosen]);
+})->middleware('auth')->name('unggah.admin');
+
+Route::get('/unggah/review/{id}', function ($id) {
+    $user = auth()->user();
+    return view('unggah-review', ['user' => $user, 'dokumen' => null]);
+})->middleware('auth')->name('unggah.review');
+
+Route::post('/unggah/keputusan/{id}', function () {
+    return redirect()->route('unggah.admin');
+})->middleware('auth')->name('unggah.keputusan');
+
+Route::get('/dokumen/{id}', function ($id) {
+    $user = auth()->user();
+    $dokumen = DB::table('dokumen')->where('id_dokumen', $id)->first();
+    return view('lihat-dokumen', ['user' => $user, 'dokumen' => $dokumen]);
+})->middleware('auth')->name('lihat-dokumen');
