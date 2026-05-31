@@ -12,7 +12,6 @@
 
 <div class="app-layout">
 
-  <!-- ═══════════════ SIDEBAR ═══════════════ -->
   <aside class="sidebar">
 
     <div class="sidebar-logo">
@@ -114,7 +113,6 @@
 
   </aside>
 
-  <!-- Main -->
   <div class="main-content">
 
     <header class="topbar">
@@ -137,31 +135,33 @@
             <circle cx="12" cy="7" r="4"/>
           </svg>
         </div>
-        <span class="topbar-username" id="topbar-username">{{ $user->username ?? 'Guest' }}</span>
+        <span class="topbar-username" id="topbar-username">Loading...</span>
       </div>
     </header>
 
     <main class="page-scroll">
 
-      <!-- Breadcrumb -->
+      <button class="btn-back" id="btn-back">
+        <svg viewBox="0 0 24 24">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+       Kembali
+      </button>
+
       <div class="breadcrumb">
         <svg viewBox="0 0 24 24">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
           <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
         </svg>
-        <span id="breadcrumb-text">Mata Kuliah - {{ $matkul->nama_matkul }}</span>
+        <span id="breadcrumb-text">Mata Kuliah - Loading...</span>
       </div>
 
-      <!-- Hero Detail -->
       <div class="detail-hero">
-        <h1 class="detail-hero-title" id="matkul-title">{{ $matkul->nama_matkul }}</h1>
-        <p class="detail-hero-desc" id="matkul-desc">
-          {{ $matkul->deskripsi ?? 'Belum ada deskripsi untuk mata kuliah ini.' }}
-        </p>
+        <h1 class="detail-hero-title" id="matkul-title">Loading...</h1>
+        <p class="detail-hero-desc" id="matkul-desc">Memuat deskripsi mata kuliah...</p>
 
         <div class="detail-info-grid">
 
-          <!-- Card 1: Fokus Materi -->
           <div class="detail-info-card">
             <div class="detail-info-label">
               <svg viewBox="0 0 24 24">
@@ -172,13 +172,12 @@
               Fokus materi dari mata kuliah terkait
             </div>
             <ul class="detail-fokus-list" id="fokus-list">
-              <li>Berisi materi mata kuliah {{ $matkul->nama_matkul }}</li>
+              <li>Berisi materi mata kuliah <span id="fokus-matkul-name">...</span></li>
               <li>Berisi soal ujian</li>
               <li>Berisi latihan soal</li>
             </ul>
           </div>
 
-          <!-- Card 2: Rating -->
           <div class="detail-info-card">
             <div class="detail-info-label">
               <svg viewBox="0 0 24 24">
@@ -190,14 +189,12 @@
             </div>
             <div class="detail-rating-wrap">
               <span class="detail-rating-star">★</span>
-              <span class="detail-rating-score" id="matkul-rating">{{ $matkul->tingkat_kesulitan }}</span>
+              <span class="detail-rating-score" id="matkul-rating">0.0</span>
               <span class="detail-rating-max">/5.0</span>
             </div>
-
-            <p class="detail-rating-sub" id="matkul-rating-sub">{{ $teksKesulitan }}</p>
+            <p class="detail-rating-sub" id="matkul-rating-sub">Loading...</p>
           </div>
 
-          <!-- Card 3: Jumlah Arsip -->
           <div class="detail-info-card">
             <div class="detail-info-label">
               <svg viewBox="0 0 24 24">
@@ -207,27 +204,25 @@
               </svg>
               Jumlah arsip tersedia (tugas, materi, dan soal)
             </div>
-            <p class="detail-arsip-count" id="matkul-arsip-count">{{ $jumlahArsip }}</p>
+            <p class="detail-arsip-count" id="matkul-arsip-count">0</p>
             <p class="detail-arsip-sub">Arsip tersimpan</p>
           </div>
 
         </div>
       </div>
 
-      <!-- Arsip Mata Kuliah -->
       <section>
         <h2 class="arsip-section-title">Arsip mata kuliah</h2>
 
-        <!-- Filter -->
         <div class="arsip-filter-bar">
           <span class="arsip-filter-label">Filter</span>
           <div class="arsip-filter-wrapper">
             <select class="arsip-filter-select" id="filter-tahun">
-              <option value=""> Semua Tahun</option>
-              <option value="2024"{{ request('tahun') == '2024' ? 'selected' : '' }}>2024</option>
-              <option value="2023"{{ request('tahun') == '2023' ? 'selected' : '' }}>2023</option>
-              <option value="2022"{{ request('tahun') == '2022' ? 'selected' : '' }}>2022</option>
-              <option value="2021"{{ request('tahun') == '2021' ? 'selected' : '' }}>2021</option>
+              <option value="">Semua Tahun</option>
+              <option value="2024">2024</option>
+              <option value="2023">2023</option>
+              <option value="2022">2022</option>
+              <option value="2021">2021</option>
             </select>
             <svg class="filter-chevron" viewBox="0 0 24 24">
               <polyline points="6 9 12 15 18 9"/>
@@ -235,45 +230,18 @@
           </div>
         </div>
 
-        <!-- List Arsip -->
         <div class="arsip-list" id="arsip-list">
-
-          @forelse ($daftarArsip as $arsip)
-          <div class="arsip-item" data-id="{{ $arsip->id_dokumen ?? $arsip->id }}">
-            <div class="arsip-icon">
-              <svg viewBox="0 0 24 24">
-                <path d="M8 17l4 4 4-4"/>
-                <path d="M12 12v9"/>
-                <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/>
-              </svg>
-            </div>
-            <div class="arsip-info">
-              <span class="arsip-name">{{ $arsip->nama_dokumen ?? $arsip->nama }}r</span>
-              <div class="arsip-meta">
-                <span class="arsip-badge">{{ $arsip->tahun }}</span>
-                <span class="arsip-date">Diunggah pada {{ $arsip->waktu_unggah ?? $arsip->created_at }}</span>
-              </div>
-            </div>
-            <div class="arsip-bookmark" data-id="{{ $arsip->id_dokumen ?? $arsip->id }}">
-              <svg viewBox="0 0 24 24">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-              </svg>
-            </div>
-          </div>
-
-          @empty
-          <p style="color: var(--color-text-muted); font-style: italic; padding: 20px 0;">
-          Belum ada arsip materi atau soal untuk mata kuliah ini.
-          </p>
-          @endforelse
-
-        </div>
+           </div>
       </section>
 
     </main>
   </div>
 
 </div>
+
+<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+  @csrf
+</form>
 
 <script src="{{ asset('script/detailMatkul.js') }}"></script>
 </body>
