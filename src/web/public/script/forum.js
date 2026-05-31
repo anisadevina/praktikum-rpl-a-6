@@ -98,9 +98,6 @@ function generateTopicCard(t) {
                     </svg>
                 </div>
                 <input type="text" class="input-balasan" placeholder="Tulis balasan Anda...">
-                <label class="label-anonim-balasan">
-                    <input type="checkbox" class="checkbox-anonim-balasan"> Anonim
-                </label>
                 <button type="button" class="btn-send-message-submit btn-kirim-balasan">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
@@ -376,7 +373,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const formEl   = kirimBtn.closest(".main-topic-input");
             const idTopik  = formEl.dataset.idTopik;
             const pesan    = formEl.querySelector(".input-balasan").value.trim();
-            const isAnonim = formEl.querySelector(".checkbox-anonim-balasan").checked ? "1" : "0";
+            const isAnonim = "0";
             if (!pesan) return;
             submitBalasan(idTopik, pesan, isAnonim, formEl);
         }
@@ -388,7 +385,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const formEl   = e.target.closest(".main-topic-input");
             const idTopik  = formEl.dataset.idTopik;
             const pesan    = e.target.value.trim();
-            const isAnonim = formEl.querySelector(".checkbox-anonim-balasan").checked ? "1" : "0";
+            const isAnonim = "0";
             if (!pesan) return;
             submitBalasan(idTopik, pesan, isAnonim, formEl);
         }
