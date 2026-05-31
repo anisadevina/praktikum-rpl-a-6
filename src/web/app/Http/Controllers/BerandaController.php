@@ -8,6 +8,10 @@ class BerandaController extends Controller
 {
     public function index()
     {
+        return view('beranda');
+    }
+    public function getData()
+    {
         $user = auth()->user();
 
         $mataKuliahTerakhir = DB::table('riwayat_akses')
@@ -29,6 +33,13 @@ class BerandaController extends Controller
             ->limit(4)
             ->get();
 
-        return view('beranda', compact('user', 'mataKuliahTerakhir', 'forumTerbaru'));
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'user' => $user,
+                'mataKuliahTerakhir' => $mataKuliahTerakhir,
+                'forumTerbaru' => $forumTerbaru
+            ]
+        ]);
     }
 }

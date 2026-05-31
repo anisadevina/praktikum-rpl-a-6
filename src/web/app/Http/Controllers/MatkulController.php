@@ -8,12 +8,17 @@ use Carbon\Carbon;
 
 class MatkulController extends Controller
 {
-    public function index(Request $request)
+    public function index()
+    {
+        return view('matkul');
+    }
+
+    public function getIndexData(Request $request)
     {
         $user = auth()->user();
         $query = $request->input('q', '');
 
-        // 1. Ambil matkul terakhir dilihat (Tetap limit 4)
+        // 1. Ambil matkul terakhir dilihat (limit 4)
         $mataKuliahTerakhir = DB::table('riwayat_akses')
             ->join('mata_kuliah', 'riwayat_akses.id_matkul', '=', 'mata_kuliah.id_matkul')
             ->where('riwayat_akses.id_user', $user->id_user)
@@ -26,12 +31,12 @@ class MatkulController extends Controller
                 return $item;
             });
 
-        // 2. Ambil semua matkul dengan PAGINATION (10 per halaman)
+        // 2. Ambil semua matkul dengan pagination
         $semuaMatkul = DB::table('mata_kuliah')
             ->when($query, function ($q) use ($query) {
                 $q->where('nama_matkul', 'like', '%' . $query . '%');
             })
-            ->paginate(12); // <--- Mengganti get() menjadi paginate(10)
+            ->paginate(12);
 
         // 3. Sisipkan jumlah arsip ke data yang sudah di-paginate
         $semuaMatkul->getCollection()->transform(function ($item) {
@@ -39,7 +44,15 @@ class MatkulController extends Controller
             return $item;
         });
 
-        return view('matkul', compact('user', 'mataKuliahTerakhir', 'semuaMatkul', 'query'));
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'user' => $user,
+                'mataKuliahTerakhir' => $mataKuliahTerakhir,
+                'semuaMatkul' => $semuaMatkul,
+                'query' => $query,
+            ]
+        ]);
     }
 
     public function search(Request $request)
@@ -57,13 +70,21 @@ class MatkulController extends Controller
         return response()->json($matkul);
     }
 
-    public function detail(Request $request)
+    public function detail()
+    {
+        return view('detailMatkul');
+    }
+
+    public function getDetailData(Request $request)
     {
         $id_matkul = $request->query('id');
         $user = auth()->user();
 
         if (!$id_matkul) {
-            return redirect('/beranda');
+            return response()->json([
+                'status' => 'error',
+                'message' => 'ID tidak ditemukan'
+            ], 400);
         }
 
         $this->catatRiwayatAkses($user->id_user, $id_matkul);
@@ -71,7 +92,10 @@ class MatkulController extends Controller
         $matkul = DB::table('mata_kuliah')->where('id_matkul', $id_matkul)->first();
 
         if (!$matkul) {
-            return redirect('/beranda');
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Mata kuliah tidak ditemukan'
+            ], 404);
         }
 
         $teksKesulitan = $this->konversiTingkatKesulitan($matkul->tingkat_kesulitan);
@@ -86,10 +110,19 @@ class MatkulController extends Controller
         $jumlahArsip = $queryArsip->count();
         $daftarArsip = $queryArsip->get();
 
-        return view('detailMatkul', compact('user', 'matkul', 'jumlahArsip', 'daftarArsip', 'teksKesulitan'));
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'user' => $user,
+                'matkul' => $matkul,
+                'teksKesulitan' => $teksKesulitan,
+                'jumlahArsip' => $jumlahArsip,
+                'daftarArsip' => $daftarArsip,
+            ]
+        ]);
     }
 
-    // --- Private Methods (Membantu agar fungsi detail tetap kurus) ---
+    // --- Private Methods ---
 
     private function catatRiwayatAkses($id_user, $id_matkul)
     {
