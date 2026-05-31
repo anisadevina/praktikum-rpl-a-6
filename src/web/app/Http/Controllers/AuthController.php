@@ -9,43 +9,54 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
-class AuthController extends Controller // Gunakan huruf kapital di awal
+class AuthController extends Controller
 {
     public function register(RegisterRequest $request)
     {
-        // Validasi otomatis dijalankan oleh RegisterRequest
-        User::create([
-            'nim' => $request->nim,
-            'username' => $request->username,
+        $user = User::create([
+            'nim'        => $request->nim,
+            'username'   => $request->username,
             'email_user' => $request->email_user,
-            'password' => Hash::make($request->password),
-            'role' => 'user',
+            'password'   => Hash::make($request->password),
+            'role'       => 'user',
         ]);
 
-        return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan login.');
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Registrasi berhasil, silakan login.',
+            'user'    => $user
+        ], 201);
     }
 
     public function login(LoginRequest $request)
     {
-        // Validasi otomatis dijalankan oleh LoginRequest
         $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/beranda');
+
+            return response()->json([
+                'status'   => 'success',
+                'message'  => 'Login berhasil',
+                'redirect' => '/beranda'
+            ], 200);
         }
 
-        return back()->withErrors([
-            'username' => 'Username atau password salah.',
-        ])->withInput($request->only('username'));
+        return response()->json([
+            'message' => 'Username atau password salah'
+        ], 401);
     }
 
     public function logout(Request $request)
     {
         Auth::logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/')->with('success', 'Kamu telah berhasil logout.');
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Logout berhasil'
+        ]);
     }
 }

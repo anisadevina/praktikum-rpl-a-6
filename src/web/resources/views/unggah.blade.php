@@ -61,16 +61,13 @@
         </nav>
 
         <div class="sidebar-footer">
-            <form method="POST" action="{{ route('logout') }}" id="form-logout">
-                @csrf
-                <div class="nav-item" onclick="document.getElementById('form-logout').submit()" style="cursor:pointer;">
-                    <div class="nav-item-left">
-                        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                        <span>Keluar</span>
-                    </div>
-                    <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            <div class="nav-item" id="btn-keluar" style="cursor:pointer;">
+                <div class="nav-item-left">
+                    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    <span>Keluar</span>
                 </div>
-            </form>
+                <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
         </div>
     </aside>
 
@@ -84,14 +81,13 @@
                 <div class="topbar-avatar">
                     <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </div>
-                <span class="topbar-username">{{ $user->username ?? 'namapengguna' }}</span>
+                <span class="topbar-username">Memuat...</span>
             </div>
         </header>
 
         <main class="page-scroll">
 
-           
-            {{-- VIEW 1: DAFTAR FILE DIUNGGAH    --}}
+            {{-- VIEW 1: DAFTAR FILE DIUNGGAH --}}
             <section id="unggah-view" class="page-view-container">
 
                 <div class="unggah-page-header">
@@ -127,37 +123,16 @@
                             </tr>
                         </thead>
                         <tbody id="unggah-table-body">
-                            @isset($dokumen)
-                                @forelse($dokumen as $d)
-                                <tr>
-                                    <td class="td-filename">{{ $d->judul_file }}</td>
-                                    <td>{{ $d->nama_matkul }}</td>
-                                    <td>{{ $d->tahun }}</td>
-                                    <td>
-                                        <span class="status-badge status-{{ strtolower($d->status) }}">
-                                            {{ ucfirst($d->status) }}
-                                        </span>
-                                    </td>
-                                    <td class="td-catatan">{{ $d->catatan ?? '–' }}</td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="5" class="td-empty">Belum ada file yang diunggah.</td>
-                                </tr>
-                                @endforelse
-                            @else
                             <tr>
-                                <td colspan="5" class="td-empty">Belum ada file yang diunggah.</td>
+                                <td colspan="5" class="td-empty">Memuat data unggahan...</td>
                             </tr>
-                            @endisset
                         </tbody>
                     </table>
                 </div>
 
             </section>
 
-          
-            {{-- VIEW 2: FORM UNGGAH FILE        --}}
+            {{-- VIEW 2: FORM UNGGAH FILE --}}
             <section id="form-unggah-view" class="page-view-container hidden">
 
                 <div class="unggah-page-header">
@@ -186,10 +161,7 @@
                                 <label class="form-label">Mata Kuliah</label>
                                 <div class="select-wrapper">
                                     <select name="id_matkul" class="form-select" required>
-                                        <option value="" disabled selected>Pilih Mata Kuliah</option>
-                                        @foreach($mataKuliah as $mk)
-                                            <option value="{{ $mk->id_matkul }}">{{ $mk->nama_matkul }}</option>
-                                        @endforeach
+                                        <option value="" disabled selected>Memuat Mata Kuliah...</option>
                                     </select>
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="select-caret">
                                         <polyline points="6 9 12 15 18 9"/>
@@ -219,10 +191,7 @@
                             <label class="form-label">Dosen</label>
                             <div class="select-wrapper">
                                 <select name="id_dosen" class="form-select" required>
-                                    <option value="" disabled selected>Pilih Dosen</option>
-                                    @foreach($dosen as $d)
-                                        <option value="{{ $d->id_dosen }}">{{ $d->nama_dosen }}</option>
-                                    @endforeach
+                                    <option value="" disabled selected>Memuat Dosen...</option>
                                 </select>
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="select-caret">
                                     <polyline points="6 9 12 15 18 9"/>
@@ -292,7 +261,9 @@
     </div>
 
 </div>
-
+<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+    @csrf
+</form>
 <script src="{{ asset('script/unggah.js') }}"></script>
 </body>
 </html>

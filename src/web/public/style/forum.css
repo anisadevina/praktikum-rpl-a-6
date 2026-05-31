@@ -562,9 +562,7 @@
     display: none !important;
 }
 
-/* Overrides warna khusus forum */
-
-/* Tombol kategori aktif */
+/* Tombol kategori aktif → pink */
 .category-btn.active {
     background-color: #BC4749 !important;
     color: #ffffff !important;

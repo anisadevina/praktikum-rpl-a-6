@@ -6,7 +6,7 @@
     <title>Review Unggahan — Study Scope</title>
     <link rel="stylesheet" href="{{ asset('style/global.css') }}">
     <link rel="stylesheet" href="{{ asset('style/beranda.css') }}">
-    <link rel="stylesheet" href="{{ asset('style/unggah-admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('style/unggahAdmin.css') }}">
     <!-- Quill Rich Text Editor -->
     <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
 </head>
@@ -196,6 +196,6 @@
 </div>
 
 <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
-<script src="{{ asset('script/unggah-review.js') }}"></script>
+<script src="{{ asset('script/unggahReview.js') }}"></script>
 </body>
 </html>

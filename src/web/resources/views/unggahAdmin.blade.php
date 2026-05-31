@@ -6,7 +6,7 @@
     <title>Unggah — Study Scope (Admin)</title>
     <link rel="stylesheet" href="{{ asset('style/global.css') }}">
     <link rel="stylesheet" href="{{ asset('style/beranda.css') }}">
-    <link rel="stylesheet" href="{{ asset('style/unggah-admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('style/unggahAdmin.css') }}">
 </head>
 <body>
 
