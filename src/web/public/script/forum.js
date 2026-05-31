@@ -255,6 +255,8 @@ async function submitTopik() {
         // Sukses: kembali ke daftar, reset form, refresh data
         showForumView();
         resetFormTopik();
+        history.replaceState(null, "", "/forum");
+        document.querySelector(".page-scroll").scrollTop = 0;
         await fetchForumData();
 
     } catch (error) {
@@ -319,6 +321,9 @@ function showForumView() {
 function showCreateView() {
     document.getElementById("forum-view").classList.add("hidden");
     document.getElementById("create-topic-view").classList.remove("hidden");
+
+    // Bersihkan hash dari URL agar tidak scroll ke topik lama setelah kembali
+    history.replaceState(null, "", window.location.pathname);
 
     // Reset tampilan forum agar hasil pencarian tidak sekilas muncul saat kembali
     const searchInput = document.getElementById("search-input");
