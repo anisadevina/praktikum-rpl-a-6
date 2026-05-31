@@ -43,4 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/forum/data', [ForumController::class, 'getData'])->name('forum.data');
     Route::post('/forum/topik', [ForumController::class, 'buatTopik'])->name('forum.topik');
     Route::post('/forum/balasan', [ForumController::class, 'buatBalasan'])->name('forum.balasan');
+
+    // Arsip 
+    Route::get('/arsip/view/{kode}', [MatkulController::class, 'viewArsip'])->name('arsip.view');
 });

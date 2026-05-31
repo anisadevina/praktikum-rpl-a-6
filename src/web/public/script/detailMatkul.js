@@ -163,31 +163,41 @@ async function fetchDetailMatkul() {
                 arsipList.innerHTML = `<p style="color: var(--color-text-muted); font-style: italic; padding: 20px 0;">Belum ada arsip materi atau soal untuk mata kuliah ini.</p>`;
             } else {
                 arsipList.innerHTML = data.daftarArsip
-                    .map(
-                        (arsip) => `
-                    <div class="arsip-item" data-id="${arsip.id_dokumen || arsip.id}">
-                        <div class="arsip-icon">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M8 17l4 4 4-4"/>
-                                <path d="M12 12v9"/>
-                                <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/>
-                            </svg>
-                        </div>
-                        <div class="arsip-info">
-                            <span class="arsip-name">${arsip.nama_dokumen || arsip.nama}</span>
-                            <div class="arsip-meta">
-                                <span class="arsip-badge">${arsip.tahun_dokumen || arsip.tahun || ""}</span>
-                                <span class="arsip-date">Diunggah pada ${arsip.waktu_unggah || arsip.created_at}</span>
+                    .map((arsip) => {
+                        const rawDate = arsip.waktu_unggah || arsip.created_at;
+                        const formattedDate = new Date(
+                            rawDate,
+                        ).toLocaleDateString("id-ID", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                        });
+
+                        return `
+                        <div class="arsip-item" data-kode="${arsip.kodeRahasia}"">
+                            <div class="arsip-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M8 17l4 4 4-4"/>
+                                    <path d="M12 12v9"/>
+                                    <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/>
+                                </svg>
+                            </div>
+                            <div class="arsip-info">
+                                <span class="arsip-name">${arsip.judul || "Tanpa Judul"}</span>
+                                <div class="arsip-meta">
+                                    <span class="arsip-badge">${arsip.tahun_dokumen || arsip.tahun || ""}</span>
+                                    
+                                    <span class="arsip-date">Diunggah pada ${formattedDate}</span>
+                                </div>
+                            </div>
+                            <div class="arsip-bookmark" data-id="${arsip.id_dokumen || arsip.id}">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                                </svg>
                             </div>
                         </div>
-                        <div class="arsip-bookmark" data-id="${arsip.id_dokumen || arsip.id}">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                            </svg>
-                        </div>
-                    </div>
-                `,
-                    )
+                    `;
+                    })
                     .join("");
             }
 
@@ -210,9 +220,9 @@ function setupArsipItems() {
         item.addEventListener("click", (e) => {
             // Jangan trigger kalau user mengeklik ikon bookmark
             if (e.target.closest(".arsip-bookmark")) return;
-            const id = item.dataset.id;
-            console.log(`Buka arsip id=${id}`);
-            // Nanti ubah ke: window.location.href = `/arsip/view/${id}`;
+            const kode = item.dataset.kode;
+
+            window.open(`/arsip/view/${kode}`, "_blank");
         });
     });
 }
