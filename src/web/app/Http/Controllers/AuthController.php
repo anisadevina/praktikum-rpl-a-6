@@ -7,23 +7,24 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth; // Wajib dipanggil untuk Session Web
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
     public function register(RegisterRequest $request)
     {
-        User::create([
-            'nim' => $request->nim,
-            'username' => $request->username,
+        $user = User::create([
+            'nim'        => $request->nim,
+            'username'   => $request->username,
             'email_user' => $request->email_user,
-            'password' => Hash::make($request->password),
-            'role' => 'user',
+            'password'   => Hash::make($request->password),
+            'role'       => 'user',
         ]);
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'Registrasi berhasil dilakukan'
+            'status'  => 'success',
+            'message' => 'Registrasi berhasil, silakan login.',
+            'user'    => $user
         ], 201);
     }
 
@@ -35,26 +36,27 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             return response()->json([
-                'status' => 'success',
-                'message' => 'Login berhasil',
+                'status'   => 'success',
+                'message'  => 'Login berhasil',
                 'redirect' => '/beranda'
             ], 200);
         }
 
         return response()->json([
-            'message' => "Username atau password salah"
+            'message' => 'Username atau password salah'
         ], 401);
     }
 
     public function logout(Request $request)
     {
         Auth::logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'Kamu telah berhasil logout.'
-        ], 200);
+            'status'  => 'success',
+            'message' => 'Logout berhasil'
+        ]);
     }
 }

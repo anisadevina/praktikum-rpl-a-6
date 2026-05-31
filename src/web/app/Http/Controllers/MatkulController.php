@@ -19,7 +19,7 @@ class MatkulController extends Controller
         $user = auth()->user();
         $query = $request->input('q', '');
 
-        // 1. Ambil matkul terakhir dilihat (Tetap limit 4)
+        // 1. Ambil matkul terakhir dilihat (limit 4)
         $mataKuliahTerakhir = DB::table('riwayat_akses')
             ->join('mata_kuliah', 'riwayat_akses.id_matkul', '=', 'mata_kuliah.id_matkul')
             ->where('riwayat_akses.id_user', $user->id_user)
@@ -32,12 +32,12 @@ class MatkulController extends Controller
                 return $item;
             });
 
-        // 2. Ambil semua matkul dengan PAGINATION (10 per halaman)
+        // 2. Ambil semua matkul dengan pagination
         $semuaMatkul = DB::table('mata_kuliah')
             ->when($query, function ($q) use ($query) {
                 $q->where('nama_matkul', 'like', '%' . $query . '%');
             })
-            ->paginate(12); // <--- Mengganti get() menjadi paginate(10)
+            ->paginate(12);
 
         // 3. Sisipkan jumlah arsip ke data yang sudah di-paginate
         $semuaMatkul->getCollection()->transform(function ($item) {
@@ -50,9 +50,25 @@ class MatkulController extends Controller
             'data' => [
                 'user' => $user,
                 'mataKuliahTerakhir' => $mataKuliahTerakhir,
-                'semuaMatkul' => $semuaMatkul
+                'semuaMatkul' => $semuaMatkul,
+                'query' => $query,
             ]
         ]);
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('q', '');
+
+        $matkul = DB::table('mata_kuliah')
+            ->where('nama_matkul', 'like', '%' . $query . '%')
+            ->get()
+            ->map(function ($item) {
+                $item->arsip = DB::table('dokumen')->where('id_matkul', $item->id_matkul)->count();
+                return $item;
+            });
+
+        return response()->json($matkul);
     }
 
     public function detail()
@@ -105,12 +121,12 @@ class MatkulController extends Controller
                 'matkul' => $matkul,
                 'teksKesulitan' => $teksKesulitan,
                 'jumlahArsip' => $jumlahArsip,
-                'daftarArsip' => $daftarArsip
+                'daftarArsip' => $daftarArsip,
             ]
         ]);
     }
 
-    // --- Private Methods (Membantu agar fungsi detail tetap kurus) ---
+    // --- Private Methods ---
 
     private function catatRiwayatAkses($id_user, $id_matkul)
     {

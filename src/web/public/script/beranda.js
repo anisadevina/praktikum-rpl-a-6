@@ -100,7 +100,7 @@ async function fetchBerandaData() {
                 forumGrid.innerHTML = data.forumTerbaru
                     .map(
                         (post) => `
-                    <div class="forum-card" data-id="${post.id_topik}">
+                    <a class="forum-card" href="/forum#topik-${post.id_topik}">
                       <div class="forum-card-header">
                         <div class="forum-avatar">
                           <svg viewBox="0 0 24 24">
@@ -112,7 +112,7 @@ async function fetchBerandaData() {
                         <span class="forum-badge">${post.tag}</span>
                       </div>
                       <p class="forum-body">${post.pesan_topik.length > 120 ? post.pesan_topik.substring(0, 120) + "..." : post.pesan_topik}</p>
-                    </div>
+                    </a>
                 `,
                     )
                     .join("");
