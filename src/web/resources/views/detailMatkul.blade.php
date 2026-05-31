@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Beranda — Study Scope</title>
+  <title>Detail Mata Kuliah — Study Scope</title>
   <link rel="stylesheet" href="{{ asset('style/global.css') }}" />
   <link rel="stylesheet" href="{{ asset('style/beranda.css') }}" />
+  <link rel="stylesheet" href="{{ asset('style/detailMatkul.css') }}" />
 </head>
 <body>
 
@@ -26,7 +27,7 @@
 
     <nav class="sidebar-nav">
 
-      <div class="nav-item active" data-page="beranda">
+      <div class="nav-item" data-page="beranda">
         <div class="nav-item-left">
           <svg viewBox="0 0 24 24">
             <rect x="3" y="3" width="7" height="7" rx="1"/>
@@ -41,7 +42,7 @@
         </svg>
       </div>
 
-      <div class="nav-item" data-page="matkul">
+      <div class="nav-item active" data-page="matkul">
         <div class="nav-item-left">
           <svg viewBox="0 0 24 24">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
@@ -140,40 +141,108 @@
 
     <main class="page-scroll">
 
-      <section class="hero-banner">
-        <h1 class="hero-greeting">
-          Halo, <em id="hero-username">...</em>!
-        </h1>
-        <p class="hero-subtitle">Selamat datang di Study Scope</p>
-        <p class="hero-desc">
-          Ayo mulai perjalananmu dengan mengakses menu utama seperti mata kuliah dan forum tanya jawab.
-        </p>
-      </section>
+      <button class="btn-back" id="btn-back">
+        <svg viewBox="0 0 24 24">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+       Kembali
+      </button>
+
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>
+        <span id="breadcrumb-text">Mata Kuliah - Loading...</span>
+      </div>
+
+      <div class="detail-hero">
+        <h1 class="detail-hero-title" id="matkul-title">Loading...</h1>
+        <p class="detail-hero-desc" id="matkul-desc">Memuat deskripsi mata kuliah...</p>
+
+        <div class="detail-info-grid">
+
+          <div class="detail-info-card">
+            <div class="detail-info-label">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              Fokus materi dari mata kuliah terkait
+            </div>
+            <ul class="detail-fokus-list" id="fokus-list">
+              <li>Berisi materi mata kuliah <span id="fokus-matkul-name">...</span></li>
+              <li>Berisi soal ujian</li>
+              <li>Berisi latihan soal</li>
+            </ul>
+          </div>
+
+          <div class="detail-info-card">
+            <div class="detail-info-label">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              Rating tingkat kesulitan mata kuliah
+            </div>
+            <div class="detail-rating-wrap">
+              <span class="detail-rating-star">★</span>
+              <span class="detail-rating-score" id="matkul-rating">0.0</span>
+              <span class="detail-rating-max">/5.0</span>
+            </div>
+            <p class="detail-rating-sub" id="matkul-rating-sub">Loading...</p>
+          </div>
+
+          <div class="detail-info-card">
+            <div class="detail-info-label">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              Jumlah arsip tersedia (tugas, materi, dan soal)
+            </div>
+            <p class="detail-arsip-count" id="matkul-arsip-count">0</p>
+            <p class="detail-arsip-sub">Arsip tersimpan</p>
+          </div>
+
+        </div>
+      </div>
 
       <section>
-        <h2 class="section-title">Terakhir Dilihat</h2>
+        <h2 class="arsip-section-title">Arsip mata kuliah</h2>
 
-        <h3 class="sub-title">Mata Kuliah</h3>
-        
-        <div class="cards-grid" id="matkul-grid">
-           </div>
+        <div class="arsip-filter-bar">
+          <span class="arsip-filter-label">Filter</span>
+          <div class="arsip-filter-wrapper">
+            <select class="arsip-filter-select" id="filter-tahun">
+              <option value="">Semua Tahun</option>
+              <option value="2024">2024</option>
+              <option value="2023">2023</option>
+              <option value="2022">2022</option>
+              <option value="2021">2021</option>
+            </select>
+            <svg class="filter-chevron" viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+        </div>
 
-        <h3 class="sub-title">Forum Terbaru</h3>
-        
-        <div class="forum-grid" id="forum-list">
+        <div class="arsip-list" id="arsip-list">
            </div>
       </section>
 
     </main>
-
   </div>
 
 </div>
 
 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-        @csrf
+  @csrf
 </form>
 
-<script src="{{ asset('script/beranda.js') }}"></script>
+<script src="{{ asset('script/detailMatkul.js') }}"></script>
 </body>
 </html>

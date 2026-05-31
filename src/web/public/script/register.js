@@ -1,11 +1,11 @@
 const registerForm = document.getElementById("registerForm");
 const usernameInput = document.getElementById("username");
 const nimInput = document.getElementById("nim");
-const emailInput = document.getElementById("email");
+const emailInput = document.getElementById("email_user");
 const passwordInput = document.getElementById("password");
 const usernameError = document.getElementById("usernameError");
 const nimError = document.getElementById("nimError");
-const emailError = document.getElementById("emailError");
+const emailError = document.getElementById("email_userError");
 const passwordError = document.getElementById("passwordError");
 const formError = document.getElementById("formError");
 const togglePasswordBtn = document.querySelector(".toggle-password");
@@ -93,7 +93,7 @@ function validatePassword(input, errorEl) {
 }
 
 // ── Submit ─────────────────────────────────────────────────────────────────
-registerForm.addEventListener("submit", (e) => {
+registerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     formError.textContent = "";
 
@@ -107,11 +107,57 @@ registerForm.addEventListener("submit", (e) => {
     const validPassword = validatePassword(passwordInput, passwordError);
 
     if (!validUsername || !validNIM || !validEmail || !validPassword) {
-        e.preventDefault();
         return;
     }
 
-    registerForm.submit();
+    const submitBtn = registerForm.querySelector('button[type="submit"]');
+    let originalBtnText = "Daftar";
+    if (submitBtn) {
+        originalBtnText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "Memproses...";
+    }
+
+    const formData = new FormData(registerForm);
+
+    try {
+        const response = await fetch("/register", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": document.querySelector('input[name="_token"]')
+                    .value,
+                Accept: "application/json",
+            },
+            body: formData,
+        });
+
+        const data = await response.json();
+
+        if (response.status === 422) {
+            for (const field in data.errors) {
+                const errorElement = document.getElementById(`${field}Error`);
+                if (errorElement) {
+                    errorElement.textContent = data.errors[field][0];
+                }
+            }
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(data.message || "Terjadi kesalahan pada server");
+        }
+
+        sessionStorage.setItem("registerSuccess", "true");
+        window.location.href = "/";
+    } catch (error) {
+        console.error("Error:", error);
+        formError.textContent = "Gagal terhubung ke server. Silakan coba lagi";
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+        }
+    }
 });
 
 // ── Reset error on input ───────────────────────────────────────────────────
