@@ -9,6 +9,9 @@ const PAGE_PATHS = {
 
 const ACTIVE_PAGE = "forum";
 
+// ─── State: Simpan semua topik untuk pencarian client-side ───────────────────
+let allTopik = [];
+
 // ─── Ambil CSRF Token dari meta tag ──────────────────────────────────────────
 function getCsrf() {
     return document.querySelector('meta[name="csrf-token"]').getAttribute("content");
@@ -108,6 +111,48 @@ function generateTopicCard(t) {
     `;
 }
 
+// ─── Render Topik (dengan filter opsional) ────────────────────────────────────
+function renderTopik(query = "") {
+    const container = document.getElementById("forum-feed-container");
+    const sectionTitle = document.getElementById("forum-section-title");
+    if (!container) return;
+
+    const keyword = query.toLowerCase().trim();
+
+    const filtered = keyword
+        ? allTopik.filter((t) => {
+            const regex = new RegExp(`\\b${keyword}`, "i");
+            return regex.test(t.pesan_topik);
+        })
+        : allTopik;
+
+    // Ubah judul section sesuai kondisi pencarian
+    if (sectionTitle) {
+        sectionTitle.textContent = keyword ? `Hasil pencarian: "${query}"` : "Terbaru";
+    }
+
+    if (filtered.length === 0) {
+        container.innerHTML = keyword
+            ? `<p style="color:#888; text-align:center; padding:2rem;">Tidak ada topik yang cocok dengan "<strong>${query}</strong>".</p>`
+            : '<p style="color:#888; text-align:center; padding:2rem;">Belum ada topik. Jadilah yang pertama membuat topik!</p>';
+        return;
+    }
+
+    container.innerHTML = filtered.map(generateTopicCard).join("");
+}
+
+// ─── Setup Search Bar Forum ───────────────────────────────────────────────────
+function setupSearch() {
+    const input = document.getElementById("search-input");
+    if (!input) return;
+
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            renderTopik(input.value);
+        }
+    });
+}
+
 // ─── Fetch Data Forum dari API ────────────────────────────────────────────────
 async function fetchForumData() {
     try {
@@ -125,16 +170,13 @@ async function fetchForumData() {
             topbarUsername.textContent = data.user.username;
         }
 
-        // Render daftar topik
-        const container = document.getElementById("forum-feed-container");
-        if (!container) return;
+        // Simpan semua topik ke state global untuk pencarian client-side
+        allTopik = data.topik;
 
-        if (data.topik.length === 0) {
-            container.innerHTML = '<p style="color:#888; text-align:center; padding:2rem;">Belum ada topik. Jadilah yang pertama membuat topik!</p>';
-            return;
-        }
-
-        container.innerHTML = data.topik.map(generateTopicCard).join("");
+        // Render daftar topik (terapkan filter jika ada teks di search bar)
+        const searchInput = document.getElementById("search-input");
+        const currentQuery = searchInput ? searchInput.value.trim() : "";
+        renderTopik(currentQuery);
 
         // Scroll ke topik tertentu jika ada hash di URL
         const hash = window.location.hash;
@@ -277,6 +319,13 @@ function showForumView() {
 function showCreateView() {
     document.getElementById("forum-view").classList.add("hidden");
     document.getElementById("create-topic-view").classList.remove("hidden");
+
+    // Reset tampilan forum agar hasil pencarian tidak sekilas muncul saat kembali
+    const searchInput = document.getElementById("search-input");
+    if (searchInput) searchInput.value = "";
+    document.getElementById("forum-section-title").textContent = "Terbaru";
+    document.getElementById("forum-feed-container").innerHTML =
+        '<p style="color:#888; font-style:italic; padding:1rem 0;">Memuat topik...</p>';
 }
 
 function resetFormTopik() {
@@ -315,6 +364,7 @@ function setupLogout() {
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
     setupSidebarActive();
+    setupSearch();
     setupLogout();
     fetchForumData();
 
@@ -325,6 +375,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btn-cancel-create").addEventListener("click", () => {
         showForumView();
         resetFormTopik();
+        fetchForumData();
     });
 
     // Tombol submit topik

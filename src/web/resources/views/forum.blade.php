@@ -101,7 +101,7 @@
                     <button class="btn-create-topic" id="btn-go-to-create">+ Buat Topik</button>
                 </div>
 
-                <h3 class="section-title">Terbaru</h3>
+                <h3 class="section-title" id="forum-section-title">Terbaru</h3>
 
                 {{-- Diisi oleh JS --}}
                 <div id="forum-feed-container" class="feed-wrapper">
