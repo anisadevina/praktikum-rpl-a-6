@@ -105,7 +105,6 @@ loginForm.addEventListener("submit", async (e) => {
         }
 
         // Jika Sukses (Status 200)
-        localStorage.setItem("api_token", data.access_token);
         sessionStorage.setItem("loggedUser", JSON.stringify(data.user));
         window.location.href = "/beranda";
     } catch (error) {

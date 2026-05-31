@@ -35,7 +35,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/matkul/detail/data', [MatkulController::class, 'getDetailData'])->name('matkul.detail.data');
 
     // Forum
-    Route::get('/forum', [ForumController::class, 'forum'])->name('forum');
+    Route::get('/forum', [ForumController::class, 'index'])->name('forum');
+    Route::get('/forum/data', [ForumController::class, 'getData'])->name('forum.data');
     Route::post('/forum/topik', [ForumController::class, 'buatTopik'])->name('forum.topik');
     Route::post('/forum/balasan', [ForumController::class, 'buatBalasan'])->name('forum.balasan');
 });

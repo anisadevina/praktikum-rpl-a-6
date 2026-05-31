@@ -3,14 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ForumController extends Controller
 {
-    public function forum(Request $request)
+    // Hanya return view (kerangka HTML kosong)
+    public function index()
+    {
+        return view('forum');
+    }
+
+    // Return JSON semua topik + balasan
+    public function getData()
     {
         $user = auth()->user();
 
@@ -23,6 +28,7 @@ class ForumController extends Controller
                 $topik->jumlah_balasan = DB::table('forum_balasan')
                     ->where('id_topik', $topik->id_topik)
                     ->count();
+                $topik->waktu_topik_human = Carbon::parse($topik->waktu_topik)->diffForHumans();
                 $topik->balasan = DB::table('forum_balasan')
                     ->join('users', 'forum_balasan.id_user', '=', 'users.id_user')
                     ->where('forum_balasan.id_topik', $topik->id_topik)
@@ -32,40 +38,48 @@ class ForumController extends Controller
                 return $topik;
             });
 
-        return view('forum', [
-            'user' => $user,
-            'topik' => $topik,
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'user'  => $user,
+                'topik' => $topik,
+            ]
         ]);
     }
 
+    // Buat topik baru, return JSON
     public function buatTopik(Request $request)
     {
         $request->validate([
             'pesan_topik' => 'required|min:5',
-            'tag' => 'required|in:general,tanya jawab',
+            'tag'         => 'required|in:general,tanya jawab',
         ], [
             'pesan_topik.required' => 'Pesan tidak boleh kosong.',
-            'pesan_topik.min' => 'Pesan minimal 5 karakter.',
-            'tag.required' => 'Pilih kategori terlebih dahulu.',
+            'pesan_topik.min'      => 'Pesan minimal 5 karakter.',
+            'tag.required'         => 'Pilih kategori terlebih dahulu.',
         ]);
 
         $user = auth()->user();
 
         DB::table('forum_topik')->insert([
-            'id_user' => $user->id_user,
-            'tag' => $request->tag,
+            'id_user'     => $user->id_user,
+            'tag'         => $request->tag,
             'pesan_topik' => $request->pesan_topik,
-            'is_anonim' => $request->is_anonim == '1' ? true : false,
+            'is_anonim'   => $request->is_anonim == '1' ? true : false,
             'waktu_topik' => now(),
         ]);
 
-        return redirect()->route('forum')->with('success', 'Topik berhasil dibuat!');
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Topik berhasil dibuat!'
+        ], 201);
     }
 
+    // Buat balasan, return JSON
     public function buatBalasan(Request $request)
     {
         $request->validate([
-            'id_topik' => 'required|exists:forum_topik,id_topik',
+            'id_topik'      => 'required|exists:forum_topik,id_topik',
             'pesan_balasan' => 'required|min:1',
         ], [
             'pesan_balasan.required' => 'Balasan tidak boleh kosong.',
@@ -74,13 +88,17 @@ class ForumController extends Controller
         $user = auth()->user();
 
         DB::table('forum_balasan')->insert([
-            'id_topik' => $request->id_topik,
-            'id_user' => $user->id_user,
+            'id_topik'      => $request->id_topik,
+            'id_user'       => $user->id_user,
             'pesan_balasan' => $request->pesan_balasan,
-            'is_anonim' => $request->is_anonim == '1' ? true : false,
+            'is_anonim'     => $request->is_anonim == '1' ? true : false,
             'waktu_balasan' => now(),
         ]);
 
-        return redirect()->route('forum')->with('success', 'Balasan berhasil dikirim!')->withFragment('topik-' . $request->id_topik);
+        return response()->json([
+            'status'   => 'success',
+            'message'  => 'Balasan berhasil dikirim!',
+            'id_topik' => $request->id_topik,
+        ], 201);
     }
 }
