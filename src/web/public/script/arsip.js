@@ -71,15 +71,16 @@ function setupFilter() {
     });
 }
 
-// Klik Item Arsip → Buka Dokumen 
+// Klik Item Arsip → Buka file langsung di tab baru
 function setupArsipItems() {
     document.querySelectorAll(".arsip-item").forEach((item) => {
         item.addEventListener("click", (e) => {
-            // Jangan trigger kalau klik bookmark
             if (e.target.closest(".arsip-bookmark")) return;
 
-            const id = item.dataset.id;
-            window.location.href = `/arsip/dokumen/${id}`;
+            const fileUrl = item.dataset.fileUrl;
+            if (fileUrl) {
+                window.open(fileUrl, "_blank");
+            }
         });
     });
 }
@@ -110,7 +111,7 @@ function setupBookmarks() {
 
                 const data = await response.json();
 
-                // Kalau dari halaman arsip dan di-unbookmark, hapus item dari list
+                // Kalau di-unbookmark, hapus item dari list
                 if (!data.bookmarked) {
                     const item = btn.closest(".arsip-item");
                     if (item) {

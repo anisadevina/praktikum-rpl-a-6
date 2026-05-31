@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Arsip — Study Scope</title>
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
   <link rel="stylesheet" href="{{ asset('style/global.css') }}" />
   <link rel="stylesheet" href="{{ asset('style/beranda.css') }}" />
   <link rel="stylesheet" href="{{ asset('style/arsip.css') }}" />
@@ -175,23 +176,10 @@
       <!-- Arsip List -->
       <div class="arsip-list" id="arsip-list">
 
-        {{-- TODO: ganti bagian ini dengan loop dari controller nanti --}}
-        {{-- @forelse ($daftarArsip as $arsip) ... @endforelse --}}
-
-        @php
-        $dummyArsip = [
-            ['id' => 1, 'nama' => 'Soal UAS Organisasi Sistem Komputer', 'tahun' => '2024', 'tanggal' => '23 Mei 2026'],
-            ['id' => 2, 'nama' => 'Materi Struktur Data - Linked List', 'tahun' => '2024', 'tanggal' => '20 Mei 2026'],
-            ['id' => 3, 'nama' => 'Latihan Soal Kalkulus II', 'tahun' => '2023', 'tanggal' => '15 Apr 2026'],
-            ['id' => 4, 'nama' => 'Soal UTS Pemrograman Web', 'tahun' => '2024', 'tanggal' => '10 Apr 2026'],
-            ['id' => 5, 'nama' => 'Ringkasan Materi Basis Data', 'tahun' => '2023', 'tanggal' => '2 Mar 2026'],
-            ['id' => 6, 'nama' => 'Soal UAS Matematika Diskrit II', 'tahun' => '2022', 'tanggal' => '18 Jan 2026'],
-            ['id' => 7, 'nama' => 'Tugas Besar Rekayasa Perangkat Lunak', 'tahun' => '2024', 'tanggal' => '5 Jan 2026'],
-        ];
-        @endphp
-
-        @foreach ($dummyArsip as $arsip)
-        <div class="arsip-item" data-id="{{ $arsip['id'] }}">
+        @forelse ($daftarArsip as $arsip)
+        <div class="arsip-item"
+             data-id="{{ $arsip->id_dokumen }}"
+             data-file-url="{{ $arsip->file_url }}">
           <div class="arsip-icon">
             <svg viewBox="0 0 24 24">
               <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
@@ -199,19 +187,27 @@
             </svg>
           </div>
           <div class="arsip-info">
-            <span class="arsip-name">{{ $arsip['nama'] }}</span>
+            <span class="arsip-name">{{ $arsip->judul }}</span>
             <div class="arsip-meta">
-              <span class="arsip-badge">{{ $arsip['tahun'] }}</span>
-              <span class="arsip-date">Diunggah pada {{ $arsip['tanggal'] }}</span>
+              <span class="arsip-badge">{{ $arsip->tahun_dokumen }}</span>
+              <span class="arsip-date">Diunggah pada {{ \Carbon\Carbon::parse($arsip->waktu_unggah)->translatedFormat('j F Y') }}</span>
             </div>
           </div>
-          <div class="arsip-bookmark" data-id="{{ $arsip['id'] }}">
+          <div class="arsip-bookmark bookmarked" data-id="{{ $arsip->id_dokumen }}">
             <svg viewBox="0 0 24 24">
               <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
             </svg>
           </div>
         </div>
-        @endforeach
+
+        @empty
+        <div class="arsip-empty">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+          </svg>
+          <p>Belum ada arsip tersimpan.</p>
+        </div>
+        @endforelse
 
       </div>
 
