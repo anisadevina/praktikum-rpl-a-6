@@ -128,6 +128,7 @@
           type="text"
           id="search-input"
           placeholder="Cari topik"
+          value="{{ request('q') }}"
           autocomplete="off"
         />
       </div>

@@ -43,11 +43,26 @@ function renderUsername() {
 function setupSearch() {
     const input = document.getElementById("search-input");
     if (!input) return;
+
     input.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
             const query = input.value.trim();
-            if (!query) return;
-            window.location.href = `${PAGE_PATHS.arsip}?q=${encodeURIComponent(query)}`;
+            const urlParams = new URLSearchParams(window.location.search);
+            if (query) {
+                urlParams.set("q", query);
+            } else {
+                urlParams.delete("q");
+            }
+            window.location.href = `${PAGE_PATHS.arsip}?${urlParams.toString()}`;
+        }
+    });
+
+    // Saat input dikosongkan, langsung refresh
+    input.addEventListener("input", () => {
+        if (input.value === "") {
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.delete("q");
+            window.location.href = `${PAGE_PATHS.arsip}?${urlParams.toString()}`;
         }
     });
 }
@@ -71,7 +86,7 @@ function setupFilter() {
     });
 }
 
-// Klik Item Arsip → Buka file langsung di tab baru
+// Klik Item Arsip > Buka file langsung di tab baru
 function setupArsipItems() {
     document.querySelectorAll(".arsip-item").forEach((item) => {
         item.addEventListener("click", (e) => {
@@ -148,7 +163,6 @@ function setupLogout() {
 // Init
 document.addEventListener("DOMContentLoaded", () => {
     setupSidebarActive();
-    renderUsername();
     setupSearch();
     setupFilter();
     setupArsipItems();
