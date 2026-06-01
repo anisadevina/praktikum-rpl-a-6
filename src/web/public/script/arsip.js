@@ -148,14 +148,28 @@ function setupBookmarks() {
 function setupLogout() {
     const btnKeluar = document.getElementById("btn-keluar");
     if (!btnKeluar) return;
-    btnKeluar.addEventListener("click", (e) => {
+    btnKeluar.addEventListener("click", async (e) => {
         e.preventDefault();
-        sessionStorage.removeItem("loggedUser");
-        const logoutForm = document.getElementById("logout-form");
-        if (logoutForm) {
-            logoutForm.submit();
-        } else {
-            window.location.href = "/login";
+        try {
+            const csrfInput = document.querySelector('#logout-form input[name="_token"]');
+            if (!csrfInput) throw new Error("CSRF token tidak ditemukan");
+
+            const response = await fetch("/logout", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": csrfInput.value,
+                    "Accept": "application/json",
+                },
+            });
+
+            if (response.ok) {
+                sessionStorage.removeItem("loggedUser");
+                window.location.href = "/";
+            } else {
+                console.error("Logout ditolak oleh server.");
+            }
+        } catch (error) {
+            console.error("Error saat logout:", error);
         }
     });
 }
