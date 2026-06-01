@@ -1,0 +1,95 @@
+.review-page-header {
+    margin-bottom: 6px; 
+}
+
+.review-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.review-title-row svg {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    stroke: var(--color-text-primary);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.review-title {
+    font-size: var(--text-h1);
+    font-weight: 800;
+    color: var(--color-text-primary);
+    letter-spacing: -0.3px;
+    line-height: 1;
+}
+
+.review-subtitle {
+    font-size: var(--text-body);
+    color: var(--color-text-secondary);
+    margin-bottom: 16px;
+}
+
+.review-divider {
+    border: none;
+    border-top: 1.5px solid var(--color-border);
+    margin-bottom: 24px;
+}
+
+/* Tabel Review  */
+.review-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.review-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.review-table thead tr {
+    background-color: var(--color-primary-light); 
+}
+
+.review-table thead th {
+    padding: 14px 20px;
+    text-align: left;
+    font-size: var(--text-body);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    white-space: nowrap;
+}
+
+/* Ujung header membulat */
+.review-table thead th:first-child {
+    border-top-left-radius: var(--radius-full);
+    border-bottom-left-radius: var(--radius-full);
+}
+
+.review-table thead th:last-child {
+    border-top-right-radius: var(--radius-full);
+    border-bottom-right-radius: var(--radius-full);
+}
+
+.review-table tbody tr {
+    transition: background 0.15s;
+    cursor: pointer;
+}
+
+.review-table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.review-table tbody td {
+    padding: 18px 20px;
+    font-size: var(--text-body);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: middle;
+}

@@ -41,33 +41,42 @@ Route::middleware('auth')->group(function () {
     Route::post('/forum/balasan', [ForumController::class, 'buatBalasan'])->name('forum.balasan');
 
     // Arsip 
+    Route::get('/arsip', function () {
+        return "Ini halaman Arsip sementara"; // Nanti tinggal arahkan ke Controller
+    })->name('arsip');
+    
     Route::get('/arsip/view/{kode}', [MatkulController::class, 'viewArsip'])->name('arsip.view');
 
     // Unggah
     Route::get('/unggah', [UnggahController::class, 'index'])->name('unggah');
     Route::get('/unggah/data', [UnggahController::class, 'getData'])->name('unggah.data');
     Route::post('/unggah', [UnggahController::class, 'upload'])->name('unggah.proses');
+
+    // -- REVIEW DOKUMEN (ADMIN) --
+    // 1. Halaman List Review
+    Route::get('/review-dokumen', function () {
+        return view('reviewList', [
+            'user' => auth()->user()
+        ]);
+    })->name('review-dokumen');
+
+    // 2. Halaman Detail Review
+    Route::get('/review-dokumen/{id}', function ($id) {
+        return view('reviewDetail', [
+            'user' => auth()->user()
+        ]);
+    })->name('review-dokumen.detail');
+
+    // 3. Tombol Submit (Kirim)
+    Route::post('/review-dokumen/keputusan/{id}', function ($id) {
+        return redirect()->route('review-dokumen');
+    })->name('review-dokumen.submit');
+
+    // -- LIHAT DOKUMEN --
+    Route::get('/dokumen/{id}', function ($id) {
+        $user = auth()->user();
+        $dokumen = DB::table('dokumen')->where('id_dokumen', $id)->first();
+        return view('lihat-dokumen', ['user' => $user, 'dokumen' => $dokumen]);
+    })->name('lihat-dokumen');
+
 });
-
-// -- UNGGAH ADMIN --
-Route::get('/unggah/admin', function () {
-    $user = auth()->user();
-    $mataKuliah = DB::table('mata_kuliah')->orderBy('nama_matkul')->get();
-    $dosen = DB::table('dosen')->orderBy('nama_dosen')->get();
-    return view('unggah-admin', ['user' => $user, 'mataKuliah' => $mataKuliah, 'dosen' => $dosen]);
-})->middleware('auth')->name('unggah.admin');
-
-Route::get('/unggah/review/{id}', function ($id) {
-    $user = auth()->user();
-    return view('unggah-review', ['user' => $user, 'dokumen' => null]);
-})->middleware('auth')->name('unggah.review');
-
-Route::post('/unggah/keputusan/{id}', function () {
-    return redirect()->route('unggah.admin');
-})->middleware('auth')->name('unggah.keputusan');
-
-Route::get('/dokumen/{id}', function ($id) {
-    $user = auth()->user();
-    $dokumen = DB::table('dokumen')->where('id_dokumen', $id)->first();
-    return view('lihat-dokumen', ['user' => $user, 'dokumen' => $dokumen]);
-})->middleware('auth')->name('lihat-dokumen');
