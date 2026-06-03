@@ -93,9 +93,17 @@ class MatkulController extends Controller
             $queryArsip->where('tahun_dokumen', $tahunFilter);
         }
 
+        $queryArsip->where('status', 'disetujui');
         $jumlahArsip = $queryArsip->count();
-        $daftarArsip = $queryArsip->get()->map(function ($item) {
+
+        $bookmarkedIds = DB::table('bookmark')
+            ->where('id_user', $user->id_user)
+            ->pluck('id_dokumen')
+            ->toArray();
+
+        $daftarArsip = $queryArsip->get()->map(function ($item) use ($bookmarkedIds) {
             $item->kodeRahasia = Crypt::encryptString($item->id_dokumen ?? $item->id);
+            $item->is_bookmarked = in_array($item->id_dokumen, $bookmarkedIds);
             return $item;
         });
 
