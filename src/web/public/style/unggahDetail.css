@@ -56,10 +56,14 @@
 }
 
 @media (max-width: 600px) {
-    .form-row-two { grid-template-columns: 1fr; }
+    .form-row-two {
+        grid-template-columns: 1fr;
+    }
 }
 
-.form-group { margin-bottom: 16px; }
+.form-group {
+    margin-bottom: 16px;
+}
 
 .form-label {
     display: block;
@@ -90,7 +94,9 @@
     box-shadow: 0 0 0 3px rgba(200, 232, 106, 0.4);
 }
 
-.form-input::placeholder { color: var(--color-text-muted); }
+.form-input::placeholder {
+    color: var(--color-text-muted);
+}
 
 /* ─── Choices.js — override styling ─────────────
    Supaya tampilannya sesuai design system hijau  */
@@ -145,7 +151,7 @@
 .choices__list--dropdown {
     border: none !important;
     border-radius: var(--radius-md) !important;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.12) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
     margin-top: 4px !important;
     overflow: hidden;
 }
@@ -201,7 +207,9 @@
     border-radius: var(--radius-md);
     background-color: rgba(255, 255, 255, 0.08);
     cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
+    transition:
+        border-color 0.15s,
+        background 0.15s;
 }
 
 .dropzone-area:hover,
@@ -315,7 +323,7 @@
 }
 
 .btn-unggah-submit {
-    background-color: #2263FF;
+    background-color: #2263ff;
     color: #ffffff;
     border: none;
     padding: 10px 28px;
@@ -324,7 +332,9 @@
     font-weight: 700;
     font-family: var(--font-base);
     cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
+    transition:
+        background 0.15s,
+        transform 0.1s;
 }
 
 .btn-unggah-submit:hover {
@@ -338,4 +348,6 @@
     transform: none;
 }
 
-.hidden { display: none !important; }
+.hidden {
+    display: none !important;
+}

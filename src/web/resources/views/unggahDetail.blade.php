@@ -54,17 +54,7 @@
                 </div>
                 <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
             </a>
-            @if(auth()->check() && auth()->user()->role === 'admin')
-                <a href="{{ route('review-dokumen') }}" class="nav-item" data-page="review">
-                    <div class="nav-item-left">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
-                        </svg>
-                        <span>Review Dokumen</span>
-                    </div>
-                    <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-                </a>
-            @endif
+            
             <a href="{{ route('arsip') }}" class="nav-item" data-page="arsip">
                 <div class="nav-item-left">
                     <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
@@ -72,6 +62,17 @@
                 </div>
                 <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
             </a>
+
+            <a href="{{ route('unggah.admin') }}" class="nav-item hidden" id="menu-review-admin" style="display: none;" data-page="review">
+                <div class="nav-item-left">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+                    </svg>
+                    <span>Review Dokumen</span>
+                </div>
+                <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+          
         </nav>
 
         <div class="sidebar-footer">
@@ -115,19 +116,15 @@
             <div class="form-unggah-card">
                 <h2 class="form-unggah-title">Unggah File</h2>
 
-                <form id="form-unggah" action="/unggah" method="POST" enctype="multipart/form-data" autocomplete="off">
+                <form id="form-unggah" autocomplete="off">
                     @csrf
 
-                    {{-- Baris 1: Mata Kuliah + Tahun --}}
+                    {{-- Mata Kuliah + Tahun --}}
                     <div class="form-row-two">
                         <div class="form-group">
                             <label class="form-label">Mata Kuliah</label>
                             <select name="id_matkul" id="select-matkul" required>
                                 <option value="" disabled selected>Pilih Mata Kuliah</option>
-                                {{-- TODO: loop dari $mataKuliah --}}
-                                {{-- @foreach ($mataKuliah as $mk) --}}
-                                {{-- <option value="{{ $mk->id_matkul }}">{{ $mk->nama_matkul }}</option> --}}
-                                {{-- @endforeach --}}
                             </select>
                         </div>
                         <div class="form-group">
@@ -139,8 +136,6 @@
                                 <option value="2024">2024</option>
                                 <option value="2023">2023</option>
                                 <option value="2022">2022</option>
-                                <option value="2021">2021</option>
-                                <option value="2020">2020</option>
                             </select>
                         </div>
                     </div>
@@ -150,10 +145,6 @@
                         <label class="form-label">Dosen</label>
                         <select name="id_dosen" id="select-dosen" required>
                             <option value="" disabled selected>Pilih Dosen</option>
-                            {{-- TODO: loop dari $dosen --}}
-                            {{-- @foreach ($dosen as $dsn) --}}
-                            {{-- <option value="{{ $dsn->id_dosen }}">{{ $dsn->nama_dosen }}</option> --}}
-                            {{-- @endforeach --}}
                         </select>
                     </div>
 

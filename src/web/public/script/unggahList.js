@@ -1,11 +1,26 @@
 document.addEventListener("DOMContentLoaded", function () {
-
-    // Render Tabel dari API 
+    // Render Tabel dari API
     async function fetchDaftarUnggahan() {
         try {
             const response = await fetch("/unggah/data");
-            const json     = await response.json();
+            const json = await response.json();
             if (json.status !== "success") return;
+
+            // isi nama user
+            const topbarUsername = document.querySelector(".topbar-username");
+            if (topbarUsername && json.data.user) {
+                topbarUsername.textContent = json.data.user.username;
+            }
+
+            // cek role
+            if (json.data.user && json.data.user.role === "admin") {
+                const menuAdmin = document.getElementById("menu-review-admin");
+                if (menuAdmin) {
+                    menuAdmin.style.display = "flex";
+                    menuAdmin.classList.remove("hidden");
+                }
+            }
+
             renderTable(json.data.dokumen);
         } catch (err) {
             console.error("Gagal memuat daftar unggahan:", err);
@@ -23,13 +38,18 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const statusLabel = { menunggu: "Menunggu", disetujui: "Disetujui", ditolak: "Ditolak" };
+        const statusLabel = {
+            menunggu: "Menunggu",
+            disetujui: "Disetujui",
+            ditolak: "Ditolak",
+        };
 
-        tbody.innerHTML = list.map((d) => {
-            const status  = (d.status || "menunggu").toLowerCase();
-            const label   = statusLabel[status] || status;
-            const catatan = d.catatan_admin || "–";
-            return `
+        tbody.innerHTML = list
+            .map((d) => {
+                const status = (d.status || "menunggu").toLowerCase();
+                const label = statusLabel[status] || status;
+                const catatan = d.catatan_admin || "–";
+                return `
                 <tr>
                     <td class="td-filename">${escapeHTML(d.judul || d.judul_file || "–")}</td>
                     <td>${escapeHTML(d.nama_matkul || "–")}</td>
@@ -38,12 +58,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     <td class="td-catatan">${escapeHTML(catatan)}</td>
                 </tr>
             `;
-        }).join("");
+            })
+            .join("");
     }
 
     fetchDaftarUnggahan();
 
-    // Logout 
+    // Logout
     const btnKeluar = document.getElementById("btn-keluar");
     if (btnKeluar) {
         btnKeluar.addEventListener("click", (e) => {
@@ -57,8 +78,16 @@ document.addEventListener("DOMContentLoaded", function () {
     // Utility
     function escapeHTML(str) {
         if (!str) return "";
-        return String(str).replace(/[&<>'"]/g, (tag) =>
-            ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[tag] || tag)
+        return String(str).replace(
+            /[&<>'"]/g,
+            (tag) =>
+                ({
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    "'": "&#39;",
+                    '"': "&quot;",
+                })[tag] || tag,
         );
     }
 });

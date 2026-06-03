@@ -1,12 +1,11 @@
 document.addEventListener("DOMContentLoaded", async function () {
-
-    // Init Choices.js (dropdown searchable + scrollable dengan render limit) 
+    // Init Choices.js (dropdown searchable + scrollable dengan render limit)
     const choicesConfig = {
-        searchEnabled: true,           // aktifkan pencarian untuk semua agar seragam
-        searchResultLimit: 999,        // tampilkan semua hasil search
-        renderChoiceLimit: 5,          // batas awal render tetap 5 seperti request
-        itemSelectText: "",            // hapus teks "Press to select"
-        shouldSort: false,             // jangan sort ulang
+        searchEnabled: true, // aktifkan pencarian untuk semua agar seragam
+        searchResultLimit: 999, // tampilkan semua hasil search
+        renderChoiceLimit: 5, // batas awal render tetap 5 seperti request
+        itemSelectText: "", // hapus teks "Press to select"
+        shouldSort: false, // jangan sort ulang
         searchPlaceholderValue: "Ketik untuk mencari...",
         noResultsText: "Tidak ditemukan",
         noChoicesText: "Tidak ada pilihan",
@@ -36,12 +35,21 @@ document.addEventListener("DOMContentLoaded", async function () {
         searchPlaceholderValue: "Cari jenis file...",
     });
 
-    // Fetch dropdown data dari API 
+    // Fetch dropdown data dari API
     async function fetchDropdownData() {
         try {
             const response = await fetch("/unggah/data");
-            const json     = await response.json();
+            const json = await response.json();
             if (json.status !== "success") return;
+
+            // cek role
+            if (json.data.user && json.data.user.role === "admin") {
+                const menuAdmin = document.getElementById("menu-review-admin");
+                if (menuAdmin) {
+                    menuAdmin.style.display = "flex";
+                    menuAdmin.classList.remove("hidden");
+                }
+            }
 
             // Isi dropdown Mata Kuliah
             if (json.data.mataKuliah) {
@@ -50,7 +58,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                         value: String(mk.id_matkul),
                         label: mk.nama_matkul,
                     })),
-                    "value", "label", true
+                    "value",
+                    "label",
+                    true,
                 );
             }
 
@@ -61,7 +71,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                         value: String(d.id_dosen),
                         label: d.nama_dosen,
                     })),
-                    "value", "label", true
+                    "value",
+                    "label",
+                    true,
                 );
             }
         } catch (err) {
@@ -71,13 +83,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     fetchDropdownData();
 
-    // Dropzone 
-    const dropzoneArea     = document.getElementById("dropzone-area");
-    const fileInput        = document.getElementById("file-input");
-    const dropzoneContent  = document.getElementById("dropzone-content");
+    // Dropzone
+    const dropzoneArea = document.getElementById("dropzone-area");
+    const fileInput = document.getElementById("file-input");
+    const dropzoneContent = document.getElementById("dropzone-content");
     const dropzoneSelected = document.getElementById("dropzone-selected");
-    const fileNameDisplay  = document.getElementById("file-name-display");
-    const btnHapusFile     = document.getElementById("btn-hapus-file");
+    const fileNameDisplay = document.getElementById("file-name-display");
+    const btnHapusFile = document.getElementById("btn-hapus-file");
 
     dropzoneArea.addEventListener("click", function (e) {
         if (btnHapusFile.contains(e.target)) return;
@@ -124,25 +136,35 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Submit Form
     const formUnggah = document.getElementById("form-unggah");
-    const btnSubmit  = document.getElementById("btn-submit");
+    const btnSubmit = document.getElementById("btn-submit");
 
     formUnggah.addEventListener("submit", async function (e) {
         e.preventDefault();
 
         const file = fileInput.files[0];
-        if (!file) { alert("Pilih file PDF terlebih dahulu!"); return; }
-        if (file.size > 20 * 1024 * 1024) { alert("Ukuran file maksimal 20MB."); return; }
+        if (!file) {
+            alert("Pilih file PDF terlebih dahulu!");
+            return;
+        }
+        if (file.size > 20 * 1024 * 1024) {
+            alert("Ukuran file maksimal 20MB.");
+            return;
+        }
 
-        const formData  = new FormData(formUnggah);
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content ?? "";
+        const formData = new FormData(formUnggah);
+        const csrfToken =
+            document.querySelector('meta[name="csrf-token"]')?.content ?? "";
 
         try {
             btnSubmit.textContent = "Mengunggah...";
-            btnSubmit.disabled    = true;
+            btnSubmit.disabled = true;
 
             const response = await fetch("/unggah", {
                 method: "POST",
-                headers: { "X-CSRF-TOKEN": csrfToken, Accept: "application/json" },
+                headers: {
+                    "X-CSRF-TOKEN": csrfToken,
+                    Accept: "application/json",
+                },
                 body: formData,
             });
 
@@ -162,7 +184,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             alert("Terjadi kesalahan jaringan. Coba lagi nanti.");
         } finally {
             btnSubmit.textContent = "Unggah";
-            btnSubmit.disabled    = false;
+            btnSubmit.disabled = false;
         }
     });
 

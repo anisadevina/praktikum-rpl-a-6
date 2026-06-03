@@ -7,6 +7,9 @@ use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\MatkulController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ArsipController;
+use App\Http\Controllers\UnggahController;
+use App\Http\Controllers\UnggahAdminController;
+use App\Http\Middleware\CekAdmin;
 
 // Autensifiaksi 
 Route::get('/', function () {
@@ -47,4 +50,17 @@ Route::middleware('auth')->group(function () {
 
     // Arsip View (dari MatkulController)
     Route::get('/arsip/view/{kode}', [MatkulController::class, 'viewArsip'])->name('arsip.view');
+
+    // Unggah
+    Route::get('/unggah', [UnggahController::class, 'index'])->name('unggah');
+    Route::get('/unggah/detail', [UnggahController::class, 'create'])->name('unggah.detail');
+    Route::get('/unggah/data', [UnggahController::class, 'getData'])->name('unggah.data');
+    Route::post('/unggah', [UnggahController::class, 'upload'])->name('unggah.proses');
+
+    // admin 
+    Route::middleware(CekAdmin::class)->group(function () {
+        Route::get('/unggah/admin', function () {
+            return view('unggahAdmin');
+        })->name('unggah.admin');
+    });
 });
