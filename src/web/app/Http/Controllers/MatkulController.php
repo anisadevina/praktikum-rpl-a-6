@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Crypt;
 
 class MatkulController extends Controller
 {
@@ -55,21 +56,6 @@ class MatkulController extends Controller
         ]);
     }
 
-    public function search(Request $request)
-    {
-        $query = $request->input('q', '');
-
-        $matkul = DB::table('mata_kuliah')
-            ->where('nama_matkul', 'like', '%' . $query . '%')
-            ->get()
-            ->map(function ($item) {
-                $item->arsip = DB::table('dokumen')->where('id_matkul', $item->id_matkul)->count();
-                return $item;
-            });
-
-        return response()->json($matkul);
-    }
-
     public function detail()
     {
         return view('detailMatkul');
@@ -108,7 +94,10 @@ class MatkulController extends Controller
         }
 
         $jumlahArsip = $queryArsip->count();
-        $daftarArsip = $queryArsip->get();
+        $daftarArsip = $queryArsip->get()->map(function ($item) {
+            $item->kodeRahasia = Crypt::encryptString($item->id_dokumen ?? $item->id);
+            return $item;
+        });
 
         return response()->json([
             'status' => 'success',
@@ -143,5 +132,30 @@ class MatkulController extends Controller
         if ($skor >= 4.00 && $skor < 5.00)
             return 'Materi cenderung mudah';
         return 'Materi cenderung mudah sekali';
+    }
+
+    public function viewArsip($kode)
+    {
+        try {
+            $id_dokumen = Crypt::decryptString($kode);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            abort(404, 'tautan dokumen tidak valid atau sudah kadaluarsa.');
+        }
+        // Cari dokumen berdasarkan ID
+        $dokumen = DB::table('dokumen')->where('id_dokumen', $id_dokumen)->first();
+
+        if (!$dokumen || !$dokumen->file_path) {
+            abort(404, 'Arsip tidak ditemukan.');
+        }
+
+        // Ambil lokasi file fisik di storage
+        $path = storage_path('app/public/' . $dokumen->file_path);
+
+        if (!file_exists($path)) {
+            abort(404, 'File fisik tidak tersedia di server.');
+        }
+
+        // Tampilkan file langsung di browser (PDF viewer bawaan)
+        return response()->file($path);
     }
 }

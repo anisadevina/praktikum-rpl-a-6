@@ -28,7 +28,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/beranda/data', [BerandaController::class, 'getData'])->name('beranda.data');
 
     // Matkul
-    Route::get('/search', [MatkulController::class, 'search'])->name('search');
     Route::get('/matkul', [MatkulController::class, 'index'])->name('matkul');
     Route::get('/matkul/data', [MatkulController::class, 'getIndexData'])->name('matkul.data');
     Route::get('/matkul/detail', [MatkulController::class, 'detail'])->name('matkul.detail');
@@ -39,4 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/forum/data', [ForumController::class, 'getData'])->name('forum.data');
     Route::post('/forum/topik', [ForumController::class, 'buatTopik'])->name('forum.topik');
     Route::post('/forum/balasan', [ForumController::class, 'buatBalasan'])->name('forum.balasan');
+
+    // Arsip 
+    Route::get('/arsip/view/{kode}', [MatkulController::class, 'viewArsip'])->name('arsip.view');
 });
