@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\MatkulController;
 use App\Http\Controllers\ForumController;
+use App\Http\Controllers\ArsipController;
 
 // -- AUTENTIKASI --
 Route::get('/', function () {
@@ -39,6 +40,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/forum/topik', [ForumController::class, 'buatTopik'])->name('forum.topik');
     Route::post('/forum/balasan', [ForumController::class, 'buatBalasan'])->name('forum.balasan');
 
-    // Arsip 
+    // Arsip
+    Route::get('/arsip', [ArsipController::class, 'index'])->name('arsip');
+    Route::get('/arsip/data', [ArsipController::class, 'getData'])->name('arsip.data');
+    Route::post('/arsip/bookmark/{id}', [ArsipController::class, 'toggleBookmark'])->name('arsip.bookmark');
+
+    // Arsip View (dari MatkulController)
     Route::get('/arsip/view/{kode}', [MatkulController::class, 'viewArsip'])->name('arsip.view');
 });
