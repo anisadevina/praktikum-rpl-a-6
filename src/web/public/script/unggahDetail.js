@@ -1,11 +1,29 @@
 document.addEventListener("DOMContentLoaded", async function () {
-    // Init Choices.js (dropdown searchable + scrollable dengan render limit)
+
+    // Navigasi Sidebar 
+    const PAGE_PATHS = {
+        beranda: "/beranda",
+        matkul:  "/matkul",
+        forum:   "/forum",
+        unggah:  "/unggah",
+        arsip:   "/arsip",
+        review:  "/unggah/admin",
+    };
+
+    document.querySelectorAll(".nav-item[data-page]").forEach((item) => {
+        item.addEventListener("click", () => {
+            const target = PAGE_PATHS[item.dataset.page];
+            if (target) window.location.href = target;
+        });
+    });
+
+    //  Init Choices.js
     const choicesConfig = {
-        searchEnabled: true, // aktifkan pencarian untuk semua agar seragam
-        searchResultLimit: 999, // tampilkan semua hasil search
-        renderChoiceLimit: 5, // batas awal render tetap 5 seperti request
-        itemSelectText: "", // hapus teks "Press to select"
-        shouldSort: false, // jangan sort ulang
+        searchEnabled: true, 
+        searchResultLimit: 999, 
+        renderChoiceLimit: 5, 
+        itemSelectText: "", 
+        shouldSort: false, 
         searchPlaceholderValue: "Ketik untuk mencari...",
         noResultsText: "Tidak ditemukan",
         noChoicesText: "Tidak ada pilihan",
