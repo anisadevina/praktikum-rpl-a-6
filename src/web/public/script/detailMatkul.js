@@ -190,7 +190,7 @@ async function fetchDetailMatkul() {
                                     <span class="arsip-date">Diunggah pada ${formattedDate}</span>
                                 </div>
                             </div>
-                            <div class="arsip-bookmark" data-id="${arsip.id_dokumen || arsip.id}">
+                            <div class="arsip-bookmark ${arsip.is_bookmarked ? 'bookmarked' : ''}" data-id="${arsip.id_dokumen || arsip.id}">
                                 <svg viewBox="0 0 24 24">
                                     <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
                                 </svg>
@@ -230,12 +230,36 @@ function setupArsipItems() {
 // ─── Bookmark Toggle ──────────────────────────────────────────────────────────
 function setupBookmarks() {
     document.querySelectorAll(".arsip-bookmark").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-            e.stopPropagation(); // Mencegah arsip-item ikut terklik
-            btn.classList.toggle("bookmarked");
+        btn.addEventListener("click", async (e) => {
+            e.stopPropagation();
+
             const id = btn.dataset.id;
-            console.log(`Bookmark diubah untuk arsip id=${id}`);
-            // Nanti tambahkan logika fetch API untuk menyimpan ke database
+            const isBookmarked = btn.classList.contains("bookmarked");
+
+            // Optimistic UI
+            btn.classList.toggle("bookmarked");
+
+            try {
+                const csrf =
+                    document.querySelector('meta[name="csrf-token"]')?.content ??
+                    document.querySelector('#logout-form input[name="_token"]')?.value ?? "";
+
+                const response = await fetch(`/arsip/bookmark/${id}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrf,
+                    },
+                    body: JSON.stringify({ bookmarked: !isBookmarked }),
+                });
+
+                if (!response.ok) throw new Error("Gagal menyimpan bookmark");
+
+            } catch (err) {
+                // Rollback kalau gagal
+                btn.classList.toggle("bookmarked");
+                console.error("Bookmark error:", err);
+            }
         });
     });
 }

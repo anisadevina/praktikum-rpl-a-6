@@ -1,0 +1,353 @@
+.unggah-page-header {
+    margin-bottom: 28px;
+}
+
+.unggah-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.unggah-title-row svg {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    stroke: var(--color-text-primary);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.unggah-title {
+    font-size: var(--text-h1);
+    font-weight: 800;
+    color: var(--color-text-primary);
+    letter-spacing: -0.3px;
+    line-height: 1;
+}
+
+.unggah-subtitle {
+    font-size: var(--text-body);
+    color: var(--color-text-secondary);
+    margin-bottom: 16px;
+}
+
+/* ─── Form Card ──────────────────────────────── */
+.form-unggah-card {
+    background-color: var(--color-primary-card);
+    border-radius: var(--radius-lg);
+    padding: 28px 30px;
+    box-shadow: var(--shadow-card);
+}
+
+.form-unggah-title {
+    font-size: var(--text-h2);
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 22px;
+}
+
+.form-row-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 600px) {
+    .form-row-two {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    font-size: var(--text-body);
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+/* Input teks biasa */
+.form-input {
+    width: 100%;
+    height: 44px; /* Kunci tinggi */
+    padding: 0 16px; /* Hapus padding vertikal, fokus horizontal */
+    border: none;
+    border-radius: var(--radius-full);
+    background-color: var(--color-bg-card);
+    color: var(--color-text-primary);
+    font-size: var(--text-body);
+    font-family: var(--font-base);
+    outline: none;
+    transition: box-shadow 0.15s;
+    display: flex;
+    align-items: center;
+}
+
+.form-input:focus {
+    box-shadow: 0 0 0 3px rgba(200, 232, 106, 0.4);
+}
+
+.form-input::placeholder {
+    color: var(--color-text-muted);
+}
+
+/* ─── Choices.js — override styling ─────────────
+   Supaya tampilannya sesuai design system hijau  */
+.choices {
+    margin-bottom: 0;
+}
+
+.choices__inner {
+    background-color: var(--color-bg-card) !important;
+    border: none !important;
+    border-radius: var(--radius-full) !important;
+    height: 44px !important; /* Kunci tinggi sama dengan input teks */
+    min-height: 44px !important;
+    padding: 0 16px !important; /* Hapus padding atas/bawah bawaan Choices */
+    font-family: var(--font-base) !important;
+    font-size: var(--text-body) !important;
+    color: var(--color-text-primary) !important;
+    display: flex !important;
+    align-items: center !important; /* Flexbox akan menengahkan dengan sempurna sekarang */
+}
+
+.choices__inner:focus-within {
+    box-shadow: 0 0 0 3px rgba(200, 232, 106, 0.4) !important;
+}
+
+.choices[data-type*="select-one"] .choices__inner {
+    padding-right: 36px !important;
+}
+
+/* Memastikan wadah teks tunggal benar-benar rata tengah */
+.choices__list--single {
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.choices__list--single .choices__item {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: normal !important;
+}
+
+.choices__placeholder {
+    color: var(--color-text-muted) !important;
+    opacity: 1 !important;
+}
+
+/* Dropdown list */
+.choices__list--dropdown {
+    border: none !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+    margin-top: 4px !important;
+    overflow: hidden;
+}
+
+.choices__list--dropdown .choices__item {
+    padding: 10px 16px !important;
+    font-size: var(--text-body) !important;
+    font-family: var(--font-base) !important;
+    color: var(--color-text-primary) !important;
+}
+
+.choices__list--dropdown .choices__item--highlighted {
+    background-color: var(--color-primary) !important;
+    color: #ffffff !important;
+}
+
+/* Memberi warna krem pada placeholder di dalam dropdown list */
+.choices__list--dropdown .choices__item[data-value=""] {
+    background-color: var(--color-bg-page) !important;
+    color: var(--color-text-muted) !important;
+    border-bottom: 1px solid var(--color-border);
+    font-weight: 500;
+}
+
+/* Search input di dalam dropdown */
+.choices__input {
+    background-color: var(--color-bg-page) !important;
+    border-bottom: 1px solid var(--color-border) !important;
+    font-family: var(--font-base) !important;
+    font-size: var(--text-body) !important;
+    padding: 10px 16px !important; /* Sedikit dilonggarkan agar nyaman diketik */
+    margin: 0 !important;
+    width: 100% !important;
+}
+
+/* Caret bawaan Choices */
+.choices[data-type*="select-one"]::after {
+    border-color: var(--color-text-muted) transparent transparent !important;
+    right: 16px !important;
+    margin-top: -2px !important; /* Tweak sedikit posisi panahnya agar seimbang */
+}
+
+.choices[data-type*="select-one"].is-open::after {
+    border-color: transparent transparent var(--color-text-muted) !important;
+    margin-top: -6px !important;
+}
+
+/* ─── Dropzone ───────────────────────────────── */
+.dropzone-area {
+    width: 100%;
+    min-height: 120px;
+    border: 2px dashed rgba(255, 255, 255, 0.4);
+    border-radius: var(--radius-md);
+    background-color: rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    transition:
+        border-color 0.15s,
+        background 0.15s;
+}
+
+.dropzone-area:hover,
+.dropzone-area.dragover {
+    border-color: var(--color-accent);
+    background-color: rgba(200, 232, 106, 0.1);
+}
+
+.dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 20px;
+    gap: 6px;
+    min-height: 120px;
+}
+
+.dropzone-content svg {
+    stroke: rgba(255, 255, 255, 0.6);
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.dropzone-content p {
+    font-size: var(--text-body);
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+}
+
+.dropzone-hint {
+    font-size: var(--text-label);
+    color: rgba(255, 255, 255, 0.5);
+    display: block;
+    margin-top: 6px;
+}
+
+.dropzone-selected {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    min-height: 120px;
+    justify-content: center;
+}
+
+.dropzone-selected svg {
+    stroke: var(--color-accent);
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+}
+
+.dropzone-selected p {
+    font-size: var(--text-body);
+    font-weight: 600;
+    color: #ffffff;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.btn-hapus-file {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #ffffff;
+    font-size: var(--text-label);
+    font-family: var(--font-base);
+    padding: 5px 12px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s;
+}
+
+.btn-hapus-file:hover {
+    background: rgba(255, 255, 255, 0.28);
+}
+
+/* ─── Form Actions ───────────────────────────── */
+.form-unggah-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-batal-unggah {
+    display: inline-flex;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: var(--radius-full);
+    font-size: var(--text-body);
+    font-weight: 500;
+    font-family: var(--font-base);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btn-batal-unggah:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-unggah-submit {
+    background-color: #2263ff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 28px;
+    border-radius: var(--radius-full);
+    font-size: var(--text-body);
+    font-weight: 700;
+    font-family: var(--font-base);
+    cursor: pointer;
+    transition:
+        background 0.15s,
+        transform 0.1s;
+}
+
+.btn-unggah-submit:hover {
+    background-color: #1a50d4;
+    transform: translateY(-1px);
+}
+
+.btn-unggah-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.hidden {
+    display: none !important;
+}

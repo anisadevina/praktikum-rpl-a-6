@@ -1,0 +1,249 @@
+/*  Page Header  */
+.arsip-header {
+    margin-bottom: 28px;
+}
+
+.arsip-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.arsip-icon {
+    width: 28px;
+    height: 28px;
+    stroke: var(--color-text-primary);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+}
+
+.arsip-title {
+    font-size: var(--text-h1);
+    font-weight: 800;
+    color: var(--color-text-primary);
+    letter-spacing: -0.3px;
+    line-height: 1;
+}
+
+.arsip-subtitle {
+    font-size: var(--text-body);
+    color: var(--color-text-secondary);
+    margin-bottom: 16px;
+}
+
+.arsip-divider {
+    border: none;
+    border-top: 1.5px solid var(--color-border);
+}
+
+/* Filter Bar */
+.arsip-filter-bar {
+    background: var(--color-primary-card);
+    border-radius: var(--radius-lg);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.arsip-filter-label {
+    font-size: var(--text-body);
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.arsip-filter-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.arsip-filter-select {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius-full);
+    padding: 5px 32px 5px 14px;
+    font-size: var(--text-small);
+    font-family: var(--font-base);
+    font-weight: 600;
+    color: #ffffff;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.arsip-filter-select option {
+    color: var(--color-text-primary);
+    background: #ffffff;
+}
+
+.arsip-filter-wrapper svg.filter-chevron {
+    position: absolute;
+    right: 10px;
+    pointer-events: none;
+}
+
+.filter-chevron {
+    width: 12px;
+    height: 12px;
+    stroke: #ffffff;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+    flex-shrink: 0;
+}
+
+/* Arsip List */
+.arsip-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.arsip-item {
+    background: #ffffff;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    transition:
+        border-color 0.15s,
+        box-shadow 0.15s;
+}
+
+.arsip-item:hover {
+    border-color: var(--color-primary-light);
+    box-shadow: 0 2px 12px rgba(74, 124, 47, 0.1);
+}
+
+.arsip-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: var(--color-bg-page);
+    border-radius: var(--radius-md);
+}
+
+.arsip-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--color-primary);
+    fill: none;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.arsip-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.arsip-name {
+    font-size: var(--text-body);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.arsip-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.arsip-badge {
+    font-size: 11px;
+    font-weight: 700;
+    background: #bc4749;
+    color: #ffffff;
+    padding: 2px 10px;
+    border-radius: var(--radius-full);
+}
+
+.arsip-date {
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+/* Bookmark */
+.arsip-bookmark {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    transition: background 0.15s;
+}
+
+.arsip-bookmark:hover {
+    background: var(--color-bg-page);
+}
+
+.arsip-bookmark svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--color-text-muted);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke 0.15s, fill 0.15s;
+}
+
+.arsip-bookmark.bookmarked svg {
+    stroke: var(--color-primary);
+    fill: var(--color-primary);
+}
+
+/* Empty State */
+.arsip-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 60px 20px;
+    color: var(--color-text-muted);
+}
+
+.arsip-empty svg {
+    width: 48px;
+    height: 48px;
+    stroke: var(--color-text-muted);
+    fill: none;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.5;
+}
+
+.arsip-empty p {
+    font-size: var(--text-body);
+    font-style: italic;
+}
