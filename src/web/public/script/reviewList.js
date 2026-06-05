@@ -1,4 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Navigasi Sidebar
+    const PAGE_PATHS = {
+        beranda: "/beranda",
+        matkul:  "/matkul",
+        forum:   "/forum",
+        unggah:  "/unggah",
+        review:  "/review-dokumen",
+        arsip:   "/arsip",
+    };
+
+    document.querySelectorAll(".nav-item[data-page]").forEach((item) => {
+        item.addEventListener("click", () => {
+            const target = PAGE_PATHS[item.dataset.page];
+            if (target) window.location.href = target;
+        });
+    });
+
     // Navigasi ke halaman detail saat baris diklik
     const tableRows = document.querySelectorAll(".clickable-row");
     tableRows.forEach(row => {
