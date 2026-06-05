@@ -1,0 +1,156 @@
+.unggah-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 6px;
+}
+
+.unggah-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.unggah-title-row svg {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    stroke: var(--color-text-primary);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.unggah-title {
+    font-size: var(--text-h1);
+    font-weight: 800;
+    color: var(--color-text-primary);
+    letter-spacing: -0.3px;
+    line-height: 1;
+}
+
+.unggah-subtitle {
+    font-size: var(--text-body);
+    color: var(--color-text-secondary);
+    margin-bottom: 16px;
+}
+
+.unggah-divider {
+    border: none;
+    border-top: 1.5px solid var(--color-border);
+    margin-bottom: 20px;
+}
+
+/* ─── Tombol + Dokumen ───────────────────────── */
+.btn-tambah-dokumen {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--color-primary);
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    font-size: var(--text-body);
+    font-family: var(--font-base);
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.15s, transform 0.1s;
+}
+
+.btn-tambah-dokumen svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    stroke: #ffffff;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+}
+
+.btn-tambah-dokumen:hover {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-1px);
+}
+
+/* ─── Tabel ──────────────────────────────────── */
+.unggah-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+}
+
+.unggah-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--color-bg-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.unggah-table thead tr {
+    background-color: var(--color-primary-card);
+}
+
+.unggah-table thead th {
+    padding: 14px 20px;
+    text-align: left;
+    font-size: var(--text-body);
+    font-weight: 600;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.unggah-table tbody tr {
+    border-bottom: 1px solid var(--color-border);
+    transition: background 0.15s;
+}
+
+.unggah-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.unggah-table tbody tr:hover {
+    background-color: var(--color-bg-page);
+}
+
+.unggah-table tbody td {
+    padding: 14px 20px;
+    font-size: var(--text-body);
+    color: var(--color-text-primary);
+    vertical-align: middle;
+}
+
+.td-filename { font-weight: 600; }
+
+.td-catatan {
+    font-size: var(--text-small);
+    color: var(--color-text-secondary);
+    font-style: italic;
+}
+
+.td-empty {
+    text-align: center;
+    color: var(--color-text-muted);
+    padding: 48px 20px !important;
+    font-style: italic;
+}
+
+/* ─── Status Badge ───────────────────────────── */
+.status-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: var(--radius-full);
+    font-size: var(--text-label);
+    font-weight: 600;
+}
+
+.status-menunggu  { background-color: #FEF3C7; color: #92400E; }
+.status-disetujui { background-color: #D1FAE5; color: #065F46; }
+.status-ditolak   { background-color: #FEE2E2; color: #991B1B; }

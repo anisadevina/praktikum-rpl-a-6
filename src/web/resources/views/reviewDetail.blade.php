@@ -53,20 +53,20 @@
                 <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
             </a>
 
+            <a href="{{ route('arsip') }}" class="nav-item" data-page="arsip">
+                <div class="nav-item-left">
+                    <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                    <span>Arsip</span>
+                </div>
+                <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+
             <a href="{{ route('review-dokumen') }}" class="nav-item active" data-page="review">
                 <div class="nav-item-left">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
                     </svg>
                     <span>Review Dokumen</span>
-                </div>
-                <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-            </a>
-
-            <a href="#" class="nav-item" data-page="arsip">
-                <div class="nav-item-left">
-                    <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-                    <span>Arsip</span>
                 </div>
                 <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
             </a>
@@ -92,7 +92,7 @@
                 <div class="topbar-avatar">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </div>
-                <span class="topbar-username">{{ auth()->user()->username ?? 'admin_fatisda' }}</span>
+                <span class="topbar-username">Memuat...</span>
             </div>
         </header>
 
@@ -107,7 +107,7 @@
                 <p class="review-subtitle">Detail Permintaan Unggah.</p>
             </div>
 
-            <form action="{{ route('review-dokumen.submit', ['id' => 1]) }}" method="POST">
+            <form id="form-review">
                 @csrf
                 <div class="review-grid">
                     
@@ -115,15 +115,15 @@
                         <h2 class="review-card-title">Informasi File</h2>
                         <div class="info-item">
                             <span class="info-label">Mata Kuliah</span>
-                            <span class="info-value">Algoritma dan Pemrograman</span>
+                            <span class="info-value">Memuat...</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Tahun</span>
-                            <span class="info-value">2026</span>
+                            <span class="info-value">Memuat...</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Dosen</span>
-                            <span class="info-value">Prof. Nama Dosen, S.Kom, M.Kom, Ph.D.</span>
+                            <span class="info-value">Memuat...</span>
                         </div>
                     </div>
 
