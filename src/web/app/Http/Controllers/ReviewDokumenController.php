@@ -53,6 +53,7 @@ class ReviewDokumenController extends Controller
 
             $dokumen = DB::table('dokumen')
                 ->join('mata_kuliah', 'dokumen.id_matkul', '=', 'mata_kuliah.id_matkul')
+                ->leftJoin('dosen', 'dokumen.id_dosen', '=', 'dosen.id_dosen')
                 ->where('dokumen.id_dokumen', $id)
                 ->select('dokumen.*', 'mata_kuliah.nama_matkul')
                 ->first();

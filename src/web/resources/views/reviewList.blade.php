@@ -52,20 +52,20 @@
                 <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
 
+            <div class="nav-item" data-page="arsip">
+                <div class="nav-item-left">
+                    <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                    <span>Arsip</span>
+                </div>
+                <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+
             <div class="nav-item active" data-page="review">
                 <div class="nav-item-left">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
                     </svg>
                     <span>Review Dokumen</span>
-                </div>
-                <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-            </div>
-
-            <div class="nav-item" data-page="arsip">
-                <div class="nav-item-left">
-                    <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-                    <span>Arsip</span>
                 </div>
                 <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
@@ -118,18 +118,9 @@
                             <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="clickable-row" data-href="{{ route('review-dokumen.detail', ['id' => 1]) }}">
-                            <td>Sistem_Basis_Data_Tugas.pdf</td>
-                            <td>Sistem Basis Data</td>
-                            <td>12-06-2026</td>
-                            <td>Menunggu Review</td>
-                        </tr>
-                        <tr class="clickable-row" data-href="{{ route('review-dokumen.detail', ['id' => 2]) }}">
-                            <td>Struktur_Data_Materi.pdf</td>
-                            <td>Struktur Data</td>
-                            <td>13-06-2026</td>
-                            <td>Menunggu Review</td>
+                    <tbody id="review-table-body">
+                        <tr>
+                            <td colspan="4" style="text-align: center;">Memuat data...</td>
                         </tr>
                     </tbody>
                 </table>

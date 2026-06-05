@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Detail Review — Admin Study Scope</title>
     <link rel="stylesheet" href="{{ asset('style/global.css') }}">
     <link rel="stylesheet" href="{{ asset('style/beranda.css') }}">
@@ -53,20 +54,20 @@
                 <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
 
+            <div class="nav-item" data-page="arsip">
+                <div class="nav-item-left">
+                    <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                    <span>Arsip</span>
+                </div>
+                <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+
             <div class="nav-item active" data-page="review">
                 <div class="nav-item-left">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
                     </svg>
                     <span>Review Dokumen</span>
-                </div>
-                <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-            </div>
-
-            <div class="nav-item" data-page="arsip">
-                <div class="nav-item-left">
-                    <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-                    <span>Arsip</span>
                 </div>
                 <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
@@ -92,7 +93,7 @@
                 <div class="topbar-avatar">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </div>
-                <span class="topbar-username">{{ auth()->user()->username ?? 'admin_fatisda' }}</span>
+                <span class="topbar-username" id="topbar-username">Memuat...</span>
             </div>
         </header>
 
@@ -107,23 +108,22 @@
                 <p class="review-subtitle">Detail Permintaan Unggah.</p>
             </div>
 
-            <form action="{{ route('review-dokumen.submit', ['id' => 1]) }}" method="POST">
-                @csrf
+            <form id="form-review" autocomplete="off">
                 <div class="review-grid">
                     
                     <div class="review-card">
                         <h2 class="review-card-title">Informasi File</h2>
                         <div class="info-item">
                             <span class="info-label">Mata Kuliah</span>
-                            <span class="info-value">Algoritma dan Pemrograman</span>
+                            <span class="info-value" id="val-matkul">Memuat...</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Tahun</span>
-                            <span class="info-value">2026</span>
+                            <span class="info-value" id="val-tahun">Memuat...</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Dosen</span>
-                            <span class="info-value">Prof. Nama Dosen, S.Kom, M.Kom, Ph.D.</span>
+                            <span class="info-value" id="val-dosen">Memuat...</span>
                         </div>
                     </div>
 
@@ -160,7 +160,7 @@
 
                     <div class="review-card">
                         <h2 class="review-card-title">Preview File (PDF)</h2>
-                        <div class="pdf-preview-box" onclick="window.open('#', '_blank')">
+                        <div class="pdf-preview-box" id="btn-preview-pdf" style="cursor:pointer;">
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                                 <polyline points="14 2 14 8 20 8"/>
@@ -174,11 +174,11 @@
                         <h2 class="review-card-title">Status</h2>
                         <div class="status-options">
                             <label class="radio-label">
-                                <input type="radio" name="status_dokumen" value="disetujui" required>
+                                <input type="radio" name="status_dokumen" value="disetujui">
                                 Setujui
                             </label>
                             <label class="radio-label">
-                                <input type="radio" name="status_dokumen" value="ditolak" required>
+                                <input type="radio" name="status_dokumen" value="ditolak">
                                 Tolak
                             </label>
                         </div>
@@ -196,6 +196,7 @@
     </div>
 </div>
 
+<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">@csrf</form>
 <script src="{{ asset('script/reviewDetail.js') }}"></script>
 </body>
 </html>

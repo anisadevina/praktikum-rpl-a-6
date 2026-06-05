@@ -1,5 +1,22 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // 1. LOGIKA EDITOR TEKS (FORMATTING & COUNTER)
+    // ─── 1. NAVIGASI SIDEBAR ──────────────────────────────────
+    const PAGE_PATHS = {
+        beranda: "/beranda",
+        matkul: "/matkul",
+        forum: "/forum",
+        unggah: "/unggah",
+        review: "/review-dokumen",
+        arsip: "/arsip",
+    };
+
+    document.querySelectorAll(".nav-item[data-page]").forEach((item) => {
+        item.addEventListener("click", () => {
+            const target = PAGE_PATHS[item.dataset.page];
+            if (target) window.location.href = target;
+        });
+    });
+
+    // ─── 2. LOGIKA EDITOR TEKS (FORMATTING & COUNTER) ─────────
     const editor = document.getElementById("editor");
     const hiddenCatatan = document.getElementById("hidden-catatan");
     const counter = document.getElementById("char-counter");
@@ -52,12 +69,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ─── 2. AMBIL DATA DARI API (LOAD DETAIL) ─────────────────
+    // ─── 3. AMBIL DATA DARI API (LOAD DETAIL) ─────────────────
     const urlParts = window.location.pathname.split("/");
     const idDokumen = urlParts[urlParts.length - 1];
 
-    // Variabel untuk menyimpan URL PDF
-    let filePdfUrl = "#";
+    let filePdfUrl = "#"; // Variabel untuk menyimpan URL PDF
 
     async function loadDetail() {
         try {
@@ -65,12 +81,14 @@ document.addEventListener("DOMContentLoaded", function () {
             const json = await res.json();
 
             if (json.status === "success") {
+                // Update Topbar
                 const topbarUsername =
                     document.getElementById("topbar-username");
                 if (topbarUsername && json.user) {
                     topbarUsername.textContent = json.user.username;
                 }
 
+                // Update Teks Informasi
                 const valMatkul = document.getElementById("val-matkul");
                 const valTahun = document.getElementById("val-tahun");
                 const valDosen = document.getElementById("val-dosen");
@@ -82,6 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         json.data.tahun_dokumen || json.data.tahun || "-";
                 if (valDosen) valDosen.textContent = json.data.dosen || "-";
 
+                // Update URL PDF
                 if (json.data.file_path) {
                     filePdfUrl = `/storage/${json.data.file_path}`;
                 }
@@ -110,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ─── 3. PROSES PENGIRIMAN REVIEW (API SUBMIT) ─────────────
+    // ─── 4. PROSES PENGIRIMAN REVIEW (API SUBMIT) ─────────────
     const formReview = document.getElementById("form-review");
 
     if (formReview) {
@@ -134,6 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
+            // Pindahkan teks HTML editor ke input hidden
             if (hiddenCatatan && editor) {
                 hiddenCatatan.value = editor.innerHTML;
             }
@@ -182,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ─── 4. KELUAR / LOGOUT ───────────────────────────────────
+    // ─── 5. KELUAR / LOGOUT ───────────────────────────────────
     const btnKeluar = document.getElementById("btn-keluar");
     if (btnKeluar) {
         btnKeluar.addEventListener("click", (e) => {
