@@ -28,15 +28,24 @@ class UnggahController extends Controller
     {
         $user = auth()->user();
 
+        $search = $request->query('q', '');
+
         $mataKuliah = DB::table('mata_kuliah')->orderBy('nama_matkul')->get();
         $dosen = DB::table('dosen')->orderBy('nama_dosen')->get();
 
-        $dokumenUser = DB::table('dokumen')
+        $query = DB::table('dokumen')
             ->join('mata_kuliah', 'dokumen.id_matkul', '=', 'mata_kuliah.id_matkul')
             ->where('dokumen.id_user', $user->id_user)
-            ->select('dokumen.*', 'mata_kuliah.nama_matkul')
-            ->orderBy('dokumen.waktu_unggah', 'desc')
-            ->get();
+            ->select('dokumen.*', 'mata_kuliah.nama_matkul');
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('mata_kuliah.nama_matkul', 'LIKE', '%' . $search . '%')
+                    ->orWhere('dokumen.judul', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        $dokumenUser = $query->orderBy('dokumen.waktu_unggah', 'desc')->get();
 
         return response()->json([
             'status' => 'success',

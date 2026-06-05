@@ -1,13 +1,12 @@
 document.addEventListener("DOMContentLoaded", async function () {
-
-    // Navigasi Sidebar 
+    // Navigasi Sidebar
     const PAGE_PATHS = {
         beranda: "/beranda",
-        matkul:  "/matkul",
-        forum:   "/forum",
-        unggah:  "/unggah",
-        arsip:   "/arsip",
-        review:  "/unggah/admin",
+        matkul: "/matkul",
+        forum: "/forum",
+        unggah: "/unggah",
+        arsip: "/arsip",
+        review: "/unggah/admin",
     };
 
     document.querySelectorAll(".nav-item[data-page]").forEach((item) => {
@@ -19,11 +18,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     //  Init Choices.js
     const choicesConfig = {
-        searchEnabled: true, 
-        searchResultLimit: 999, 
-        renderChoiceLimit: 5, 
-        itemSelectText: "", 
-        shouldSort: false, 
+        searchEnabled: true,
+        searchResultLimit: 999,
+        renderChoiceLimit: 5,
+        itemSelectText: "",
+        shouldSort: false,
         searchPlaceholderValue: "Ketik untuk mencari...",
         noResultsText: "Tidak ditemukan",
         noChoicesText: "Tidak ada pilihan",
@@ -209,11 +208,48 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Logout
     const btnKeluar = document.getElementById("btn-keluar");
     if (btnKeluar) {
-        btnKeluar.addEventListener("click", (e) => {
+        btnKeluar.addEventListener("click", async (e) => {
             e.preventDefault();
-            sessionStorage.removeItem("loggedUser");
-            const form = document.getElementById("logout-form");
-            form ? form.submit() : (window.location.href = "/login");
+            try {
+                const csrfInput = document.querySelector(
+                    '#logout-form input[name="_token"]',
+                );
+                if (!csrfInput) return;
+
+                const response = await fetch("/logout", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": csrfInput.value,
+                        Accept: "application/json",
+                    },
+                });
+
+                if (response.ok) {
+                    sessionStorage.removeItem("loggedUser");
+                    window.location.href = "/";
+                }
+            } catch (error) {
+                console.error("Error saat logout:", error);
+            }
+        });
+    }
+
+    const topbarSearchInput = document.querySelector(".search-bar input");
+    if (topbarSearchInput) {
+        topbarSearchInput.addEventListener("keydown", function (e) {
+            // Jika user menekan tombol Enter
+            if (e.key === "Enter") {
+                e.preventDefault(); // Mencegah form tersubmit otomatis
+                const query = this.value.trim();
+
+                if (query !== "") {
+                    // Pindah ke halaman matkul sambil membawa teks yang dicari
+                    window.location.href = `/matkul?q=${encodeURIComponent(query)}`;
+                } else {
+                    // Jika kosong, sekadar pindah ke halaman matkul
+                    window.location.href = `/matkul`;
+                }
+            }
         });
     }
 });
