@@ -127,7 +127,7 @@
         <input
           type="text"
           id="search-input"
-          placeholder="Cari topik"
+          placeholder="Cari arsip"
           value="{{ request('q') }}"
           autocomplete="off"
         />

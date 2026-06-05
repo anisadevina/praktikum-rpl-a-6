@@ -1,11 +1,28 @@
 document.addEventListener("DOMContentLoaded", async function () {
-    // Init Choices.js (dropdown searchable + scrollable dengan render limit)
+    // Navigasi Sidebar
+    const PAGE_PATHS = {
+        beranda: "/beranda",
+        matkul: "/matkul",
+        forum: "/forum",
+        unggah: "/unggah",
+        arsip: "/arsip",
+        review: "/review-dokumen",
+    };
+
+    document.querySelectorAll(".nav-item[data-page]").forEach((item) => {
+        item.addEventListener("click", () => {
+            const target = PAGE_PATHS[item.dataset.page];
+            if (target) window.location.href = target;
+        });
+    });
+
+    //  Init Choices.js
     const choicesConfig = {
-        searchEnabled: true, // aktifkan pencarian untuk semua agar seragam
-        searchResultLimit: 999, // tampilkan semua hasil search
-        renderChoiceLimit: 5, // batas awal render tetap 5 seperti request
-        itemSelectText: "", // hapus teks "Press to select"
-        shouldSort: false, // jangan sort ulang
+        searchEnabled: true,
+        searchResultLimit: 999,
+        renderChoiceLimit: 5,
+        itemSelectText: "",
+        shouldSort: false,
         searchPlaceholderValue: "Ketik untuk mencari...",
         noResultsText: "Tidak ditemukan",
         noChoicesText: "Tidak ada pilihan",
@@ -49,6 +66,11 @@ document.addEventListener("DOMContentLoaded", async function () {
                     menuAdmin.style.display = "flex";
                     menuAdmin.classList.remove("hidden");
                 }
+            }
+            // Ambil username
+            const topbarUsername = document.querySelector(".topbar-username");
+            if (topbarUsername && json.data.user) {
+                topbarUsername.textContent = json.data.user.username;
             }
 
             // Isi dropdown Mata Kuliah
@@ -191,11 +213,48 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Logout
     const btnKeluar = document.getElementById("btn-keluar");
     if (btnKeluar) {
-        btnKeluar.addEventListener("click", (e) => {
+        btnKeluar.addEventListener("click", async (e) => {
             e.preventDefault();
-            sessionStorage.removeItem("loggedUser");
-            const form = document.getElementById("logout-form");
-            form ? form.submit() : (window.location.href = "/login");
+            try {
+                const csrfInput = document.querySelector(
+                    '#logout-form input[name="_token"]',
+                );
+                if (!csrfInput) return;
+
+                const response = await fetch("/logout", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": csrfInput.value,
+                        Accept: "application/json",
+                    },
+                });
+
+                if (response.ok) {
+                    sessionStorage.removeItem("loggedUser");
+                    window.location.href = "/";
+                }
+            } catch (error) {
+                console.error("Error saat logout:", error);
+            }
+        });
+    }
+
+    const topbarSearchInput = document.querySelector(".search-bar input");
+    if (topbarSearchInput) {
+        topbarSearchInput.addEventListener("keydown", function (e) {
+            // Jika user menekan tombol Enter
+            if (e.key === "Enter") {
+                e.preventDefault(); // Mencegah form tersubmit otomatis
+                const query = this.value.trim();
+
+                if (query !== "") {
+                    // Pindah ke halaman matkul sambil membawa teks yang dicari
+                    window.location.href = `/matkul?q=${encodeURIComponent(query)}`;
+                } else {
+                    // Jika kosong, sekadar pindah ke halaman matkul
+                    window.location.href = `/matkul`;
+                }
+            }
         });
     }
 });

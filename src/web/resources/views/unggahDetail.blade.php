@@ -26,44 +26,44 @@
         </div>
 
         <nav class="sidebar-nav">
-            <a href="{{ route('beranda') }}" class="nav-item" data-page="beranda">
+            <div class="nav-item" data-page="beranda">
                 <div class="nav-item-left">
                     <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
                     <span>Beranda</span>
                 </div>
                 <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-            </a>
-            <a href="{{ route('matkul') }}" class="nav-item" data-page="matkul">
+            </div>
+            <div class="nav-item" data-page="matkul">
                 <div class="nav-item-left">
                     <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
                     <span>Mata Kuliah</span>
                 </div>
                 <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-            </a>
-            <a href="{{ route('forum') }}" class="nav-item" data-page="forum">
+            </div>
+            <div class="nav-item" data-page="forum">
                 <div class="nav-item-left">
                     <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                     <span>Forum</span>
                 </div>
                 <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-            </a>
-            <a href="{{ route('unggah') }}" class="nav-item active" data-page="unggah">
+            </div>
+            <div class="nav-item active" data-page="unggah">
                 <div class="nav-item-left">
                     <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
                     <span>Unggah</span>
                 </div>
                 <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-            </a>
+            </div>
             
-            <a href="{{ route('arsip') }}" class="nav-item" data-page="arsip">
+            <div class="nav-item" data-page="arsip">
                 <div class="nav-item-left">
                     <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
                     <span>Arsip</span>
                 </div>
                 <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-            </a>
+            </div>
 
-            <a href="{{ route('review-dokumen') }}" class="nav-item hidden" id="menu-review-admin" style="display: none;" data-page="review">
+            <div class="nav-item hidden" id="menu-review-admin" style="display: none;" data-page="review">
                 <div class="nav-item-left">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
@@ -71,7 +71,7 @@
                     <span>Review Dokumen</span>
                 </div>
                 <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-            </a>
+            </div>
           
         </nav>
 

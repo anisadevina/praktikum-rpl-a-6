@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const json = await res.json();
 
             if (json.status === "success") {
-                // Update Topbar
+                // Update Topbar Username
                 const topbarUsername =
                     document.getElementById("topbar-username");
                 if (topbarUsername && json.user) {
@@ -98,11 +98,63 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (valTahun)
                     valTahun.textContent =
                         json.data.tahun_dokumen || json.data.tahun || "-";
-                if (valDosen) valDosen.textContent = json.data.dosen || "-";
+
+                // Fallback ekstra aman: pakai json.data.dosen ATAU json.data.nama_dosen
+                if (valDosen)
+                    valDosen.textContent =
+                        json.data.dosen || json.data.nama_dosen || "-";
 
                 // Update URL PDF
                 if (json.data.file_path) {
                     filePdfUrl = `/storage/${json.data.file_path}`;
+                }
+
+                if (json.data.status !== "menunggu") {
+                    // 1. Sembunyikan tombol "Kirim"
+                    const btnKirim = document.querySelector(".btn-kirim");
+                    if (btnKirim) btnKirim.style.display = "none";
+
+                    // 2. Set pilihan radio sesuai status dari DB dan matikan kliknya
+                    const radios = document.querySelectorAll(
+                        'input[name="status_dokumen"]',
+                    );
+                    radios.forEach((radio) => {
+                        radio.disabled = true;
+                        if (radio.value === json.data.status)
+                            radio.checked = true;
+                    });
+
+                    // 3. Matikan teks editor
+                    const editorContainer = document.getElementById("editor");
+                    if (editorContainer) {
+                        editorContainer.setAttribute(
+                            "contenteditable",
+                            "false",
+                        );
+                        editorContainer.style.backgroundColor = "#f5f5f5";
+                        editorContainer.innerHTML =
+                            json.data.catatan_admin ||
+                            "<i>Tidak ada catatan.</i>";
+                    }
+
+                    // 4. Tambahkan pesan peringatan visual
+                    const actionDiv = document.querySelector(".action-buttons");
+                    if (actionDiv) {
+                        const pesan = document.createElement("span");
+                        // Warna teks: merah gelap jika ditolak, hijau jika disetujui
+                        pesan.style.color =
+                            json.data.status === "ditolak"
+                                ? "#721c24"
+                                : "#155724";
+                        pesan.style.fontWeight = "bold";
+                        pesan.style.marginRight = "auto";
+
+                        const kataStatus =
+                            json.data.status.charAt(0).toUpperCase() +
+                            json.data.status.slice(1);
+                        pesan.innerHTML = `Dokumen ini telah ${kataStatus} permanen.`;
+                        actionDiv.prepend(pesan);
+                    }
                 }
             } else {
                 console.error("Gagal dari server:", json.message);
@@ -205,15 +257,52 @@ document.addEventListener("DOMContentLoaded", function () {
     // ─── 5. KELUAR / LOGOUT ───────────────────────────────────
     const btnKeluar = document.getElementById("btn-keluar");
     if (btnKeluar) {
-        btnKeluar.addEventListener("click", (e) => {
+        btnKeluar.addEventListener("click", async (e) => {
             e.preventDefault();
-            sessionStorage.removeItem("loggedUser");
-            const formLogout = document.getElementById("logout-form");
+            try {
+                const csrfInput = document.querySelector(
+                    '#logout-form input[name="_token"]',
+                );
 
-            if (formLogout) {
-                formLogout.submit();
-            } else {
-                window.location.href = "/login";
+                if (!csrfInput) {
+                    window.location.href = "/login";
+                    return;
+                }
+
+                const response = await fetch("/logout", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": csrfInput.value,
+                        Accept: "application/json",
+                    },
+                });
+
+                if (response.ok) {
+                    sessionStorage.removeItem("loggedUser");
+                    window.location.href = "/";
+                }
+            } catch (error) {
+                console.error("Error saat logout:", error);
+            }
+        });
+    }
+
+    // ─── 6. PENCARIAN GLOBAL DI TOPBAR ────────────────────────
+    const topbarSearchInput = document.querySelector(".search-bar input");
+    if (topbarSearchInput) {
+        topbarSearchInput.addEventListener("keydown", function (e) {
+            // Jika user menekan tombol Enter
+            if (e.key === "Enter") {
+                e.preventDefault(); // Mencegah form tersubmit otomatis
+                const query = this.value.trim();
+
+                if (query !== "") {
+                    // Pindah ke halaman matkul sambil membawa teks yang dicari
+                    window.location.href = `/matkul?q=${encodeURIComponent(query)}`;
+                } else {
+                    // Jika kosong, sekadar pindah ke halaman matkul
+                    window.location.href = `/matkul`;
+                }
             }
         });
     }
