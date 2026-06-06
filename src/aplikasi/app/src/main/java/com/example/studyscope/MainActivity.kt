@@ -3,45 +3,59 @@ package com.example.studyscope
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.studyscope.ui.theme.StudyScopeTheme
+import androidx.compose.runtime.*
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.studyscope.screen.LoginScreen
+import com.example.studyscope.screen.RegisterScreen
+import com.example.studyscope.viewmodel.AuthViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            StudyScopeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            StudyScopeApp()
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun StudyScopeApp() {
+    val navController = rememberNavController()
+    // Menggunakan 1 ViewModel yang sama untuk Login dan Register
+    val authViewModel: AuthViewModel = viewModel()
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    StudyScopeTheme {
-        Greeting("Android")
+    // Menyimpan token login sementara
+    var authToken by remember { mutableStateOf<String?>(null) }
+
+    NavHost(navController = navController, startDestination = "login") {
+
+        // Layar 1: Login
+        composable("login") {
+            LoginScreen(
+                viewModel = authViewModel,
+                onNavigateToRegister = { navController.navigate("register") },
+                onLoginSuccess = { token ->
+                    authToken = token
+                    // TODO: Arahkan ke halaman Beranda nanti
+                    println("Login Sukses! Token: $token")
+                }
+            )
+        }
+
+        // Layar 2: Register
+        composable("register") {
+            RegisterScreen(
+                viewModel = authViewModel,
+                onNavigateToLogin = { navController.navigate("login") },
+                onRegisterSuccess = { token ->
+                    authToken = token
+                    // TODO: Arahkan ke halaman Beranda nanti
+                    println("Register Sukses! Token: $token")
+                }
+            )
+        }
     }
 }
