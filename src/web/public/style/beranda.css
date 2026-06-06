@@ -296,10 +296,19 @@
 }
 
 .hero-desc {
-    font-size: var(--text-body);
-    color: rgba(255, 255, 255, 0.65);
-    max-width: 520px;
-    line-height: 1.6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    color: var(--color-text-on-green-sub);
+}
+
+@media (max-width: 900px) {
+    .hero-desc {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+    }
 }
 
 /* =============================================
