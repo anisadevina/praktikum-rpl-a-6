@@ -9,6 +9,7 @@ use App\Http\Controllers\ArsipController;
 use App\Http\Controllers\UnggahController;
 use App\Http\Controllers\ReviewDokumenController;
 use App\Http\Middleware\CekAdmin;
+use App\Http\Controllers\PengaturanController;
 
 
 // Autensifiaksi 
@@ -65,5 +66,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/api/review-dokumen', [ReviewDokumenController::class, 'getListData']);
         Route::get('/api/review-dokumen/{id}', [ReviewDokumenController::class, 'getDetailData']);
         Route::post('/api/review-dokumen/{id}', [ReviewDokumenController::class, 'submitReview']);
+
+        // API untuk pengaturan Pop-up Kuisioner
+        Route::get('/api/pengaturan/popup', [PengaturanController::class, 'getPopupStatus']);
+        Route::post('/api/pengaturan/popup', [PengaturanController::class, 'setPopupStatus']);
     });
 });

@@ -171,3 +171,67 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+// --- FITUR POP-UP KUISIONER SEMESTER ---
+async function cekDanTampilkanPopup() {
+    // Jika pop-up sudah pernah dilihat di sesi login ini, batalkan (biar tidak spam).
+    if (sessionStorage.getItem("popupSemesterSudahDilihat") === "true") {
+        return;
+    }
+
+    try {
+        const res = await fetch("/api/pengaturan/popup");
+        const json = await res.json();
+
+        // Jika admin menyalakan (ON) tombolnya, munculkan pop-up!
+        if (json.status === "success" && json.data === "on") {
+            munculkanModalGForm();
+            // Simpan ingatan agar tidak muncul lagi saat di-refresh
+            sessionStorage.setItem("popupSemesterSudahDilihat", "true");
+        }
+    } catch (e) {
+        console.error("Gagal mengecek status pop-up:", e);
+    }
+}
+
+function munculkanModalGForm() {
+    // Membuat elemen background gelap (Overlay)
+    const overlay = document.createElement("div");
+    overlay.style.cssText =
+        "position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; display:flex; align-items:center; justify-content:center; backdrop-filter: blur(3px);";
+
+    // Membuat kotak dialog
+    const modal = document.createElement("div");
+    modal.style.cssText =
+        "background:#fff; padding:30px; border-radius:12px; width:90%; max-width:450px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.2); animation: popIn 0.3s ease-out;";
+
+    modal.innerHTML = `
+            <style>
+                @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+            </style>
+            <div style="background:#E8F5E9; color:#2E7D32; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 15px;">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            </div>
+            <h2 style="margin:0 0 10px; color:#1f2937; font-size: 22px;">Akhir Semester Tiba!</h2>
+            <p style="color:#4b5563; line-height:1.6; margin-bottom:24px; font-size:15px;">
+                Silakan review dan bagikan pengalaman mata kuliahmu untuk membantu teman-teman dan junior lainnya di semester depan.
+            </p>
+            <a href="https://github.com/anisadevina/praktikum-rpl-a-6" target="_blank" style="display:block; background:#5A8C23; color:#fff; padding:12px 20px; border-radius:8px; text-decoration:none; font-weight:bold; font-size:16px; margin-bottom:12px; transition: 0.2s;">
+                Isi Google Form Sekarang
+            </a>
+            <button id="btn-tutup-popup" style="background:none; border:none; color:#6b7280; font-size:14px; cursor:pointer; text-decoration:underline;">
+                Nanti Saja, Lanjut ke Study Scope
+            </button>
+        `;
+
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+
+    // Aksi tutup modal
+    document.getElementById("btn-tutup-popup").addEventListener("click", () => {
+        overlay.remove();
+    });
+}
+
+// Eksekusi fungsinya
+cekDanTampilkanPopup();

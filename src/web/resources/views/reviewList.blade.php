@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review Dokumen — Admin Study Scope</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('style/global.css') }}">
     <link rel="stylesheet" href="{{ asset('style/beranda.css') }}">
     <link rel="stylesheet" href="{{ asset('style/reviewList.css') }}">
@@ -68,6 +69,19 @@
                     <span>Review Dokumen</span>
                 </div>
                 <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+
+            <div class="nav-item hidden" id="menu-popup-setting" style="display: none; padding: 10px 20px; cursor: default;">
+                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                    <span style="color: black; font-size: 14px;">Pop-up Kuisioner</span>
+                    
+                    <label style="position: relative; display: inline-block; width: 40px; height: 20px;">
+                        <input type="checkbox" id="toggle-popup-btn" style="opacity: 0; width: 0; height: 0;">
+                        <span id="toggle-slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px;">
+                            <span id="toggle-circle" style="position: absolute; content: ''; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%;"></span>
+                        </span>
+                    </label>
+                </div>
             </div>
         </nav>
 
