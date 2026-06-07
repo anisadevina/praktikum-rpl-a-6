@@ -85,20 +85,3 @@ php artisan storage:link
 php artisan serve
 ```
 
-### Membuat Akun Admin
-
-Setelah server berjalan, buka Tinker lalu jalankan:
-
-```bash
-php artisan tinker
-```
-
-```php
-App\Models\User::create([
-    'nim'        => '000000',
-    'username'   => 'admin',
-    'email_user' => 'admin@admin.com',
-    'password'   => bcrypt('password'),
-    'role'       => 'admin',
-]);
-```
