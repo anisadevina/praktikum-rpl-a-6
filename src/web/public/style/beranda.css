@@ -377,9 +377,9 @@
 }
 
 .card-thumbnail svg {
-    width: 36px;
-    height: 36px;
-    stroke: var(--color-border);
+    width: 52px;
+    height: 52px;
+    stroke: var(--icon-stroke, var(--color-primary));
     fill: none;
     stroke-width: 1.5;
     stroke-linecap: round;
