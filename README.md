@@ -1,6 +1,6 @@
 # Study Scope - Praktikum RPL
 
-Platform akademik mahasiswa FATISDA untuk mengakses, berdiskusi, dan berbagi dokumen perkuliahan secara terpusat. Tersedia dalam dua platform: aplikasi web (Laravel) dan aplikasi mobile (Android).
+Platform akademik mahasiswa FATISDA untuk mengakses, berdiskusi, dan berbagi dokumen perkuliahan secara terpusat. 
 
 ---
 
@@ -19,7 +19,6 @@ Platform akademik mahasiswa FATISDA untuk mengakses, berdiskusi, dan berbagi dok
 
 - **Backend:** Laravel 11 (PHP)
 - **Frontend Web:** Vanilla JS + CSS (tanpa framework)
-- **Mobile:** Android (Kotlin + Jetpack Compose)
 - **Database:** MySQL
 - **Auth:** Laravel Session (web) & Laravel Sanctum (API mobile)
 
