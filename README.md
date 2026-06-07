@@ -30,7 +30,8 @@ Platform akademik mahasiswa FATISDA untuk mengakses, berdiskusi, dan berbagi dok
 ### Mahasiswa
 - **Autentikasi** - Register dan login berbasis sesi, dengan validasi NIM dan email institusi
 - **Beranda** - Menampilkan mata kuliah terakhir diakses dan topik forum terbaru
-- **Mata Kuliah** - Daftar semua mata kuliah dengan pencarian dan pagination; halaman detail menampilkan arsip dokumen per mata kuliah beserta tingkat kesulitan
+- **Mata Kuliah** - Daftar semua mata kuliah dengan pencarian dan pagination
+- **Detail Mata Kuliah** - Halaman detail menampilkan arsip dokumen per mata kuliah beserta tingkat kesulitan
 ---
 
 ## Struktur Folder
