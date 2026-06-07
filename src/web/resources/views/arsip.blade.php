@@ -83,7 +83,7 @@
         </svg>
       </div>
 
-      <div class="nav-item active" data-page="arsip">
+      <div class="nav-item" data-page="arsip">
         <div class="nav-item-left">
           <svg viewBox="0 0 24 24">
             <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
@@ -127,8 +127,7 @@
         <input
           type="text"
           id="search-input"
-          placeholder="Cari topik"
-          value="{{ request('q') }}"
+          placeholder="Cari arsip"
           autocomplete="off"
         />
       </div>
@@ -139,7 +138,7 @@
             <circle cx="12" cy="7" r="4"/>
           </svg>
         </div>
-        <span class="topbar-username" id="topbar-username">{{ $user->username ?? 'Guest' }}</span>
+        <span class="topbar-username" id="topbar-username">...</span>
       </div>
     </header>
 
@@ -163,10 +162,10 @@
         <div class="arsip-filter-wrapper">
           <select class="arsip-filter-select" id="filter-tahun">
             <option value="">Semua Tahun</option>
-            <option value="2024" {{ request('tahun') == '2024' ? 'selected' : '' }}>2024</option>
-            <option value="2023" {{ request('tahun') == '2023' ? 'selected' : '' }}>2023</option>
-            <option value="2022" {{ request('tahun') == '2022' ? 'selected' : '' }}>2022</option>
-            <option value="2021" {{ request('tahun') == '2021' ? 'selected' : '' }}>2021</option>
+            <option value="2024">2024</option>
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
           </select>
           <svg class="filter-chevron" viewBox="0 0 24 24">
             <polyline points="6 9 12 15 18 9"/>
@@ -176,40 +175,7 @@
 
       <!-- Arsip List -->
       <div class="arsip-list" id="arsip-list">
-
-        @forelse ($daftarArsip as $arsip)
-        <div class="arsip-item"
-             data-id="{{ $arsip->id_dokumen }}"
-             data-file-url="{{ $arsip->file_url }}">
-          <div class="arsip-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
-              <polyline points="13 2 13 9 20 9"/>
-            </svg>
-          </div>
-          <div class="arsip-info">
-            <span class="arsip-name">{{ $arsip->judul }}</span>
-            <div class="arsip-meta">
-              <span class="arsip-badge">{{ $arsip->tahun_dokumen }}</span>
-              <span class="arsip-date">Diunggah pada {{ \Carbon\Carbon::parse($arsip->waktu_unggah)->translatedFormat('j F Y') }}</span>
-            </div>
-          </div>
-          <div class="arsip-bookmark bookmarked" data-id="{{ $arsip->id_dokumen }}">
-            <svg viewBox="0 0 24 24">
-              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-            </svg>
-          </div>
-        </div>
-
-        @empty
-        <div class="arsip-empty">
-          <svg viewBox="0 0 24 24">
-            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-          </svg>
-          <p>Belum ada arsip tersimpan.</p>
-        </div>
-        @endforelse
-
+        <p style="color: var(--color-text-muted); font-style: italic;">Memuat arsip...</p>
       </div>
 
     </main>

@@ -1,4 +1,4 @@
-// Konfigurasi Path 
+// ─── Konfigurasi Path Halaman ─────────────────────────────────────────────────
 const PAGE_PATHS = {
     beranda: "/beranda",
     matkul: "/matkul",
@@ -9,7 +9,7 @@ const PAGE_PATHS = {
 
 const ACTIVE_PAGE = "arsip";
 
-// Sidebar Aktif
+// ─── Sidebar Aktif ────────────────────────────────────────────────────────────
 function setupSidebarActive() {
     const navItems = document.querySelectorAll(".nav-item[data-page]");
     navItems.forEach((item) => {
@@ -26,23 +26,15 @@ function setupSidebarActive() {
     });
 }
 
-// Username dari session 
-function renderUsername() {
-    const el = document.getElementById("topbar-username");
-    if (!el) return;
-    const stored = sessionStorage.getItem("loggedUser");
-    if (stored) {
-        try {
-            const user = JSON.parse(stored);
-            if (user.username) el.textContent = user.username;
-        } catch (_) {}
-    }
-}
-
-// Search
+// ─── Search ───────────────────────────────────────────────────────────────────
 function setupSearch() {
     const input = document.getElementById("search-input");
     if (!input) return;
+
+    // Isi kolom input dengan kata kunci yang sedang dicari (dari URL)
+    const params = new URLSearchParams(window.location.search);
+    const currentQuery = params.get("q");
+    if (currentQuery) input.value = currentQuery;
 
     input.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
@@ -67,10 +59,15 @@ function setupSearch() {
     });
 }
 
-// Filter Tahun
+// ─── Filter Tahun ─────────────────────────────────────────────────────────────
 function setupFilter() {
     const select = document.getElementById("filter-tahun");
     if (!select) return;
+
+    // Sinkronkan nilai select dengan URL saat ini
+    const params = new URLSearchParams(window.location.search);
+    const currentTahun = params.get("tahun");
+    if (currentTahun) select.value = currentTahun;
 
     select.addEventListener("change", function () {
         const selectedTahun = this.value;
@@ -86,7 +83,83 @@ function setupFilter() {
     });
 }
 
-// Klik Item Arsip > Buka file langsung di tab baru
+// ─── Helper: Generate HTML satu item arsip ────────────────────────────────────
+function generateArsipItem(arsip) {
+    return `
+        <div class="arsip-item" data-id="${arsip.id_dokumen}" data-file-url="${arsip.file_url}">
+          <div class="arsip-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+              <polyline points="13 2 13 9 20 9"/>
+            </svg>
+          </div>
+          <div class="arsip-info">
+            <span class="arsip-name">${arsip.judul}</span>
+            <div class="arsip-meta">
+              <span class="arsip-badge">${arsip.tahun_dokumen}</span>
+              <span class="arsip-date">Diunggah pada ${arsip.waktu_unggah_human}</span>
+            </div>
+          </div>
+          <div class="arsip-bookmark bookmarked" data-id="${arsip.id_dokumen}">
+            <svg viewBox="0 0 24 24">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+        </div>
+    `;
+}
+
+// ─── Fetch Utama: Ambil Data dari API ─────────────────────────────────────────
+async function fetchArsipData() {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const query = params.get("q") || "";
+        const tahun = params.get("tahun") || "";
+
+        const url = `/arsip/data?q=${encodeURIComponent(query)}&tahun=${encodeURIComponent(tahun)}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Gagal mengambil data arsip");
+
+        const json = await response.json();
+        const data = json.data;
+
+        // 1. Render username di topbar
+        const topbarUsername = document.getElementById("topbar-username");
+        if (topbarUsername && data.user) {
+            topbarUsername.textContent = data.user.username;
+        }
+
+        // 2. Render daftar arsip
+        const arsipList = document.getElementById("arsip-list");
+        if (!arsipList) return;
+
+        if (data.daftarArsip.length === 0) {
+            arsipList.innerHTML = `
+                <div class="arsip-empty">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                  </svg>
+                  <p>Belum ada arsip tersimpan.</p>
+                </div>
+            `;
+        } else {
+            arsipList.innerHTML = data.daftarArsip.map(generateArsipItem).join("");
+        }
+
+        // 3. Pasang event listener setelah elemen dirender
+        setupArsipItems();
+        setupBookmarks();
+
+    } catch (error) {
+        console.error("Error:", error);
+        const arsipList = document.getElementById("arsip-list");
+        if (arsipList) {
+            arsipList.innerHTML = '<p style="color: red;">Gagal memuat data. Silakan muat ulang halaman.</p>';
+        }
+    }
+}
+
+// ─── Klik Item Arsip > Buka file langsung di tab baru ────────────────────────
 function setupArsipItems() {
     document.querySelectorAll(".arsip-item").forEach((item) => {
         item.addEventListener("click", (e) => {
@@ -100,7 +173,7 @@ function setupArsipItems() {
     });
 }
 
-// Bookmark Toggle
+// ─── Bookmark Toggle ──────────────────────────────────────────────────────────
 function setupBookmarks() {
     document.querySelectorAll(".arsip-bookmark").forEach((btn) => {
         btn.addEventListener("click", async (e) => {
@@ -144,7 +217,7 @@ function setupBookmarks() {
     });
 }
 
-// Tombol Keluar
+// ─── Tombol Keluar ────────────────────────────────────────────────────────────
 function setupLogout() {
     const btnKeluar = document.getElementById("btn-keluar");
     if (!btnKeluar) return;
@@ -174,12 +247,13 @@ function setupLogout() {
     });
 }
 
-// Init
+// ─── Inisialisasi Saat Halaman Dimuat ─────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
     setupSidebarActive();
     setupSearch();
     setupFilter();
-    setupArsipItems();
-    setupBookmarks();
     setupLogout();
+
+    // Tarik data API setelah DOM siap
+    fetchArsipData();
 });
