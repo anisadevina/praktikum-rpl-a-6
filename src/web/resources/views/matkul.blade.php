@@ -58,6 +58,7 @@
         </div>
         <svg class="nav-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
+      
     </nav>
 
     <div class="sidebar-footer">
@@ -132,6 +133,7 @@
   @csrf
 </form>
 
+<script src="{{ asset('script/matkulIcon.js') }}"></script>
 <script src="{{ asset('script/matkul.js') }}"></script>
 </body>
 </html>

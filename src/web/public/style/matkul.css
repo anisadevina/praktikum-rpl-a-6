@@ -38,10 +38,19 @@
     margin-bottom: 32px;
 }
 
-/* Membuat bagian atas card (thumbnail) menjadi putih bersih sesuai gambar */
+/* Membuat bagian atas card (thumbnail) dengan warna per kategori */
 .matkul-card .card-thumbnail {
-    background-color: #ffffff;
     height: 150px;
+}
+
+.matkul-card .card-thumbnail svg {
+    width: 52px;
+    height: 52px;
+    stroke: var(--icon-stroke, var(--color-primary));
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 /* Ukuran judul section */

@@ -1,43 +1,45 @@
 /*  Page Header  */
 .arsip-header {
-    margin-bottom: 28px;
+    margin-bottom: 0;
 }
 
 .arsip-title-row {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 6px;
+    margin-bottom: 12px;
 }
 
 .arsip-icon {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     stroke: var(--color-text-primary);
     fill: none;
-    stroke-width: 1.8;
+    stroke-width: 2;
     stroke-linecap: round;
     stroke-linejoin: round;
     flex-shrink: 0;
 }
 
 .arsip-title {
-    font-size: var(--text-h1);
+    font-size: 32px;
     font-weight: 800;
     color: var(--color-text-primary);
-    letter-spacing: -0.3px;
-    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
 }
 
 .arsip-subtitle {
     font-size: var(--text-body);
     color: var(--color-text-secondary);
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .arsip-divider {
     border: none;
-    border-top: 1.5px solid var(--color-border);
+    border-top: 2px solid var(--color-border-input);
+    margin-bottom: 32px;
 }
 
 /* Filter Bar */

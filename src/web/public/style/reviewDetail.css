@@ -1,0 +1,229 @@
+/* Layout 2 Kolom Grid */
+.review-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+@media (max-width: 900px) {
+    .review-grid { grid-template-columns: 1fr; }
+}
+
+/* Card Style */
+.review-card {
+    background-color: var(--color-primary-light);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.review-card-title {
+    font-size: var(--text-h2);
+    font-weight: 800;
+    color: var(--color-bg-page);
+    margin-bottom: 20px;
+}
+
+/* Informasi File Card */
+.info-item {
+    margin-bottom: 16px;
+}
+
+.info-label {
+    font-size: var(--text-body);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
+    display: block;
+}
+
+.info-value {
+    font-size: var(--text-body);
+    color: var(--color-text-primary);
+}
+
+/* ─── Text Editor (Catatan Review) ─── */
+.editor-container {
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-md);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.editor-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-border);
+    background-color: #ffffff;
+}
+
+.editor-toolbar select {
+    border: none;
+    font-weight: 600;
+    font-family: var(--font-base);
+    font-size: var(--text-small);
+    outline: none;
+    cursor: pointer;
+    background: transparent;
+}
+
+.editor-toolbar button {
+    background: none;
+    border: none;
+    padding: 6px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+.editor-toolbar button:hover {
+    background-color: var(--color-bg-page);
+}
+
+.editor-toolbar button.active {
+    background-color: #e2e8f0; /* Highlight saat fitur aktif */
+}
+
+.editor-toolbar svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--color-text-primary);
+    fill: none;
+    stroke-width: 2;
+}
+
+.editor-textarea {
+    flex: 1;
+    width: 100%;
+    border: none;
+    padding: 16px;
+    font-family: var(--font-base);
+    font-size: var(--text-body);
+    outline: none;
+    min-height: 120px;
+    overflow-y: auto;
+    background-color: transparent;
+}
+
+.editor-textarea[contenteditable="true"]:empty:before {
+    content: attr(placeholder);
+    color: var(--color-text-muted);
+    pointer-events: none;
+    display: block;
+}
+
+.editor-footer {
+    text-align: right;
+    padding: 8px 16px;
+    font-size: var(--text-label);
+    color: var(--color-text-muted);
+    font-weight: 500;
+    background-color: #ffffff;
+}
+
+/* Preview PDF Box */
+.pdf-preview-box {
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-md);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    color: var(--color-text-muted);
+    font-weight: 600;
+    gap: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.pdf-preview-box:hover {
+    background-color: #fcfcfc;
+}
+
+.pdf-preview-box svg {
+    stroke: var(--color-text-muted);
+}
+
+/* Status Radio Buttons */
+.status-options {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    background-color: var(--color-bg-card);
+    padding: 16px 20px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: var(--text-body);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    gap: 12px;
+    transition: border 0.15s;
+    border: 2px solid transparent;
+}
+
+.radio-label:has(input:checked) {
+    border-color: #2263FF; 
+}
+
+.radio-label input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #2263FF;
+    cursor: pointer;
+}
+
+/* ─── Action Buttons ─── */
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 10px;
+}
+
+.btn-kembali {
+    background-color: var(--color-bg-card);
+    border: 1.5px solid var(--color-border);
+    color: var(--color-text-primary);
+    padding: 12px 32px;
+    border-radius: var(--radius-full);
+    font-size: var(--text-body);
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+.btn-kembali:hover {
+    background-color: var(--color-bg-page);
+}
+
+.btn-kirim {
+    background-color: #2263FF;
+    color: #ffffff;
+    border: none;
+    padding: 12px 40px;
+    border-radius: var(--radius-full);
+    font-size: var(--text-body);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btn-kirim:hover {
+    background-color: #1a50d4;
+}

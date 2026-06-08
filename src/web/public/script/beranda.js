@@ -1,4 +1,4 @@
-// ─── Konfigurasi Path Halaman ────────────────────────────────────────────────
+// Konfigurasi Path Halaman
 const PAGE_PATHS = {
     beranda: "/beranda",
     matkul: "/matkul",
@@ -9,7 +9,7 @@ const PAGE_PATHS = {
 
 const ACTIVE_PAGE = "beranda";
 
-// ─── Sidebar Aktif ────────────────────────────────────────────────────────────
+// Sidebar Aktif
 function setupSidebarActive() {
     const navItems = document.querySelectorAll(".nav-item[data-page]");
     navItems.forEach((item) => {
@@ -27,7 +27,7 @@ function setupSidebarActive() {
     });
 }
 
-// ─── Search ───────────────────────────────────────────────────────────────────
+// Search
 function setupSearch() {
     const input = document.getElementById("search-input");
     if (!input) return;
@@ -41,7 +41,7 @@ function setupSearch() {
     });
 }
 
-// ─── Fetch Data API Beranda ───────────────────────────────────────────────────
+// Fetch Data API Beranda
 async function fetchBerandaData() {
     try {
         const response = await fetch("/beranda/data");
@@ -67,12 +67,8 @@ async function fetchBerandaData() {
                     .map(
                         (mk) => `
                     <div class="matkul-card" data-id="${mk.id_matkul}">
-                      <div class="card-thumbnail">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <rect x="3" y="3" width="18" height="18" rx="2"/>
-                          <circle cx="8.5" cy="8.5" r="1.5"/>
-                          <polyline points="21 15 16 10 5 21"/>
-                        </svg>
+                      <div class="card-thumbnail" style="background:${getBgMatkul(mk.nama_matkul)}; --icon-stroke:${getStrokeMatkul(mk.nama_matkul)};">
+                        ${getIconMatkul(mk.nama_matkul)}
                       </div>
                       <div class="card-body">
                         <p class="card-name" title="${mk.nama_matkul}">${mk.nama_matkul}</p>
@@ -127,7 +123,7 @@ async function fetchBerandaData() {
     }
 }
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
+// Init
 document.addEventListener("DOMContentLoaded", () => {
     setupSidebarActive();
     setupSearch();
@@ -135,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Tarik data API beranda saat kerangka HTML sudah siap
     fetchBerandaData();
 
-    // ── Tombol Keluar (Menggunakan API) ──
+    // Tombol Keluar (Menggunakan API)
     const btnKeluar = document.getElementById("btn-keluar");
     if (btnKeluar) {
         btnKeluar.addEventListener("click", async (e) => {

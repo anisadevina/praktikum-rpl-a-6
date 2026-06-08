@@ -51,7 +51,7 @@ class ArsipController extends Controller
             });
 
         return view('arsip', [
-            'user'        => $user,
+            'user' => $user,
             'daftarArsip' => $daftarArsip,
         ]);
     }
@@ -100,7 +100,7 @@ class ArsipController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => [
-                'user'        => $user,
+                'user' => $user,
                 'daftarArsip' => $daftarArsip,
             ]
         ]);
@@ -133,21 +133,21 @@ class ArsipController extends Controller
                 ->delete();
 
             return response()->json([
-                'status'     => 'success',
+                'status' => 'success',
                 'bookmarked' => false,
-                'message'    => 'Bookmark dihapus.'
+                'message' => 'Bookmark dihapus.'
             ]);
         } else {
             // Belum di-bookmark > tambahkan
             DB::table('bookmark')->insert([
-                'id_user'    => $user->id_user,
+                'id_user' => $user->id_user,
                 'id_dokumen' => $id,
             ]);
 
             return response()->json([
-                'status'     => 'success',
+                'status' => 'success',
                 'bookmarked' => true,
-                'message'    => 'Dokumen disimpan ke arsip.'
+                'message' => 'Dokumen disimpan ke arsip.'
             ]);
         }
     }

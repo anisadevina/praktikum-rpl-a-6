@@ -1,4 +1,4 @@
-// Konfigurasi Path 
+// Konfigurasi Path
 const PAGE_PATHS = {
     beranda: "/beranda",
     matkul: "/matkul",
@@ -26,7 +26,7 @@ function setupSidebarActive() {
     });
 }
 
-// Username dari session 
+// Username dari session
 function renderUsername() {
     const el = document.getElementById("topbar-username");
     if (!el) return;
@@ -106,7 +106,7 @@ function setupBookmarks() {
         btn.addEventListener("click", async (e) => {
             e.stopPropagation();
 
-            const id         = btn.dataset.id;
+            const id = btn.dataset.id;
             const isBookmark = btn.classList.contains("bookmarked");
 
             // Optimistic UI — langsung toggle dulu sebelum response
@@ -117,7 +117,9 @@ function setupBookmarks() {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')?.content ?? "",
+                        "X-CSRF-TOKEN":
+                            document.querySelector('meta[name="csrf-token"]')
+                                ?.content ?? "",
                     },
                     body: JSON.stringify({ bookmarked: !isBookmark }),
                 });
@@ -131,7 +133,7 @@ function setupBookmarks() {
                     const item = btn.closest(".arsip-item");
                     if (item) {
                         item.style.transition = "opacity 0.3s";
-                        item.style.opacity    = "0";
+                        item.style.opacity = "0";
                         setTimeout(() => item.remove(), 300);
                     }
                 }
@@ -151,14 +153,16 @@ function setupLogout() {
     btnKeluar.addEventListener("click", async (e) => {
         e.preventDefault();
         try {
-            const csrfInput = document.querySelector('#logout-form input[name="_token"]');
+            const csrfInput = document.querySelector(
+                '#logout-form input[name="_token"]',
+            );
             if (!csrfInput) throw new Error("CSRF token tidak ditemukan");
 
             const response = await fetch("/logout", {
                 method: "POST",
                 headers: {
                     "X-CSRF-TOKEN": csrfInput.value,
-                    "Accept": "application/json",
+                    Accept: "application/json",
                 },
             });
 

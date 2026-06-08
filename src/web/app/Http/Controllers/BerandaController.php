@@ -22,7 +22,10 @@ class BerandaController extends Controller
             ->limit(4)
             ->get()
             ->map(function ($item) {
-                $item->arsip = DB::table('dokumen')->where('id_matkul', $item->id_matkul)->count();
+                $item->arsip = DB::table('dokumen')
+                    ->where('id_matkul', $item->id_matkul)
+                    ->where('status', 'disetujui')
+                    ->count();
                 return $item;
             });
 

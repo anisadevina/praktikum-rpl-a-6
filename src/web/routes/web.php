@@ -1,14 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\MatkulController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ArsipController;
+use App\Http\Controllers\UnggahController;
+use App\Http\Controllers\ReviewDokumenController;
+use App\Http\Middleware\CekAdmin;
 
-// -- AUTENTIKASI --
+
+// Autensifiaksi 
 Route::get('/', function () {
     return view('login');
 })->name('login');
@@ -21,7 +24,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.proses');
 Route::post('/register', [AuthController::class, 'register'])->name('register.proses');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// -- RUTE YANG BUTUH LOGIN --
+// Rute dari auth
 Route::middleware('auth')->group(function () {
 
     // Beranda
@@ -47,4 +50,20 @@ Route::middleware('auth')->group(function () {
 
     // Arsip View (dari MatkulController)
     Route::get('/arsip/view/{kode}', [MatkulController::class, 'viewArsip'])->name('arsip.view');
+
+    // Unggah
+    Route::get('/unggah', [UnggahController::class, 'index'])->name('unggah');
+    Route::get('/unggah/detail', [UnggahController::class, 'create'])->name('unggah.detail');
+    Route::get('/unggah/data', [UnggahController::class, 'getData'])->name('unggah.data');
+    Route::post('/unggah', [UnggahController::class, 'upload'])->name('unggah.proses');
+
+    // admin 
+    Route::middleware(CekAdmin::class)->group(function () {
+        Route::get('/review-dokumen', [ReviewDokumenController::class, 'index'])->name('review-dokumen');
+        Route::get('/review-dokumen/{id}', [ReviewDokumenController::class, 'detail'])->name('review-dokumen.detail');
+
+        Route::get('/api/review-dokumen', [ReviewDokumenController::class, 'getListData']);
+        Route::get('/api/review-dokumen/{id}', [ReviewDokumenController::class, 'getDetailData']);
+        Route::post('/api/review-dokumen/{id}', [ReviewDokumenController::class, 'submitReview']);
+    });
 });

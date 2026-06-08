@@ -1,36 +1,51 @@
 /* FORUM PAGE */
-
-.page-view-container {
-    width: 100%;
-    animation: fadeIn 0.25s ease-in-out;
+.forum-page-header {
+    margin-bottom: 0;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-/*Forum Header */
-.forum-header {
+.forum-header-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1.5px solid var(--color-border);
-    padding-bottom: 18px;
-    margin-bottom: 24px;
+    margin-bottom: 12px;
 }
 
-.header-text h1 {
-    font-size: var(--text-h1);
-    font-weight: 700;
+.forum-header-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.forum-icon {
+    width: 32px;
+    height: 32px;
+    stroke: var(--color-text-primary);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.forum-header-title h1 {
+    font-size: 32px;
+    font-weight: 800;
     color: var(--color-text-primary);
-    letter-spacing: -0.3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
 }
 
-.header-text p {
-    font-size: var(--text-body);
-    color: var(--color-text-muted);
-    margin-top: 4px;
+.forum-header-subtitle {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin-bottom: 20px;
+}
+
+.forum-header-divider {
+    border: none;
+    border-bottom: 2px solid var(--color-border-input);
+    margin-bottom: 32px;
 }
 
 /* Tombol Buat Topik */
@@ -45,6 +60,9 @@
     cursor: pointer;
     white-space: nowrap;
     flex-shrink: 0;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;;
     transition: background 0.15s, transform 0.1s;
 }
 
@@ -55,10 +73,8 @@
 
 /* Section Title */
 .section-title {
-    font-size: var(--text-h3);
-    font-weight: 600;
-    color: var(--color-text-primary);
-    margin-bottom: 14px;
+    font-size: 24px;
+    margin-bottom: 16px;
 }
 
 /*  Feed Wrapper */
@@ -562,15 +578,13 @@
     display: none !important;
 }
 
-/* ─── Overrides warna khusus forum ──────────────── */
-
 /* Tombol kategori aktif → pink */
 .category-btn.active {
     background-color: #BC4749 !important;
     color: #ffffff !important;
 }
 
-/* Tombol Unggah → biru */
+/* Tombol Unggah */
 .btn-submit {
     background-color: #2263FF !important;
     color: #ffffff !important;
@@ -581,7 +595,7 @@
     transform: translateY(-1px);
 }
 
-/* Radio button "Tampilkan Sebagai" → biru */
+/* Radio button "Tampilkan Sebagai" */
 .radio-label input[type="radio"] {
     accent-color: #2263FF !important;
 }
