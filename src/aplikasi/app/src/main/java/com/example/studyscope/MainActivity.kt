@@ -38,9 +38,12 @@ fun StudyScopeApp() {
                 viewModel = authViewModel,
                 onNavigateToRegister = { navController.navigate("register") },
                 onLoginSuccess = { token ->
-                    authToken = token
-                    // TODO: Arahkan ke halaman Beranda nanti
-                    println("Login Sukses! Token: $token")
+                    authToken = token // 1. Simpan tokennya
+
+                    // 2. Pindah ke Beranda, dan hancurkan "login" dari riwayat tombol Back HP
+                    navController.navigate("beranda") {
+                        popUpTo("login") { inclusive = true }
+                    }
                 }
             )
         }
@@ -51,11 +54,34 @@ fun StudyScopeApp() {
                 viewModel = authViewModel,
                 onNavigateToLogin = { navController.navigate("login") },
                 onRegisterSuccess = { token ->
-                    authToken = token
-                    // TODO: Arahkan ke halaman Beranda nanti
-                    println("Register Sukses! Token: $token")
+                    authToken = token // 1. Simpan tokennya
+
+                    // 2. Pindah ke Beranda, dan hancurkan "register" dari riwayat tombol Back HP
+                    navController.navigate("beranda") {
+                        popUpTo("register") { inclusive = true }
+                    }
                 }
             )
+        }
+        // --- LAYAR 3: BERANDA ---
+        composable("beranda") {
+            // Kita pastikan token tidak kosong sebelum membuka Beranda
+            if (authToken != null) {
+                BerandaScreen(
+                    token = authToken!!, // Kirim token ke BerandaScreen
+                    onNavigateToMatkul = {
+                        // TODO: Nanti arahkan ke halaman detail mata kuliah
+                        // navController.navigate("matkul_detail")
+                    }
+                )
+            } else {
+                // Keamanan ekstra: Jika token tiba-tiba hilang/null, tendang balik ke layar Login
+                LaunchedEffect(Unit) {
+                    navController.navigate("login") {
+                        popUpTo(0)
+                    }
+                }
+            }
         }
     }
 }

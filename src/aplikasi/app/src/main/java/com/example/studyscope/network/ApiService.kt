@@ -20,6 +20,13 @@ interface ApiService {
     @Headers("Accept: application/json")
     @POST("register")
     suspend fun register(@Body request: RegisterRequest): Response<AuthResponse>
+
+    // Menembak route GET /beranda/data
+    @Headers("Accept: application/json")
+    @GET("beranda/data")
+    suspend fun getBeranda(
+        @Header("Authorization") token: String
+    ): Response<BerandaResponse>
 }
 
 object ApiClient {
