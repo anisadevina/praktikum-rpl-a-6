@@ -93,17 +93,26 @@
 
             {{-- HALAMAN DAFTAR FORUM --}}
             <section id="forum-view" class="page-view-container">
-                <div class="forum-header">
-                    <div class="header-text">
-                        <h1>Forum</h1>
-                        <p>Buat topik yang ingin dibicarakan, dan mulai berinteraksi dengan semua orang.</p>
+                <div class="forum-page-header">
+                    <div class="forum-header-top">
+                        <div class="forum-header-title">
+                            <svg class="forum-icon" viewBox="0 0 24 24">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                            <h1>
+                                Forum
+                            </h1>
+                        </div>
+                        <button class="btn-create-topic" id="btn-go-to-create">+ Buat Topik</button>
                     </div>
-                    <button class="btn-create-topic" id="btn-go-to-create">+ Buat Topik</button>
+                    <p class="forum-header-subtitle">
+                        Buat topik yang ingin dibicarakan, dan mulai berinteraksi dengan semua orang.
+                    </p>
+                    <hr class="forum-header-divider">
                 </div>
+            
+                <h2 class="section-title" id="forum-section-title">Terbaru</h2>
 
-                <h3 class="section-title" id="forum-section-title">Terbaru</h3>
-
-                {{-- Diisi oleh JS --}}
                 <div id="forum-feed-container" class="feed-wrapper">
                     <p style="color:#888; font-style:italic; padding:1rem 0;">Memuat topik...</p>
                 </div>
@@ -111,11 +120,21 @@
 
             {{-- HALAMAN BUAT TOPIK --}}
             <section id="create-topic-view" class="page-view-container hidden">
-                <div class="forum-header">
-                    <div class="header-text">
-                        <h1>Forum</h1>
-                        <p>Buat topik yang ingin kamu bicarakan, dan mulai berinteraksi dengan semua orang.</p>
+                <div class="forum-page-header">
+                    <div class="forum-header-top">
+                        <div class="forum-header-title">
+                            <svg class="forum-icon" viewBox="0 0 24 24">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                            <h1>
+                                Forum
+                            </h1>
+                        </div>
                     </div>
+                    <p class="forum-header-subtitle">
+                        Buat topik yang ingin kamu bicarakan, dan mulai berinteraksi dengan semua orang.
+                    </p>
+                    <hr class="forum-header-divider">
                 </div>
 
                 <div class="create-card">

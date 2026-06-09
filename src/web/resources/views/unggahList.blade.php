@@ -99,7 +99,7 @@
 
         <main class="page-scroll">
             <div class="unggah-page-header">
-                <div>
+                <div class ="unggah-header-top">
                     <div class="unggah-title-row">
                         <svg viewBox="0 0 24 24">
                             <polyline points="16 16 12 12 8 16"/>
@@ -108,19 +108,18 @@
                         </svg>
                         <h1 class="unggah-title">UNGGAH</h1>
                     </div>
-                    <p class="unggah-subtitle">Unggah file dan berbagi dengan semua orang.</p>
+                    <a href="{{ route('unggah.detail') }}" class="btn-tambah-dokumen">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Dokumen
+                    </a>
                 </div>
-                <a href="{{ route('unggah.detail') }}" class="btn-tambah-dokumen">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                        <line x1="12" y1="5" x2="12" y2="19"/>
-                        <line x1="5" y1="12" x2="19" y2="12"/>
-                    </svg>
-                    Dokumen
-                </a>
+                <p class="unggah-subtitle"> Unggah file dan berbagi dengan semua orang. </p>
+                <hr class="unggah-divider">
             </div>
-
-            <hr class="unggah-divider">
-
+            
             <div class="unggah-table-wrapper">
                 <table class="unggah-table">
                     <thead>

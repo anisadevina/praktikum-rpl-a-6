@@ -174,6 +174,7 @@
         @csrf
 </form>
 
+<script src="{{ asset('script/matkulIcon.js') }}"></script>
 <script src="{{ asset('script/beranda.js') }}"></script>
 </body>
 </html>

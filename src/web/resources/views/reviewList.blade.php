@@ -120,7 +120,7 @@
                     </thead>
                     <tbody id="review-table-body">
                         <tr>
-                            <td colspan="4" style="text-align: center;">Memuat data...</td>
+                            <td colspan="4" class="td-empty-review">Memuat data...</td>
                         </tr>
                     </tbody>
                 </table>
