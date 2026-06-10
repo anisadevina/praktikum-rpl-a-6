@@ -61,43 +61,46 @@ fun RegisterScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 32.dp)
+                .padding(horizontal = 28.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+
             // Logo
             Box(
                 modifier = Modifier
-                    .size(width = 180.dp, height = 90.dp)
-                    .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp))
+                    .size(width = 120.dp, height = 60.dp)
+                    .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
                     .background(Color.White.copy(alpha = 0.5f)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Default.Image,
                     contentDescription = "Logo",
-                    modifier = Modifier.size(36.dp),
+                    modifier = Modifier.size(24.dp),
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
 
-            Spacer(modifier = Modifier.height(AppSpacing.lg))
+            Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "Daftar Akun",
+                text = "Daftar Sekarang",
                 style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            
-            Text(
-                text = "Lengkapi data dirimu untuk memulai",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray,
+                color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(AppSpacing.xl))
+            Text(
+                text = "Lengkapi data dirimu untuk memulai",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+
+            Spacer(modifier = Modifier.height(AppSpacing.lg))
 
             // Field NIM
             Text(
@@ -109,45 +112,27 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = nim,
                 onValueChange = { nim = it },
-                placeholder = { Text("Masukkan NIM", color = Color.LightGray) },
+                placeholder = {
+                    Text(
+                        "Masukkan NIM",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                },
                 modifier = Modifier.fillMaxWidth(),
-                leadingIcon = { Icon(Icons.Default.Badge, null, Modifier.size(20.dp)) },
+                leadingIcon = { Icon(Icons.Default.Badge, null, Modifier.size(18.dp)) },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
+                textStyle = MaterialTheme.typography.bodyMedium,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.primary
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline
                 )
             )
 
-            Spacer(modifier = Modifier.height(AppSpacing.md))
-
-            // Field Email
-            Text(
-                text = "Email SSO UNS",
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp),
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                placeholder = { Text("Masukkan Email SSO", color = Color.LightGray) },
-                modifier = Modifier.fillMaxWidth(),
-                leadingIcon = { Icon(Icons.Default.Email, null, Modifier.size(20.dp)) },
-                singleLine = true,
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.primary
-                )
-            )
-
-            Spacer(modifier = Modifier.height(AppSpacing.md))
+            Spacer(modifier = Modifier.height(AppSpacing.sm))
 
             // Field Username
             Text(
@@ -159,20 +144,59 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = username,
                 onValueChange = { username = it },
-                placeholder = { Text("Masukkan Username", color = Color.LightGray) },
+                placeholder = {
+                    Text(
+                        "Masukkan Username",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                },
                 modifier = Modifier.fillMaxWidth(),
-                leadingIcon = { Icon(Icons.Default.Person, null, Modifier.size(20.dp)) },
+                leadingIcon = { Icon(Icons.Default.Person, null, Modifier.size(18.dp)) },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
+                textStyle = MaterialTheme.typography.bodyMedium,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.primary
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline
                 )
             )
 
-            Spacer(modifier = Modifier.height(AppSpacing.md))
+            Spacer(modifier = Modifier.height(AppSpacing.sm))
+
+            // Field Email
+            Text(
+                text = "Email SSO UNS",
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp),
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                placeholder = {
+                    Text(
+                        "Masukkan Email SSO",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+                leadingIcon = { Icon(Icons.Default.Email, null, Modifier.size(18.dp)) },
+                singleLine = true,
+                shape = RoundedCornerShape(12.dp),
+                textStyle = MaterialTheme.typography.bodyMedium,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline
+                )
+            )
+
+            Spacer(modifier = Modifier.height(AppSpacing.sm))
 
             // Field Password
             Text(
@@ -184,47 +208,62 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                placeholder = { Text("*******", color = Color.LightGray) },
+                placeholder = {
+                    Text(
+                        "Masukkan Password",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                },
                 modifier = Modifier.fillMaxWidth(),
-                leadingIcon = { Icon(Icons.Default.Lock, null, Modifier.size(20.dp)) },
+                leadingIcon = { Icon(Icons.Default.Lock, null, Modifier.size(18.dp)) },
                 visualTransformation = PasswordVisualTransformation(),
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
+                textStyle = MaterialTheme.typography.bodyMedium,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.primary
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline
                 )
             )
 
-            Spacer(modifier = Modifier.height(AppSpacing.xl))
+            Spacer(modifier = Modifier.height(AppSpacing.lg))
 
+            // Tombol Daftar
             Button(
                 onClick = { viewModel.register(nim, username, email, password) },
-                modifier = Modifier.fillMaxWidth().height(52.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(46.dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.tertiary
+                ),
                 enabled = authState != "Loading"
             ) {
                 Text(
-                    text = if (authState == "Loading") "Memproses..." else "Daftar", 
+                    text = if (authState == "Loading") "Memproses..." else "Daftar",
                     style = MaterialTheme.typography.labelLarge,
                     color = Color.White
                 )
             }
 
+            // Pesan Error
             if (authState.startsWith("Error")) {
                 Text(
-                    text = authState, 
-                    color = MaterialTheme.colorScheme.error, 
+                    text = authState,
+                    color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(top = 8.dp)
+                    modifier = Modifier.padding(top = 6.dp),
+                    textAlign = TextAlign.Center
                 )
             }
 
-            Spacer(modifier = Modifier.height(AppSpacing.lg))
+            Spacer(modifier = Modifier.height(AppSpacing.sm))
 
+            // Link ke Login
             TextButton(onClick = {
                 viewModel.resetState()
                 onNavigateToLogin()
@@ -232,7 +271,12 @@ fun RegisterScreen(
                 Text(
                     text = buildAnnotatedString {
                         append("Sudah punya akun? ")
-                        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.tertiary, fontWeight = FontWeight.Bold)) {
+                        withStyle(
+                            style = SpanStyle(
+                                color = MaterialTheme.colorScheme.tertiary,
+                                fontWeight = FontWeight.Bold
+                            )
+                        ) {
                             append("Masuk")
                         }
                     },
@@ -240,8 +284,8 @@ fun RegisterScreen(
                     color = MaterialTheme.colorScheme.onBackground
                 )
             }
-            
-            Spacer(modifier = Modifier.height(AppSpacing.xl))
+
+            Spacer(modifier = Modifier.height(AppSpacing.md))
         }
     }
 }
