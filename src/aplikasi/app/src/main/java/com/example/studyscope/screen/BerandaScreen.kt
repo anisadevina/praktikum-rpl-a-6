@@ -8,7 +8,10 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.studyscope.viewmodel.BerandaViewModel
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.studyscope.ui.theme.StudyScopeTheme
 
 // --- PENGATURAN WARNA DARI DESAINMU ---
 val BackgroundColor = Color(0xFFF7F4E9) // Krem terang
@@ -39,14 +44,30 @@ fun BerandaScreen(
     val error by viewModel.error.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
 
-    // Ambil data saat layar pertama kali dibuka
-    LaunchedEffect(Unit) {
-        viewModel.fetchBeranda(token)
-    }
+    BerandaContent(
+        username = berandaData?.user?.username ?: "Pengguna",
+        searchQuery = searchQuery,
+        onSearchQueryChange = { viewModel.updateSearchQuery(it) },
+        isLoading = isLoading,
+        error = error,
+        matkulList = berandaData?.mataKuliahTerakhir ?: emptyList(),
+        onNavigateToMatkul = onNavigateToMatkul
+    )
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BerandaContent(
+    username: String,
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit,
+    isLoading: Boolean,
+    error: String?,
+    matkulList: List<com.example.studyscope.model.Matkul>,
+    onNavigateToMatkul: () -> Unit
+) {
     Scaffold(
         bottomBar = {
-            // --- BOTTOM NAVIGATION BAR ---
             NavigationBar(
                 containerColor = DarkGreen,
                 contentColor = Color.White,
@@ -55,7 +76,7 @@ fun BerandaScreen(
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.Home, contentDescription = "Beranda") },
                     selected = true,
-                    onClick = { /* Tetap di sini */ },
+                    onClick = { },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = DarkGreen,
                         selectedTextColor = Color.White,
@@ -64,20 +85,20 @@ fun BerandaScreen(
                     )
                 )
                 NavigationBarItem(
-                    icon = { Icon(Icons.Default.MenuBook, contentDescription = "Arsip") },
+                    icon = { Icon(Icons.AutoMirrored.Filled.MenuBook, contentDescription = "Arsip") },
                     selected = false,
-                    onClick = { /* TODO: Navigasi ke Arsip */ },
+                    onClick = { },
                     colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.LightGray)
                 )
                 NavigationBarItem(
-                    icon = { Icon(Icons.Default.BookmarkBorder, contentDescription = "Bookmark") },
+                    icon = { Icon(Icons.Outlined.BookmarkBorder, contentDescription = "Bookmark") },
                     selected = false,
-                    onClick = { /* TODO: Navigasi ke Bookmark */ },
+                    onClick = { },
                     colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.LightGray)
                 )
             }
         },
-        containerColor = BackgroundColor // Warna krem latar belakang
+        containerColor = BackgroundColor
     ) { paddingValues ->
 
         Column(
@@ -88,8 +109,6 @@ fun BerandaScreen(
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            // --- HEADER (Profil, Nama, Logout) ---
-            val username = berandaData?.user?.username ?: "Pengguna"
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -121,21 +140,20 @@ fun BerandaScreen(
                 }
 
                 IconButton(
-                    onClick = { /* TODO: Fungsi Logout */ },
+                    onClick = { },
                     modifier = Modifier
                         .background(Color(0xFFBC4749), CircleShape)
                         .size(40.dp)
                 ) {
-                    Icon(Icons.Default.ExitToApp, contentDescription = "Logout", tint = Color.White)
+                    Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Logout", tint = Color.White)
                 }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // --- SEARCH BAR ---
             OutlinedTextField(
                 value = searchQuery,
-                onValueChange = { viewModel.updateSearchQuery(it) },
+                onValueChange = onSearchQueryChange,
                 placeholder = { Text("Cari mata kuliah", color = Color.Gray) },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Gray) },
                 modifier = Modifier
@@ -151,53 +169,30 @@ fun BerandaScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // --- HERO CARD (Kartu Hijau Tua) ---
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = DarkGreen)
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
-                    Text(
-                        text = "Halo, $username!",
-                        color = Color.White,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Text(text = "Halo, $username!", color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "Selamat datang di Study Scope",
-                        color = Color.White,
-                        fontSize = 14.sp
-                    )
-                    Text(
-                        text = "Ayo mulai perjalananmu dengan mengakses menu mata kuliah dan arsip",
-                        color = Color.White.copy(alpha = 0.8f),
-                        fontSize = 11.sp,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
+                    Text(text = "Selamat datang di Study Scope", color = Color.White, fontSize = 14.sp)
+                    Text(text = "Ayo mulai perjalananmu dengan mengakses menu mata kuliah dan arsip", color = Color.White.copy(alpha = 0.8f), fontSize = 11.sp, modifier = Modifier.padding(top = 4.dp))
                 }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = "Akses Terakhir Mata Kuliah",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
+            Text(text = "Akses Terakhir Mata Kuliah", fontSize = 16.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(12.dp))
 
-            // --- GRID KARTU MATA KULIAH ---
             if (isLoading) {
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator(color = DarkGreen)
                 }
             } else if (error != null) {
-                Text(text = error!!, color = MaterialTheme.colorScheme.error)
+                Text(text = error, color = MaterialTheme.colorScheme.error)
             } else {
-                val matkulList = berandaData?.mataKuliahTerakhir ?: emptyList()
-
                 if (matkulList.isEmpty()) {
                     Text("Belum ada data mata kuliah.", color = Color.Gray)
                 } else {
@@ -214,7 +209,6 @@ fun BerandaScreen(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Column {
-                                    // Placeholder Gambar Putih
                                     Box(
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -225,15 +219,8 @@ fun BerandaScreen(
                                         Icon(Icons.Default.Image, contentDescription = null, tint = Color.LightGray)
                                     }
 
-                                    // Info Matkul (Bagian Hijau)
                                     Column(modifier = Modifier.padding(12.dp)) {
-                                        Text(
-                                            text = matkul.nama_matkul,
-                                            color = Color.Black,
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 14.sp,
-                                            maxLines = 1
-                                        )
+                                        Text(text = matkul.nama_matkul, color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 14.sp, maxLines = 1)
                                         Spacer(modifier = Modifier.height(4.dp))
                                         Text("Tingkat kesulitan", fontSize = 10.sp, color = Color.Black)
                                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -262,5 +249,24 @@ fun BerandaScreen(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun BerandaScreenPreview() {
+    StudyScopeTheme {
+        BerandaContent(
+            username = "Andi Saja",
+            searchQuery = "",
+            onSearchQueryChange = {},
+            isLoading = false,
+            error = null,
+            matkulList = listOf(
+                com.example.studyscope.model.Matkul(1, "Algoritma", 4.5, 10),
+                com.example.studyscope.model.Matkul(2, "Struktur Data", 4.0, 8)
+            ),
+            onNavigateToMatkul = {}
+        )
     }
 }

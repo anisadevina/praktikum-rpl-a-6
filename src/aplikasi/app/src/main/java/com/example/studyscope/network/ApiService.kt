@@ -1,6 +1,7 @@
 package com.example.studyscope.network
 
 import com.example.studyscope.model.AuthResponse
+import com.example.studyscope.model.BerandaResponse
 import com.example.studyscope.model.LoginRequest
 import com.example.studyscope.model.RegisterRequest
 import retrofit2.Retrofit
@@ -8,6 +9,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Headers
 
 interface ApiService {
