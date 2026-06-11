@@ -4,6 +4,7 @@ import com.example.studyscope.model.AuthResponse
 import com.example.studyscope.model.BerandaResponse
 import com.example.studyscope.model.LoginRequest
 import com.example.studyscope.model.RegisterRequest
+import com.example.studyscope.model.MatkulResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
@@ -12,6 +13,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
+import retrofit2.http.Query
 
 interface ApiService {
     // Menembak route POST /login
@@ -30,6 +32,14 @@ interface ApiService {
     suspend fun getBeranda(
         @Header("Authorization") token: String
     ): Response<BerandaResponse>
+
+    //Mata Kuliah
+    @Headers("Accept: application/json")
+    @GET("matkul/data")
+    suspend fun getMatkul(
+        @Header("Authorization") token: String,
+        @Query("q") query: String = ""
+    ): Response<MatkulResponse>
 }
 
 object ApiClient {
