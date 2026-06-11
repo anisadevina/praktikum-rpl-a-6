@@ -57,7 +57,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/unggah/data', [UnggahController::class, 'getData'])->name('unggah.data');
     Route::post('/unggah', [UnggahController::class, 'upload'])->name('unggah.proses');
 
-    // admin 
+    // Admin 
     Route::middleware(CekAdmin::class)->group(function () {
         Route::get('/review-dokumen', [ReviewDokumenController::class, 'index'])->name('review-dokumen');
         Route::get('/review-dokumen/{id}', [ReviewDokumenController::class, 'detail'])->name('review-dokumen.detail');
