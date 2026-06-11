@@ -8,8 +8,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.studyscope.screen.BerandaScreen
 import com.example.studyscope.screen.LoginScreen
 import com.example.studyscope.screen.RegisterScreen
+import com.example.studyscope.ui.theme.StudyScopeTheme
 import com.example.studyscope.viewmodel.AuthViewModel
 import com.example.studyscope.screen.BerandaScreen
 
@@ -17,7 +19,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            StudyScopeApp()
+            StudyScopeTheme {
+                StudyScopeApp()
+            }
         }
     }
 }
