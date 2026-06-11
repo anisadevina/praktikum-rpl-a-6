@@ -115,3 +115,46 @@ input::-webkit-credentials-auto-fill-button {
     display: none !important;
     pointer-events: none;
 }
+
+/* ─── Page Header (shared semua halaman) ─── */
+.page-header {
+    margin-bottom: 0;
+}
+
+.page-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+
+.page-title-row svg {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    stroke: var(--color-text-primary);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.page-title {
+    font-size: var(--text-h1);
+    font-weight: 800;
+    color: var(--color-text-primary);
+    letter-spacing: -0.3px;
+    line-height: 1;
+}
+
+.page-subtitle {
+    font-size: var(--text-body);
+    color: var(--color-text-secondary);
+    margin-bottom: 20px;
+}
+
+.page-divider {
+    border: none;
+    border-top: 1.5px solid var(--color-border);
+    margin-bottom: 24px;
+}

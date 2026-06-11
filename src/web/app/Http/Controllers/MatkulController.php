@@ -28,7 +28,10 @@ class MatkulController extends Controller
             ->limit(4)
             ->get()
             ->map(function ($item) {
-                $item->arsip = DB::table('dokumen')->where('id_matkul', $item->id_matkul)->count();
+                $item->arsip = DB::table('dokumen')
+                    ->where('id_matkul', $item->id_matkul)
+                    ->where('status', 'disetujui')
+                    ->count();
                 return $item;
             });
 
@@ -41,7 +44,10 @@ class MatkulController extends Controller
 
         // 3. Sisipkan jumlah arsip ke data yang sudah di-paginate
         $semuaMatkul->getCollection()->transform(function ($item) {
-            $item->arsip = DB::table('dokumen')->where('id_matkul', $item->id_matkul)->count();
+            $item->arsip = DB::table('dokumen')
+                ->where('id_matkul', $item->id_matkul)
+                ->where('status', 'disetujui')
+                ->count();
             return $item;
         });
 
@@ -131,15 +137,15 @@ class MatkulController extends Controller
 
     private function konversiTingkatKesulitan($skor)
     {
-        if ($skor >= 1.00 && $skor < 2.00)
-            return 'Materi cenderung sulit sekali';
-        if ($skor >= 2.00 && $skor < 3.00)
-            return 'Materi cenderung sulit';
-        if ($skor >= 3.00 && $skor < 4.00)
-            return 'Materi cenderung sedang';
-        if ($skor >= 4.00 && $skor < 5.00)
+        if ($skor >= 1.00 && $skor < 2.00) 
+            return 'Materi cenderung mudah sekali';
+        if ($skor >= 2.00 && $skor < 3.00) 
             return 'Materi cenderung mudah';
-        return 'Materi cenderung mudah sekali';
+        if ($skor >= 3.00 && $skor < 4.00) 
+            return 'Materi cenderung sedang';
+        if ($skor >= 4.00 && $skor < 5.00) 
+            return 'Materi cenderung sulit';
+        return 'Materi cenderung sulit sekali';
     }
 
     public function viewArsip($kode)

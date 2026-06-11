@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
         forum: "/forum",
         unggah: "/unggah",
         arsip: "/arsip",
-        review: "/unggah/admin",
+        review: "/review-dokumen",
     };
 
     document.querySelectorAll(".nav-item[data-page]").forEach((item) => {

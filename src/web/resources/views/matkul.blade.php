@@ -133,6 +133,7 @@
   @csrf
 </form>
 
+<script src="{{ asset('script/matkulIcon.js') }}"></script>
 <script src="{{ asset('script/matkul.js') }}"></script>
 </body>
 </html>

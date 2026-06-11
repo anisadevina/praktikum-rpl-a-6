@@ -108,7 +108,7 @@ Berikut batasan sistem pada platform Study Scope:
 | FR-08 | Sistem memungkinkan admin memverifikasi file yang diunggah sebelum file tersebut ditampilkan dan dapat dilihat publik. | High | US-08 |
 | FR-09 | Sistem membatasi akses platform hanya untuk mahasiswa FATISDA dengan melakukan validasi NIM pada saat registrasi akun. | Medium | US-10 |
 | FR-10 | Sistem memungkinkan admin mengelola insight mata kuliah dengan mengunggah informasi fokus materi dan data tingkat kesulitan berdasarkan hasil survei akhir semester. | Medium | US-11 |
-| FR-11 | Sistem menampilkan pop-up pemberitahuan pengisian survei tingkat kesulitan kepada pengguna (Mahasiswa) saat admin mengunggah tautan survei di akhir semester, lalu mengarahkan pengguna (Mahasiswa) ke halaman G-Form. | Medium | US-11 |
+| FR-11 | Sistem menampilkan pop-up pemberitahuan pengisian survei tingkat kesulitan kepada pengguna (Mahasiswa) saat admin mengunggah tautan survei di akhir semester, lalu mengarahkan pengguna (Mahasiswa) ke halaman G-Form. | Low | US-11 |
 | FR-12 | Sistem memungkinkan admin menghapus komentar pada forum diskusi yang tidak pantas atau mengandung SARA. | Medium | US-09 |
 | FR-13 | Sistem memastikan komentar yang telah dihapus admin tidak ditampilkan kembali pada halaman forum setelah halaman dimuat ulang. | Medium | US-09 |
 | FR-14 | Sistem memungkinkan admin mengunggah file CSV/Excel berisi data NIM mahasiswa untuk memperbarui basis data akses platform. | High | US-10 |

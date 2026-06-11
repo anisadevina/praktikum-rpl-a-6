@@ -1,15 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\MatkulController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ArsipController;
 use App\Http\Controllers\UnggahController;
-use App\Http\Controllers\UnggahAdminController;
+use App\Http\Controllers\ReviewDokumenController;
 use App\Http\Middleware\CekAdmin;
+
 
 // Autensifiaksi 
 Route::get('/', function () {
@@ -59,8 +59,11 @@ Route::middleware('auth')->group(function () {
 
     // admin 
     Route::middleware(CekAdmin::class)->group(function () {
-        Route::get('/unggah/admin', function () {
-            return view('unggahAdmin');
-        })->name('unggah.admin');
+        Route::get('/review-dokumen', [ReviewDokumenController::class, 'index'])->name('review-dokumen');
+        Route::get('/review-dokumen/{id}', [ReviewDokumenController::class, 'detail'])->name('review-dokumen.detail');
+
+        Route::get('/api/review-dokumen', [ReviewDokumenController::class, 'getListData']);
+        Route::get('/api/review-dokumen/{id}', [ReviewDokumenController::class, 'getDetailData']);
+        Route::post('/api/review-dokumen/{id}', [ReviewDokumenController::class, 'submitReview']);
     });
 });

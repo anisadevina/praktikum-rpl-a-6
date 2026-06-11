@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         forum: "/forum",
         unggah: "/unggah",
         arsip: "/arsip",
-        review: "/unggah/admin",
+        review: "/review-dokumen",
     };
 
     document.querySelectorAll(".nav-item[data-page]").forEach((item) => {
@@ -66,6 +66,11 @@ document.addEventListener("DOMContentLoaded", async function () {
                     menuAdmin.style.display = "flex";
                     menuAdmin.classList.remove("hidden");
                 }
+            }
+            // Ambil username
+            const topbarUsername = document.querySelector(".topbar-username");
+            if (topbarUsername && json.data.user) {
+                topbarUsername.textContent = json.data.user.username;
             }
 
             // Isi dropdown Mata Kuliah
