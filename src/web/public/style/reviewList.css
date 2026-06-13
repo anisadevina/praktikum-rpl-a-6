@@ -1,0 +1,102 @@
+.review-page-header {
+    margin-bottom: 0; 
+}
+
+.review-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.review-title-row svg {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    stroke: var(--color-text-primary);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+}
+
+.review-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--color-text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+.review-subtitle {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin-bottom: 20px;
+}
+
+.review-divider {
+    border: none;
+    border-bottom: 2px solid var(--color-border-input);
+    margin-bottom: 32px;
+}
+
+/* ─── Tabel Review (disamakan dengan unggahList) ─── */
+.review-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+}
+
+.review-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--color-bg-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.review-table thead tr {
+    background-color: var(--color-primary-card);
+}
+
+.review-table thead th {
+    padding: 14px 20px;
+    text-align: left;
+    font-size: var(--text-body);
+    font-weight: 600;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.review-table tbody tr {
+    border-bottom: 1px solid var(--color-border);
+    transition: background 0.15s;
+    cursor: pointer;
+}
+
+.review-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.review-table tbody tr:hover {
+    background-color: var(--color-bg-page);
+}
+
+.review-table tbody td {
+    padding: 14px 20px;
+    font-size: var(--text-body);
+    font-weight: 400;
+    color: var(--color-text-primary);
+    vertical-align: middle;
+}
+
+.td-empty-review {
+    text-align: center;
+    color: var(--color-text-muted);
+    padding: 48px 20px !important;
+    font-style: italic;
+}
