@@ -66,6 +66,12 @@ fun StudyScopeApp() {
                     token = authToken!!,
                     onNavigateToMatkul = {
                         navController.navigate("matakuliah")
+                    },
+                    onLogout = {
+                        authToken = null
+                        navController.navigate("login") {
+                            popUpTo(0) { inclusive = true }
+                        }
                     }
                 )
             } else {

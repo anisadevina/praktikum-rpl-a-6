@@ -30,7 +30,7 @@ import com.example.studyscope.viewmodel.MataKuliahViewModel
 @Composable
 fun MataKuliahScreen(
     token: String,
-    username: String,
+    // ✅ Parameter username: String dihapus dari sini agar tidak error di MainActivity
     onNavigateBack: () -> Unit,
     onNavigateToDetail: (Int) -> Unit,
     onLogout: () -> Unit = {},
@@ -41,14 +41,16 @@ fun MataKuliahScreen(
     val error by viewModel.error.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
 
+    val currentUsername by viewModel.username.collectAsState()
+
     LaunchedEffect(Unit) {
         viewModel.fetchMatkul(token = token)
     }
 
     MataKuliahContent(
-        username = username,
+        username = currentUsername,
         searchQuery = searchQuery,
-        onSearchQueryChange = { viewModel.updateSearchQuery(it) },
+        onSearchQueryChange = { query -> viewModel.updateSearchQuery(query, token) },
         isLoading = isLoading,
         error = error,
         matkulList = matkulList,

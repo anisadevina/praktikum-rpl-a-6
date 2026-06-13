@@ -17,3 +17,8 @@ data class AuthResponse(
     val message: String,
     val token: String? = null // Nanti diisi token Sanctum
 )
+
+data class ValidationErrorResponse(
+    val message: String,
+    val errors: Map<String, List<String>>
+)

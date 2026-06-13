@@ -26,6 +26,10 @@ interface ApiService {
     @POST("register")
     suspend fun register(@Body request: RegisterRequest): Response<AuthResponse>
 
+    @Headers("Accept: application/json")
+    @POST("logout")
+    suspend fun logout(@Header("Authorization") token: String): Response<AuthResponse>
+
     // Menembak route GET /beranda/data
     @Headers("Accept: application/json")
     @GET("beranda/data")
