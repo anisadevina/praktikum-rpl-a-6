@@ -93,14 +93,19 @@ class MatkulController extends Controller
         $teksKesulitan = $this->konversiTingkatKesulitan($matkul->tingkat_kesulitan);
 
         $tahunFilter = $request->query('tahun');
-        $queryArsip = DB::table('dokumen')->where('id_matkul', $id_matkul);
+        $jumlahArsip = DB::table('dokumen')
+            ->where('id_matkul', $id_matkul)
+            ->where('status', 'disetujui')
+            ->count();
+
+        $queryArsip = DB::table('dokumen')
+            ->where('id_matkul', $id_matkul)
+            ->where('status', 'disetujui')
+            ->orderBy('waktu_unggah', 'desc');
 
         if (!empty($tahunFilter)) {
             $queryArsip->where('tahun_dokumen', $tahunFilter);
         }
-
-        $queryArsip->where('status', 'disetujui');
-        $jumlahArsip = $queryArsip->count();
 
         $bookmarkedIds = DB::table('bookmark')
             ->where('id_user', $user->id_user)
@@ -137,13 +142,13 @@ class MatkulController extends Controller
 
     private function konversiTingkatKesulitan($skor)
     {
-        if ($skor >= 1.00 && $skor < 2.00) 
+        if ($skor >= 1.00 && $skor < 2.00)
             return 'Materi cenderung mudah sekali';
-        if ($skor >= 2.00 && $skor < 3.00) 
+        if ($skor >= 2.00 && $skor < 3.00)
             return 'Materi cenderung mudah';
-        if ($skor >= 3.00 && $skor < 4.00) 
+        if ($skor >= 3.00 && $skor < 4.00)
             return 'Materi cenderung sedang';
-        if ($skor >= 4.00 && $skor < 5.00) 
+        if ($skor >= 4.00 && $skor < 5.00)
             return 'Materi cenderung sulit';
         return 'Materi cenderung sulit sekali';
     }

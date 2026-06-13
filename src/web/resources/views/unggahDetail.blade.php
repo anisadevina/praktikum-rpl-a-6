@@ -132,11 +132,6 @@
                             <label class="form-label">Tahun</label>
                             <select name="tahun" id="select-tahun" required>
                                 <option value="" disabled selected>Pilih Tahun</option>
-                                <option value="2026">2026</option>
-                                <option value="2025">2025</option>
-                                <option value="2024">2024</option>
-                                <option value="2023">2023</option>
-                                <option value="2022">2022</option>
                             </select>
                             <span class="error-text" id="err-tahun" style="color: red; font-size: 12px; display: none;"></span>
                         </div>

@@ -32,10 +32,20 @@ document.addEventListener("DOMContentLoaded", async function () {
         ...choicesConfig,
         searchPlaceholderValue: "Cari mata kuliah...",
     });
-    new Choices("#select-tahun", {
+    const choicesTahun = new Choices("#select-tahun", {
         ...choicesConfig,
         searchPlaceholderValue: "Cari tahun...",
     });
+
+    const tahunSekarang = new Date().getFullYear();
+    const pilihanTahun = [];
+
+    for (let y = tahunSekarang; y >= 2022; y--) {
+        pilihanTahun.push({ value: String(y), label: String(y) });
+    }
+
+    choicesTahun.setChoices(pilihanTahun, "value", "label", true);
+
     const choicesDosen = new Choices("#select-dosen", {
         ...choicesConfig,
         searchPlaceholderValue: "Cari nama dosen...",

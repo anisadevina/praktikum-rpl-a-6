@@ -8,6 +8,8 @@ use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ArsipController;
 use App\Http\Controllers\UnggahController;
 use App\Http\Middleware\CekAdmin;
+use App\Http\Controllers\ReviewDokumenController;
+
 
 // Autensifiaksi 
 Route::get('/', function () {
@@ -57,10 +59,12 @@ Route::middleware('auth')->group(function () {
 
     // admin 
     Route::middleware(CekAdmin::class)->group(function () {
-        // Sementara halaman kosong
-        Route::get('/admin', function () {
-            return view('admin');
-        })->name('admin');
+        Route::get('/review-dokumen', [ReviewDokumenController::class, 'index'])->name('review-dokumen');
+        Route::get('/review-dokumen/{id}', [ReviewDokumenController::class, 'detail'])->name('review-dokumen.detail');
+
+        Route::get('/api/review-dokumen', [ReviewDokumenController::class, 'getListData']);
+        Route::get('/api/review-dokumen/{id}', [ReviewDokumenController::class, 'getDetailData']);
+        Route::post('/api/review-dokumen/{id}', [ReviewDokumenController::class, 'submitReview']);
     });
 
 });
