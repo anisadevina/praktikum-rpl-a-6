@@ -1,5 +1,5 @@
 package com.example.studyscope.model
-
+import com.google.gson.annotations.SerializedName
 data class UserData(
     val id_user: Int,
     val username: String,
@@ -15,6 +15,7 @@ data class Matkul(
 
 data class BerandaData(
     val user: UserData,
+    @SerializedName("mata_kuliah_terakhir")
     val mataKuliahTerakhir: List<Matkul>
 )
 

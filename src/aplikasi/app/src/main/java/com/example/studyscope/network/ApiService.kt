@@ -4,7 +4,6 @@ import com.example.studyscope.model.AuthResponse
 import com.example.studyscope.model.BerandaResponse
 import com.example.studyscope.model.LoginRequest
 import com.example.studyscope.model.RegisterRequest
-import com.example.studyscope.model.BerandaResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
@@ -13,8 +12,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
-import retrofit2.http.GET
-import retrofit2.http.Header
 
 interface ApiService {
     // Menembak route POST /login
@@ -26,6 +23,10 @@ interface ApiService {
     @Headers("Accept: application/json")
     @POST("register")
     suspend fun register(@Body request: RegisterRequest): Response<AuthResponse>
+
+    @Headers("Accept: application/json")
+    @POST("logout")
+    suspend fun logout(@Header("Authorization") token: String): Response<AuthResponse>
 
     // Menembak route GET /beranda/data
     @Headers("Accept: application/json")

@@ -51,6 +51,8 @@ fun RegisterScreen(
     val authState by viewModel.authState.collectAsState()
     val token by viewModel.token.collectAsState()
 
+    val fieldErrors by viewModel.fieldErrors.collectAsState()
+
     if (authState == "SuccessRegister" && token != null) {
         LaunchedEffect(Unit) {
             onRegisterSuccess(token!!)
@@ -128,6 +130,12 @@ fun RegisterScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 textStyle = MaterialTheme.typography.bodyMedium,
+                isError = fieldErrors.containsKey("nim"),
+                supportingText = {
+                    if (fieldErrors.containsKey("nim")) {
+                        Text(text = fieldErrors["nim"]!!, color = MaterialTheme.colorScheme.error)
+                    }
+                },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
@@ -160,6 +168,12 @@ fun RegisterScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 textStyle = MaterialTheme.typography.bodyMedium,
+                isError = fieldErrors.containsKey("username"),
+                supportingText = {
+                    if (fieldErrors.containsKey("username")) {
+                        Text(text = fieldErrors["username"]!!, color = MaterialTheme.colorScheme.error)
+                    }
+                },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
@@ -192,6 +206,12 @@ fun RegisterScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 textStyle = MaterialTheme.typography.bodyMedium,
+                isError = fieldErrors.containsKey("email_user"), // Namanya sesuai JSON Laravel
+                supportingText = {
+                    if (fieldErrors.containsKey("email_user")) {
+                        Text(text = fieldErrors["email_user"]!!, color = MaterialTheme.colorScheme.error)
+                    }
+                },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
@@ -225,6 +245,12 @@ fun RegisterScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 textStyle = MaterialTheme.typography.bodyMedium,
+                isError = fieldErrors.containsKey("password"),
+                supportingText = {
+                    if (fieldErrors.containsKey("password")) {
+                        Text(text = fieldErrors["password"]!!, color = MaterialTheme.colorScheme.error)
+                    }
+                },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,

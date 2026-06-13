@@ -46,6 +46,8 @@ fun LoginScreen(
     val authState by viewModel.authState.collectAsState()
     val token by viewModel.token.collectAsState()
 
+    val fieldErrors by viewModel.fieldErrors.collectAsState()
+
     if (authState == "SuccessLogin" && token != null) {
         LaunchedEffect(Unit) {
             onLoginSuccess(token!!)
@@ -97,9 +99,7 @@ fun LoginScreen(
             Text(
                 text = "Username",
                 style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 4.dp),
+                modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp),
                 color = MaterialTheme.colorScheme.onBackground
             )
             OutlinedTextField(
@@ -119,6 +119,12 @@ fun LoginScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 textStyle = MaterialTheme.typography.bodyMedium,
+                isError = fieldErrors.containsKey("username"),
+                supportingText = {
+                    if (fieldErrors.containsKey("username")) {
+                        Text(text = fieldErrors["username"]!!, color = MaterialTheme.colorScheme.error)
+                    }
+                },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
@@ -157,6 +163,12 @@ fun LoginScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 textStyle = MaterialTheme.typography.bodyMedium,
+                isError = fieldErrors.containsKey("password"),
+                supportingText = {
+                    if (fieldErrors.containsKey("password")) {
+                        Text(text = fieldErrors["password"]!!, color = MaterialTheme.colorScheme.error)
+                    }
+                },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
