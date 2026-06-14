@@ -41,10 +41,10 @@ Platform akademik mahasiswa FATISDA untuk mengakses, berdiskusi, dan berbagi dok
 
 ## MVP Status (3 Fitur Inti)
 | No | Fitur | Kategori | Status | Screenshoot |
-|:----:|:-------:|:----------:|--------|-------------|
-| 1 | Autentifikasi (Login & Register) | Must Have | Selesai, berfungsi dengan baik | <img src="docs/assets/img/login(1).jpeg" width="150"> <img src="docs/assets/img/register(1).jpeg" width="150"><br><img src="docs/assets/img/register(2).jpeg" width="150"> <img src="docs/assets/img/register(3).jpeg" width="150"> |
-| 2 | Beranda | Must Have | Selesai, berfungsi dengan baik | <img src="docs/assets/img/beranda(1).jpeg" width="310"><br><br><img src="docs/assets/img/beranda(2).jpeg" width="310"> |
-| 3 | Menu Mata Kuliah | Must Have | Selesai, berfungsi dengan baik | <img src="docs/assets/img/mataKuliah(1).jpeg" width="310"> |
+|:---:|---|:---:|---|:---:|
+| 1 | Autentikasi (Login & Register) | Must Have | Selesai, berfungsi dengan baik | <img src="docs/assets/img/login(1).jpeg" width="200"><br><em>Halaman Login tanpa input</em><br><br><img src="docs/assets/img/register(1).jpeg" width="200"><br><em>Halaman Register tanpa input</em><br><br><img src="docs/assets/img/register(2).jpeg" width="200"><br><em>Halaman Register data sudah terdaftar</em><br><br><img src="docs/assets/img/register(3).jpeg" width="200"><br><em>Halaman Register data tidak sesuai</em> |
+| 2 | Beranda | Must Have | Selesai, berfungsi dengan baik | <img src="docs/assets/img/beranda(1).jpeg" width="350"><br><em>Beranda (atas) search bar, riwayat mata kuliah</em><br><br><img src="docs/assets/img/beranda(2).jpeg" width="350"><br><em>Beranda (bawah), forum terbaru</em> |
+| 3 | Menu Mata Kuliah | Must Have | Selesai, berfungsi dengan baik | <img src="docs/assets/img/mataKuliah(1).jpeg" width="350"><br><em>Daftar Mata Kuliah lengkap</em> |
 
 ---
 
