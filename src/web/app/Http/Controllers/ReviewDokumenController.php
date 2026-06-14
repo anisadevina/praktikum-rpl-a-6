@@ -45,8 +45,6 @@ class ReviewDokumenController extends Controller
     public function getDetailData($id)
     {
         try {
-            $user = auth()->user();
-
             $dokumen = DB::table('dokumen')
                 ->join('mata_kuliah', 'dokumen.id_matkul', '=', 'mata_kuliah.id_matkul')
                 ->leftJoin('dosen', 'dokumen.id_dosen', '=', 'dosen.id_dosen')
@@ -58,7 +56,11 @@ class ReviewDokumenController extends Controller
                 return response()->json(['status' => 'error', 'message' => 'Dokumen tidak ditemukan'], 404);
             }
 
-            return response()->json(['status' => 'success', 'data' => $dokumen, 'user' => $user]);
+            return response()->json([
+                'status' => 'success',
+                'data'   => $dokumen,
+                'user'   => auth()->user(),
+            ]);
         } catch (\Exception $e) {
             Log::error('API Review Detail Error: ' . $e->getMessage());
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
@@ -68,11 +70,11 @@ class ReviewDokumenController extends Controller
     public function submitReview(Request $request, $id)
     {
         try {
-            $cekDokumen = DB::table('dokumen')->where('id_dokumen', $id)->first();
+            $dokumen = DB::table('dokumen')->where('id_dokumen', $id)->first();
 
-            if ($cekDokumen && $cekDokumen->status !== 'menunggu') {
+            if ($dokumen && $dokumen->status !== 'menunggu') {
                 return response()->json([
-                    'status' => 'error',
+                    'status'  => 'error',
                     'message' => 'Dokumen ini sudah disetujui secara permanen dan tidak bisa diubah lagi!'
                 ], 403);
             }
@@ -81,21 +83,21 @@ class ReviewDokumenController extends Controller
                 'status_dokumen' => 'required|in:disetujui,ditolak'
             ]);
 
-            $teksMurni = trim(strip_tags($request->catatan_admin));
+            $catatanBersih = trim(strip_tags($request->catatan_admin));
 
-            if ($request->status_dokumen === 'ditolak' && empty($teksMurni)) {
+            if ($request->status_dokumen === 'ditolak' && empty($catatanBersih)) {
                 return response()->json([
-                    'status' => 'error',
+                    'status'  => 'error',
                     'message' => 'Catatan wajib diisi jika dokumen ditolak!'
                 ], 400);
             }
 
-            $filePathBaru = $this->prosesFileSaatDitolak($cekDokumen, $request->status_dokumen);
+            $filePathTersimpan = $this->prosesFileSaatDitolak($dokumen, $request->status_dokumen);
 
             DB::table('dokumen')->where('id_dokumen', $id)->update([
-                'status' => $request->status_dokumen,
+                'status'        => $request->status_dokumen,
                 'catatan_admin' => $request->catatan_admin,
-                'file_path' => $filePathBaru
+                'file_path'     => $filePathTersimpan,
             ]);
 
             return response()->json(['status' => 'success', 'message' => 'Review berhasil disimpan!']);
@@ -107,10 +109,6 @@ class ReviewDokumenController extends Controller
 
     // --- Private Methods ---
 
-    /**
-     * Hapus file fisik dari storage jika dokumen ditolak,
-     * dan kembalikan nilai file_path yang akan disimpan ke database.
-     */
     private function prosesFileSaatDitolak(object $dokumen, string $statusBaru): string
     {
         if ($statusBaru !== 'ditolak') {

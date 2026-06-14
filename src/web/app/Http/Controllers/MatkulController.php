@@ -19,7 +19,7 @@ class MatkulController extends Controller
 
     public function getIndexData(Request $request)
     {
-        $user = auth()->user();
+        $user  = auth()->user();
         $query = $request->input('q', '');
 
         $mataKuliahTerakhir = $this->ambilMatkulTerakhirDiakses($user->id_user);
@@ -52,19 +52,19 @@ class MatkulController extends Controller
 
     public function getDetailData(Request $request)
     {
-        $id_matkul = $request->query('id');
-        $user = auth()->user();
+        $idMatkul = $request->query('id');
+        $user     = auth()->user();
 
-        if (!$id_matkul) {
+        if (!$idMatkul) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'ID tidak ditemukan'
             ], 400);
         }
 
-        $this->catatRiwayatAkses($user->id_user, $id_matkul);
+        $this->catatRiwayatAkses($user->id_user, $idMatkul);
 
-        $matkul = DB::table('mata_kuliah')->where('id_matkul', $id_matkul)->first();
+        $matkul = DB::table('mata_kuliah')->where('id_matkul', $idMatkul)->first();
 
         if (!$matkul) {
             return response()->json([
@@ -76,11 +76,11 @@ class MatkulController extends Controller
         $teksKesulitan = $this->konversiTingkatKesulitan($matkul->tingkat_kesulitan);
 
         $jumlahArsip = DB::table('dokumen')
-            ->where('id_matkul', $id_matkul)
+            ->where('id_matkul', $idMatkul)
             ->where('status', 'disetujui')
             ->count();
 
-        $daftarArsip = $this->ambilArsipMatkul($id_matkul, $user->id_user, $request->query('tahun'));
+        $daftarArsip = $this->ambilArsipMatkul($idMatkul, $user->id_user, $request->query('tahun'));
 
         return response()->json([
             'status' => 'success',
@@ -97,49 +97,45 @@ class MatkulController extends Controller
     public function viewArsip($kode)
     {
         try {
-            $id_dokumen = Crypt::decryptString($kode);
+            $idDokumen = Crypt::decryptString($kode);
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
-            abort(404, 'tautan dokumen tidak valid atau sudah kadaluarsa.');
+            abort(404, 'Tautan dokumen tidak valid atau sudah kadaluarsa.');
         }
 
-        $dokumen = DB::table('dokumen')->where('id_dokumen', $id_dokumen)->first();
+        $dokumen = DB::table('dokumen')->where('id_dokumen', $idDokumen)->first();
 
         if (!$dokumen || !$dokumen->file_path) {
             abort(404, 'Arsip tidak ditemukan.');
         }
 
-        $path = storage_path('app/public/' . $dokumen->file_path);
+        $pathFisik = storage_path('app/public/' . $dokumen->file_path);
 
-        if (!file_exists($path)) {
+        if (!file_exists($pathFisik)) {
             abort(404, 'File fisik tidak tersedia di server.');
         }
 
-        return response()->file($path);
+        return response()->file($pathFisik);
     }
 
     // --- Private Methods ---
 
-    private function catatRiwayatAkses($id_user, $id_matkul)
+    private function catatRiwayatAkses(int $idUser, int $idMatkul): void
     {
         DB::table('riwayat_akses')->updateOrInsert(
-            ['id_user' => $id_user, 'id_matkul' => $id_matkul],
+            ['id_user' => $idUser, 'id_matkul' => $idMatkul],
             ['waktu_akses' => Carbon::now()]
         );
     }
 
-    /**
-     * Ambil daftar arsip suatu mata kuliah yang sudah disetujui,
-     * lengkap dengan flag bookmark dan kode enkripsi untuk akses file.
-     */
-    private function ambilArsipMatkul($id_matkul, $id_user, $tahunFilter)
+    private function ambilArsipMatkul(int $idMatkul, int $idUser, ?string $tahunFilter)
     {
-        $bookmarkedIds = DB::table('bookmark')
-            ->where('id_user', $id_user)
+        $idDokumenDibookmark = DB::table('bookmark')
+            ->where('id_user', $idUser)
             ->pluck('id_dokumen')
             ->toArray();
 
         $queryArsip = DB::table('dokumen')
-            ->where('id_matkul', $id_matkul)
+            ->where('id_matkul', $idMatkul)
             ->where('status', 'disetujui')
             ->orderBy('waktu_unggah', 'desc');
 
@@ -147,10 +143,10 @@ class MatkulController extends Controller
             $queryArsip->where('tahun_dokumen', $tahunFilter);
         }
 
-        return $queryArsip->get()->map(function ($item) use ($bookmarkedIds) {
-            $item->kodeRahasia = Crypt::encryptString($item->id_dokumen ?? $item->id);
-            $item->is_bookmarked = in_array($item->id_dokumen, $bookmarkedIds);
-            return $item;
+        return $queryArsip->get()->map(function ($dokumen) use ($idDokumenDibookmark) {
+            $dokumen->kodeRahasia  = Crypt::encryptString($dokumen->id_dokumen ?? $dokumen->id);
+            $dokumen->isDibookmark = in_array($dokumen->id_dokumen, $idDokumenDibookmark);
+            return $dokumen;
         });
     }
 

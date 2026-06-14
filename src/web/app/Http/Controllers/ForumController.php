@@ -15,8 +15,7 @@ class ForumController extends Controller
 
     public function getData()
     {
-        $user = auth()->user();
-
+        $user  = auth()->user();
         $topik = DB::table('forum_topik')
             ->join('users', 'forum_topik.id_user', '=', 'users.id_user')
             ->select('forum_topik.*', 'users.username')
@@ -26,7 +25,7 @@ class ForumController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'data' => [
+            'data'   => [
                 'user'  => $user,
                 'topik' => $topik,
             ]
@@ -44,19 +43,17 @@ class ForumController extends Controller
             'tag.required'         => 'Pilih kategori terlebih dahulu.',
         ]);
 
-        $user = auth()->user();
-
         DB::table('forum_topik')->insert([
-            'id_user'     => $user->id_user,
+            'id_user'     => auth()->id(),
             'tag'         => $request->tag,
             'pesan_topik' => $request->pesan_topik,
-            'is_anonim'   => $request->is_anonim == '1' ? true : false,
+            'is_anonim'   => $request->is_anonim === '1',
             'waktu_topik' => now(),
         ]);
 
         return response()->json([
             'status'  => 'success',
-            'message' => 'Topik berhasil dibuat!'
+            'message' => 'Topik berhasil dibuat!',
         ], 201);
     }
 
@@ -69,13 +66,11 @@ class ForumController extends Controller
             'pesan_balasan.required' => 'Balasan tidak boleh kosong.',
         ]);
 
-        $user = auth()->user();
-
         DB::table('forum_balasan')->insert([
             'id_topik'      => $request->id_topik,
-            'id_user'       => $user->id_user,
+            'id_user'       => auth()->id(),
             'pesan_balasan' => $request->pesan_balasan,
-            'is_anonim'     => $request->is_anonim == '1' ? true : false,
+            'is_anonim'     => $request->is_anonim === '1',
             'waktu_balasan' => now(),
         ]);
 
@@ -88,9 +83,6 @@ class ForumController extends Controller
 
     // --- Private Methods ---
 
-    /**
-     * Lengkapi data topik dengan jumlah balasan, waktu relatif, dan daftar balasan.
-     */
     private function lengkapiDataTopik(object $topik): object
     {
         $topik->jumlah_balasan    = DB::table('forum_balasan')->where('id_topik', $topik->id_topik)->count();
