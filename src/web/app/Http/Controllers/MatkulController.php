@@ -150,16 +150,14 @@ class MatkulController extends Controller
         });
     }
 
-    private function konversiTingkatKesulitan($skor)
+    private function konversiTingkatKesulitan(float $skor): string
     {
-        if ($skor >= 1.00 && $skor < 2.00)
-            return 'Materi cenderung mudah sekali';
-        if ($skor >= 2.00 && $skor < 3.00)
-            return 'Materi cenderung mudah';
-        if ($skor >= 3.00 && $skor < 4.00)
-            return 'Materi cenderung sedang';
-        if ($skor >= 4.00 && $skor < 5.00)
-            return 'Materi cenderung sulit';
-        return 'Materi cenderung sulit sekali';
+        return match(true) {
+            $skor >= 1.00 && $skor < 2.00 => 'Materi cenderung mudah sekali',
+            $skor >= 2.00 && $skor < 3.00 => 'Materi cenderung mudah',
+            $skor >= 3.00 && $skor < 4.00 => 'Materi cenderung sedang',
+            $skor >= 4.00 && $skor < 5.00 => 'Materi cenderung sulit',
+            default                        => 'Materi cenderung sulit sekali',
+        };
     }
 }
