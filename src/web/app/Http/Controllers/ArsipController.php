@@ -12,36 +12,8 @@ class ArsipController extends Controller
     public function index(Request $request)
     {
         $user = auth()->user();
-        $tahun = $request->query('tahun');
-        $query = $request->query('q', '');
 
-        $arsipQuery = DB::table('bookmark')
-            ->join('dokumen', 'bookmark.id_dokumen', '=', 'dokumen.id_dokumen')
-            ->join('mata_kuliah', 'dokumen.id_matkul', '=', 'mata_kuliah.id_matkul')
-            ->join('dosen', 'dokumen.id_dosen', '=', 'dosen.id_dosen')
-            ->where('bookmark.id_user', $user->id_user)
-            ->where('dokumen.status', 'disetujui')
-            ->select(
-                'dokumen.id_dokumen',
-                'dokumen.judul',
-                'dokumen.kategori_file',
-                'dokumen.tahun_dokumen',
-                'dokumen.waktu_unggah',
-                'dokumen.file_path',
-                'mata_kuliah.nama_matkul',
-                'dosen.nama_dosen'
-            );
-
-        if ($tahun) {
-            $arsipQuery->where('dokumen.tahun_dokumen', $tahun);
-        }
-
-        if ($query) {
-            $arsipQuery->whereRaw('LOWER(dokumen.judul) REGEXP ?', ['(^|[[:space:]])' . strtolower(preg_quote($query))]);
-        }
-
-        $daftarArsip = $arsipQuery
-            ->orderBy('dokumen.waktu_unggah', 'desc')
+        $daftarArsip = $this->queryArsipBookmark($user->id_user, $request)
             ->get()
             ->map(function ($item) {
                 $item->file_url = route('arsip.view', [
@@ -59,36 +31,8 @@ class ArsipController extends Controller
     public function getData(Request $request)
     {
         $user = auth()->user();
-        $tahun = $request->query('tahun');
-        $query = $request->query('q', '');
 
-        $arsipQuery = DB::table('bookmark')
-            ->join('dokumen', 'bookmark.id_dokumen', '=', 'dokumen.id_dokumen')
-            ->join('mata_kuliah', 'dokumen.id_matkul', '=', 'mata_kuliah.id_matkul')
-            ->join('dosen', 'dokumen.id_dosen', '=', 'dosen.id_dosen')
-            ->where('bookmark.id_user', $user->id_user)
-            ->where('dokumen.status', 'disetujui')
-            ->select(
-                'dokumen.id_dokumen',
-                'dokumen.judul',
-                'dokumen.kategori_file',
-                'dokumen.tahun_dokumen',
-                'dokumen.waktu_unggah',
-                'dokumen.file_path',
-                'mata_kuliah.nama_matkul',
-                'dosen.nama_dosen'
-            );
-
-        if ($tahun) {
-            $arsipQuery->where('dokumen.tahun_dokumen', $tahun);
-        }
-
-        if ($query) {
-            $arsipQuery->whereRaw('LOWER(dokumen.judul) REGEXP ?', ['(^|[[:space:]])' . strtolower(preg_quote($query))]);
-        }
-
-        $daftarArsip = $arsipQuery
-            ->orderBy('dokumen.waktu_unggah', 'desc')
+        $daftarArsip = $this->queryArsipBookmark($user->id_user, $request)
             ->get()
             ->map(function ($item) {
                 $item->kodeRahasia = Crypt::encryptString($item->id_dokumen);
@@ -110,7 +54,6 @@ class ArsipController extends Controller
     {
         $user = auth()->user();
 
-        // Pastikan dokumen ada dan sudah disetujui
         $dokumen = DB::table('dokumen')
             ->where('id_dokumen', $id)
             ->where('status', 'disetujui')
@@ -126,7 +69,6 @@ class ArsipController extends Controller
             ->first();
 
         if ($existing) {
-            // Sudah di-bookmark > hapus (unbookmark)
             DB::table('bookmark')
                 ->where('id_user', $user->id_user)
                 ->where('id_dokumen', $id)
@@ -138,7 +80,6 @@ class ArsipController extends Controller
                 'message' => 'Bookmark dihapus.'
             ]);
         } else {
-            // Belum di-bookmark > tambahkan
             DB::table('bookmark')->insert([
                 'id_user' => $user->id_user,
                 'id_dokumen' => $id,
@@ -150,5 +91,44 @@ class ArsipController extends Controller
                 'message' => 'Dokumen disimpan ke arsip.'
             ]);
         }
+    }
+
+    // --- Private Methods ---
+
+    /**
+     * Bangun query dasar arsip yang sudah di-bookmark oleh user,
+     * dengan filter tahun dan pencarian judul opsional.
+     */
+    private function queryArsipBookmark(int $idUser, Request $request)
+    {
+        $tahun = $request->query('tahun');
+        $query = $request->query('q', '');
+
+        $arsipQuery = DB::table('bookmark')
+            ->join('dokumen', 'bookmark.id_dokumen', '=', 'dokumen.id_dokumen')
+            ->join('mata_kuliah', 'dokumen.id_matkul', '=', 'mata_kuliah.id_matkul')
+            ->join('dosen', 'dokumen.id_dosen', '=', 'dosen.id_dosen')
+            ->where('bookmark.id_user', $idUser)
+            ->where('dokumen.status', 'disetujui')
+            ->select(
+                'dokumen.id_dokumen',
+                'dokumen.judul',
+                'dokumen.kategori_file',
+                'dokumen.tahun_dokumen',
+                'dokumen.waktu_unggah',
+                'dokumen.file_path',
+                'mata_kuliah.nama_matkul',
+                'dosen.nama_dosen'
+            );
+
+        if ($tahun) {
+            $arsipQuery->where('dokumen.tahun_dokumen', $tahun);
+        }
+
+        if ($query) {
+            $arsipQuery->whereRaw('LOWER(dokumen.judul) REGEXP ?', ['(^|[[:space:]])' . strtolower(preg_quote($query))]);
+        }
+
+        return $arsipQuery->orderBy('dokumen.waktu_unggah', 'desc');
     }
 }

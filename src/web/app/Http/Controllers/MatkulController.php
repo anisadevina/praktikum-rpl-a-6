@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\AmbilDataMatkul;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -9,6 +10,8 @@ use Illuminate\Support\Facades\Crypt;
 
 class MatkulController extends Controller
 {
+    use AmbilDataMatkul;
+
     public function index()
     {
         return view('matkul');
@@ -19,36 +22,19 @@ class MatkulController extends Controller
         $user = auth()->user();
         $query = $request->input('q', '');
 
-        // 1. Ambil matkul terakhir dilihat (limit 4)
-        $mataKuliahTerakhir = DB::table('riwayat_akses')
-            ->join('mata_kuliah', 'riwayat_akses.id_matkul', '=', 'mata_kuliah.id_matkul')
-            ->where('riwayat_akses.id_user', $user->id_user)
-            ->select('mata_kuliah.*')
-            ->orderBy('riwayat_akses.waktu_akses', 'desc')
-            ->limit(4)
-            ->get()
-            ->map(function ($item) {
-                $item->arsip = DB::table('dokumen')
-                    ->where('id_matkul', $item->id_matkul)
-                    ->where('status', 'disetujui')
-                    ->count();
-                return $item;
-            });
+        // Pakai trait, tidak ada duplikasi lagi
+        $mataKuliahTerakhir = $this->ambilMatkulTerakhirDiakses($user->id_user);
 
-        // 2. Ambil semua matkul dengan pagination
+        // Ambil semua matkul dengan pagination
         $semuaMatkul = DB::table('mata_kuliah')
             ->when($query, function ($q) use ($query) {
                 $q->where('nama_matkul', 'like', '%' . $query . '%');
             })
             ->paginate(12);
 
-        // 3. Sisipkan jumlah arsip ke data yang sudah di-paginate
+        // Sisipkan jumlah arsip ke data yang sudah di-paginate
         $semuaMatkul->getCollection()->transform(function ($item) {
-            $item->arsip = DB::table('dokumen')
-                ->where('id_matkul', $item->id_matkul)
-                ->where('status', 'disetujui')
-                ->count();
-            return $item;
+            return $this->sisipkanJumlahArsip($item);
         });
 
         return response()->json([
@@ -160,21 +146,19 @@ class MatkulController extends Controller
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
             abort(404, 'tautan dokumen tidak valid atau sudah kadaluarsa.');
         }
-        // Cari dokumen berdasarkan ID
+
         $dokumen = DB::table('dokumen')->where('id_dokumen', $id_dokumen)->first();
 
         if (!$dokumen || !$dokumen->file_path) {
             abort(404, 'Arsip tidak ditemukan.');
         }
 
-        // Ambil lokasi file fisik di storage
         $path = storage_path('app/public/' . $dokumen->file_path);
 
         if (!file_exists($path)) {
             abort(404, 'File fisik tidak tersedia di server.');
         }
 
-        // Tampilkan file langsung di browser (PDF viewer bawaan)
         return response()->file($path);
     }
 }
