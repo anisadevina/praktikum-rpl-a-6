@@ -8,13 +8,11 @@ use Carbon\Carbon;
 
 class ForumController extends Controller
 {
-    // Hanya return view (kerangka HTML kosong)
     public function index()
     {
         return view('forum');
     }
 
-    // Return JSON semua topik + balasan
     public function getData()
     {
         $user = auth()->user();
@@ -24,19 +22,7 @@ class ForumController extends Controller
             ->select('forum_topik.*', 'users.username')
             ->orderBy('forum_topik.waktu_topik', 'desc')
             ->get()
-            ->map(function ($topik) {
-                $topik->jumlah_balasan = DB::table('forum_balasan')
-                    ->where('id_topik', $topik->id_topik)
-                    ->count();
-                $topik->waktu_topik_human = Carbon::parse($topik->waktu_topik)->diffForHumans();
-                $topik->balasan = DB::table('forum_balasan')
-                    ->join('users', 'forum_balasan.id_user', '=', 'users.id_user')
-                    ->where('forum_balasan.id_topik', $topik->id_topik)
-                    ->select('forum_balasan.*', 'users.username')
-                    ->orderBy('forum_balasan.waktu_balasan', 'asc')
-                    ->get();
-                return $topik;
-            });
+            ->map(fn($topik) => $this->lengkapiDataTopik($topik));
 
         return response()->json([
             'status' => 'success',
@@ -47,7 +33,6 @@ class ForumController extends Controller
         ]);
     }
 
-    // Buat topik baru, return JSON
     public function buatTopik(Request $request)
     {
         $request->validate([
@@ -75,7 +60,6 @@ class ForumController extends Controller
         ], 201);
     }
 
-    // Buat balasan, return JSON
     public function buatBalasan(Request $request)
     {
         $request->validate([
@@ -100,5 +84,24 @@ class ForumController extends Controller
             'message'  => 'Balasan berhasil dikirim!',
             'id_topik' => $request->id_topik,
         ], 201);
+    }
+
+    // --- Private Methods ---
+
+    /**
+     * Lengkapi data topik dengan jumlah balasan, waktu relatif, dan daftar balasan.
+     */
+    private function lengkapiDataTopik(object $topik): object
+    {
+        $topik->jumlah_balasan    = DB::table('forum_balasan')->where('id_topik', $topik->id_topik)->count();
+        $topik->waktu_topik_human = Carbon::parse($topik->waktu_topik)->diffForHumans();
+        $topik->balasan           = DB::table('forum_balasan')
+            ->join('users', 'forum_balasan.id_user', '=', 'users.id_user')
+            ->where('forum_balasan.id_topik', $topik->id_topik)
+            ->select('forum_balasan.*', 'users.username')
+            ->orderBy('forum_balasan.waktu_balasan', 'asc')
+            ->get();
+
+        return $topik;
     }
 }

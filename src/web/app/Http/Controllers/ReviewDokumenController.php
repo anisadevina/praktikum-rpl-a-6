@@ -9,19 +9,16 @@ use Illuminate\Support\Facades\Storage;
 
 class ReviewDokumenController extends Controller
 {
-    // 1. Tampilkan HTML Kosong List
     public function index()
     {
         return view('reviewList');
     }
 
-    // 2. Tampilkan HTML Kosong Detail
     public function detail($id)
     {
         return view('reviewDetail', ['id' => $id]);
     }
 
-    // 3. API: Ambil semua daftar dokumen (List)
     public function getListData()
     {
         try {
@@ -35,7 +32,6 @@ class ReviewDokumenController extends Controller
                     'dokumen.waktu_unggah',
                     'dokumen.status'
                 )
-
                 ->orderBy('dokumen.waktu_unggah', 'desc')
                 ->get();
 
@@ -46,7 +42,6 @@ class ReviewDokumenController extends Controller
         }
     }
 
-    // 4. API: Ambil 1 data dokumen (Detail)
     public function getDetailData($id)
     {
         try {
@@ -64,14 +59,12 @@ class ReviewDokumenController extends Controller
             }
 
             return response()->json(['status' => 'success', 'data' => $dokumen, 'user' => $user]);
-
         } catch (\Exception $e) {
             Log::error('API Review Detail Error: ' . $e->getMessage());
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
 
-    // 5. API: Proses Submit Review
     public function submitReview(Request $request, $id)
     {
         try {
@@ -88,10 +81,8 @@ class ReviewDokumenController extends Controller
                 'status_dokumen' => 'required|in:disetujui,ditolak'
             ]);
 
-            // Cek teks murni
             $teksMurni = trim(strip_tags($request->catatan_admin));
 
-            // Wajib isi jika ditolak!
             if ($request->status_dokumen === 'ditolak' && empty($teksMurni)) {
                 return response()->json([
                     'status' => 'error',
@@ -99,16 +90,7 @@ class ReviewDokumenController extends Controller
                 ], 400);
             }
 
-            // delete file ketika ditolak
-            $filePathBaru = $cekDokumen->file_path;
-
-            if ($request->status_dokumen === 'ditolak') {
-                if ($cekDokumen->file_path && Storage::disk('public')->exists($cekDokumen->file_path)) {
-                    Storage::disk('public')->delete($cekDokumen->file_path);
-                }
-                $filePathBaru = '';
-            }
-
+            $filePathBaru = $this->prosesFileSaatDitolak($cekDokumen, $request->status_dokumen);
 
             DB::table('dokumen')->where('id_dokumen', $id)->update([
                 'status' => $request->status_dokumen,
@@ -117,10 +99,28 @@ class ReviewDokumenController extends Controller
             ]);
 
             return response()->json(['status' => 'success', 'message' => 'Review berhasil disimpan!']);
-
         } catch (\Exception $e) {
             Log::error('API Submit Review Error: ' . $e->getMessage());
             return response()->json(['status' => 'error', 'message' => 'Terjadi kesalahan saat menyimpan.'], 500);
         }
+    }
+
+    // --- Private Methods ---
+
+    /**
+     * Hapus file fisik dari storage jika dokumen ditolak,
+     * dan kembalikan nilai file_path yang akan disimpan ke database.
+     */
+    private function prosesFileSaatDitolak(object $dokumen, string $statusBaru): string
+    {
+        if ($statusBaru !== 'ditolak') {
+            return $dokumen->file_path;
+        }
+
+        if ($dokumen->file_path && Storage::disk('public')->exists($dokumen->file_path)) {
+            Storage::disk('public')->delete($dokumen->file_path);
+        }
+
+        return '';
     }
 }

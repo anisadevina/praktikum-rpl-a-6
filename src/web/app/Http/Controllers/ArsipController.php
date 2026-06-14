@@ -15,12 +15,7 @@ class ArsipController extends Controller
 
         $daftarArsip = $this->queryArsipBookmark($user->id_user, $request)
             ->get()
-            ->map(function ($item) {
-                $item->file_url = route('arsip.view', [
-                    'kode' => Crypt::encryptString($item->id_dokumen)
-                ]);
-                return $item;
-            });
+            ->map(fn($item) => $this->tambahUrlFile($item));
 
         return view('arsip', [
             'user' => $user,
@@ -35,8 +30,7 @@ class ArsipController extends Controller
         $daftarArsip = $this->queryArsipBookmark($user->id_user, $request)
             ->get()
             ->map(function ($item) {
-                $item->kodeRahasia = Crypt::encryptString($item->id_dokumen);
-                $item->file_url = route('arsip.view', ['kode' => $item->kodeRahasia]);
+                $item = $this->tambahUrlFile($item);
                 $item->waktu_unggah_human = Carbon::parse($item->waktu_unggah)->translatedFormat('j F Y');
                 return $item;
             });
@@ -95,10 +89,6 @@ class ArsipController extends Controller
 
     // --- Private Methods ---
 
-    /**
-     * Bangun query dasar arsip yang sudah di-bookmark oleh user,
-     * dengan filter tahun dan pencarian judul opsional.
-     */
     private function queryArsipBookmark(int $idUser, Request $request)
     {
         $tahun = $request->query('tahun');
@@ -130,5 +120,16 @@ class ArsipController extends Controller
         }
 
         return $arsipQuery->orderBy('dokumen.waktu_unggah', 'desc');
+    }
+
+    /**
+     * Tambahkan properti URL akses file ke objek arsip.
+     */
+    private function tambahUrlFile(object $item): object
+    {
+        $item->file_url = route('arsip.view', [
+            'kode' => Crypt::encryptString($item->id_dokumen)
+        ]);
+        return $item;
     }
 }
