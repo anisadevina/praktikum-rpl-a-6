@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class forumTopik extends Model
+class ForumTopik extends Model
 {
     protected $table = 'forum_topik';
     protected $primaryKey = 'id_topik';
