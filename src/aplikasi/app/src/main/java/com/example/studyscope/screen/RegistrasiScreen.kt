@@ -10,8 +10,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Archive
+import androidx.compose.material.icons.outlined.Layers
+import androidx.compose.material.icons.outlined.StackedLineChart
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
@@ -47,6 +51,8 @@ fun RegisterScreen(
     val authState by viewModel.authState.collectAsState()
     val token by viewModel.token.collectAsState()
 
+    val fieldErrors by viewModel.fieldErrors.collectAsState()
+
     if (authState == "SuccessRegister" && token != null) {
         LaunchedEffect(Unit) {
             onRegisterSuccess(token!!)
@@ -72,13 +78,13 @@ fun RegisterScreen(
                 modifier = Modifier
                     .size(width = 120.dp, height = 60.dp)
                     .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
-                    .background(Color.White.copy(alpha = 0.5f)),
+                    .background(Color.White.copy(alpha = 0.5f), RoundedCornerShape(10.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Default.Image,
+                    imageVector = Icons.Outlined.Layers,
                     contentDescription = "Logo",
-                    modifier = Modifier.size(24.dp),
+                    modifier = Modifier.size(36.dp),
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
@@ -124,6 +130,12 @@ fun RegisterScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 textStyle = MaterialTheme.typography.bodyMedium,
+                isError = fieldErrors.containsKey("nim"),
+                supportingText = {
+                    if (fieldErrors.containsKey("nim")) {
+                        Text(text = fieldErrors["nim"]!!, color = MaterialTheme.colorScheme.error)
+                    }
+                },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
@@ -156,6 +168,12 @@ fun RegisterScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 textStyle = MaterialTheme.typography.bodyMedium,
+                isError = fieldErrors.containsKey("username"),
+                supportingText = {
+                    if (fieldErrors.containsKey("username")) {
+                        Text(text = fieldErrors["username"]!!, color = MaterialTheme.colorScheme.error)
+                    }
+                },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
@@ -188,6 +206,12 @@ fun RegisterScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 textStyle = MaterialTheme.typography.bodyMedium,
+                isError = fieldErrors.containsKey("email_user"), // Namanya sesuai JSON Laravel
+                supportingText = {
+                    if (fieldErrors.containsKey("email_user")) {
+                        Text(text = fieldErrors["email_user"]!!, color = MaterialTheme.colorScheme.error)
+                    }
+                },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
@@ -221,6 +245,12 @@ fun RegisterScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 textStyle = MaterialTheme.typography.bodyMedium,
+                isError = fieldErrors.containsKey("password"),
+                supportingText = {
+                    if (fieldErrors.containsKey("password")) {
+                        Text(text = fieldErrors["password"]!!, color = MaterialTheme.colorScheme.error)
+                    }
+                },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,

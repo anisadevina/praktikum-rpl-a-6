@@ -73,7 +73,14 @@ fun StudyScopeApp() {
                 BerandaScreen(
                     token = authToken!!,
                     onNavigateToMatkul = {
-                        // TODO: arahkan ke halaman detail mata kuliah
+                        // Nanti diarahkan ke detail matkul
+                    },
+                    onLogout = {
+                        authToken = null
+
+                        navController.navigate("login") {
+                            popUpTo(0) { inclusive = true }
+                        }
                     }
                 )
             } else {
