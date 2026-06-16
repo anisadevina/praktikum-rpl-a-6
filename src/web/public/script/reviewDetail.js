@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // ─── 1. NAVIGASI SIDEBAR ──────────────────────────────────
+    // NAVIGASI SIDEBAR
     const PAGE_PATHS = {
         beranda: "/beranda",
         matkul: "/matkul",
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // ─── 2. LOGIKA EDITOR TEKS (FORMATTING & COUNTER) ─────────
+    // (FORMATTING & COUNTER) 
     const editor = document.getElementById("editor");
     const hiddenCatatan = document.getElementById("hidden-catatan");
     const counter = document.getElementById("char-counter");
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ─── 3. AMBIL DATA DARI API (LOAD DETAIL) ─────────────────
+    // AMBIL DATA DARI API (LOAD DETAIL) 
     const urlParts = window.location.pathname.split("/");
     const idDokumen = urlParts[urlParts.length - 1];
 
@@ -181,7 +181,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ─── 4. PROSES PENGIRIMAN REVIEW (API SUBMIT) ─────────────
+    // PROSES PENGIRIMAN REVIEW (API SUBMIT) 
     const formReview = document.getElementById("form-review");
 
     if (formReview) {
@@ -254,7 +254,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ─── 5. KELUAR / LOGOUT ───────────────────────────────────
+    // KELUAR / LOGOUT
     const btnKeluar = document.getElementById("btn-keluar");
     if (btnKeluar) {
         btnKeluar.addEventListener("click", async (e) => {
@@ -287,7 +287,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ─── 6. PENCARIAN GLOBAL DI TOPBAR ────────────────────────
+    // PENCARIAN GLOBAL DI TOPBAR 
     const topbarSearchInput = document.querySelector(".search-bar input");
     if (topbarSearchInput) {
         topbarSearchInput.addEventListener("keydown", function (e) {

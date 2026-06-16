@@ -219,10 +219,6 @@
           <div class="arsip-filter-wrapper">
             <select class="arsip-filter-select" id="filter-tahun">
               <option value="">Semua Tahun</option>
-              <option value="2024">2024</option>
-              <option value="2023">2023</option>
-              <option value="2022">2022</option>
-              <option value="2021">2021</option>
             </select>
             <svg class="filter-chevron" viewBox="0 0 24 24">
               <polyline points="6 9 12 15 18 9"/>

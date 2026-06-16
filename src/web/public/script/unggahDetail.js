@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     });
 
-    //  Init Choices.js
+    // Init Choices.js
     const choicesConfig = {
         searchEnabled: true,
         searchResultLimit: 999,
@@ -28,25 +28,28 @@ document.addEventListener("DOMContentLoaded", async function () {
         noChoicesText: "Tidak ada pilihan",
     };
 
-    // Mata Kuliah — isi dari API
     const choicesMatkul = new Choices("#select-matkul", {
         ...choicesConfig,
         searchPlaceholderValue: "Cari mata kuliah...",
     });
-
-    // Tahun — sudah ada option dari blade
-    new Choices("#select-tahun", {
+    const choicesTahun = new Choices("#select-tahun", {
         ...choicesConfig,
         searchPlaceholderValue: "Cari tahun...",
     });
 
-    // Dosen — isi dari API
+    const tahunSekarang = new Date().getFullYear();
+    const pilihanTahun = [];
+
+    for (let y = tahunSekarang; y >= 2022; y--) {
+        pilihanTahun.push({ value: String(y), label: String(y) });
+    }
+
+    choicesTahun.setChoices(pilihanTahun, "value", "label", true);
+
     const choicesDosen = new Choices("#select-dosen", {
         ...choicesConfig,
         searchPlaceholderValue: "Cari nama dosen...",
     });
-
-    // Kategori — sudah ada option dari blade
     new Choices("#select-kategori", {
         ...choicesConfig,
         searchPlaceholderValue: "Cari jenis file...",
@@ -59,7 +62,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             const json = await response.json();
             if (json.status !== "success") return;
 
-            // cek role
             if (json.data.user && json.data.user.role === "admin") {
                 const menuAdmin = document.getElementById("menu-review-admin");
                 if (menuAdmin) {
@@ -67,13 +69,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                     menuAdmin.classList.remove("hidden");
                 }
             }
-            // Ambil username
+
             const topbarUsername = document.querySelector(".topbar-username");
             if (topbarUsername && json.data.user) {
                 topbarUsername.textContent = json.data.user.username;
             }
 
-            // Isi dropdown Mata Kuliah
             if (json.data.mataKuliah) {
                 choicesMatkul.setChoices(
                     json.data.mataKuliah.map((mk) => ({
@@ -86,7 +87,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 );
             }
 
-            // Isi dropdown Dosen
             if (json.data.dosen) {
                 choicesDosen.setChoices(
                     json.data.dosen.map((d) => ({
@@ -102,7 +102,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             console.error("Gagal memuat data dropdown:", err);
         }
     }
-
     fetchDropdownData();
 
     // Dropzone
@@ -156,57 +155,121 @@ document.addEventListener("DOMContentLoaded", async function () {
         dropzoneSelected.classList.remove("hidden");
     }
 
-    // Submit Form
+    // Submit Form & Validasi
     const formUnggah = document.getElementById("form-unggah");
     const btnSubmit = document.getElementById("btn-submit");
 
     formUnggah.addEventListener("submit", async function (e) {
         e.preventDefault();
 
+        // Sembunyikan semua pesan error terlebih dahulu
+        document
+            .querySelectorAll(".error-text")
+            .forEach((el) => (el.style.display = "none"));
+
+        let isValid = true;
+
+        // Ambil data
+        const matkul = document.getElementById("select-matkul").value;
+        const tahun = document.getElementById("select-tahun").value;
+        const dosen = document.getElementById("select-dosen").value;
+        const kategori = document.getElementById("select-kategori").value;
+        const judul = document.getElementById("input-judul").value.trim();
         const file = fileInput.files[0];
-        if (!file) {
-            alert("Pilih file PDF terlebih dahulu!");
-            return;
-        }
-        if (file.size > 20 * 1024 * 1024) {
-            alert("Ukuran file maksimal 20MB.");
-            return;
-        }
 
-        const formData = new FormData(formUnggah);
-        const csrfToken =
-            document.querySelector('meta[name="csrf-token"]')?.content ?? "";
-
-        try {
-            btnSubmit.textContent = "Mengunggah...";
-            btnSubmit.disabled = true;
-
-            const response = await fetch("/unggah", {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": csrfToken,
-                    Accept: "application/json",
-                },
-                body: formData,
-            });
-
-            const result = await response.json();
-
-            if (response.ok && result.status === "success") {
-                alert("Berhasil: " + result.message);
-                window.location.href = "/unggah"; // kembali ke list
-            } else {
-                const errors = result.errors
-                    ? Object.values(result.errors).flat().join("\n")
-                    : result.message || "Periksa kembali isianmu.";
-                alert("Gagal mengunggah:\n" + errors);
+        // Fungsi pemuncul error
+        const showError = (id, message) => {
+            const errorEl = document.getElementById(id);
+            if (errorEl) {
+                errorEl.textContent = message;
+                errorEl.style.display = "block";
             }
-        } catch (err) {
-            console.error("Upload error:", err);
-            alert("Terjadi kesalahan jaringan. Coba lagi nanti.");
-        } finally {
-            btnSubmit.textContent = "Unggah";
-            btnSubmit.disabled = false;
+            isValid = false;
+        };
+
+        // 1. Validasi Input Biasa
+        if (!matkul) showError("err-matkul", "Mata kuliah wajib dipilih.");
+
+        if (!tahun) {
+            showError("err-tahun", "Tahun wajib dipilih.");
+        } else if (tahun < 2022 || tahun > 2026) {
+            showError("err-tahun", "Tahun harus antara 2022 hingga 2026.");
+        }
+
+        if (!dosen) showError("err-dosen", "Dosen pengampu wajib dipilih.");
+        if (!kategori)
+            showError("err-kategori", "Kategori file wajib dipilih.");
+        if (!judul) showError("err-judul", "Judul file tidak boleh kosong.");
+
+        // 2. Validasi File (Wajib ada, Format PDF, Maksimal 20MB)
+        if (!file) {
+            showError("err-file", "File PDF wajib diunggah.");
+        } else {
+            if (file.type !== "application/pdf") {
+                showError("err-file", "Format file harus PDF.");
+            }
+            const maxSize = 20 * 1024 * 1024; // 20MB dalam bytes
+            if (file.size > maxSize) {
+                showError("err-file", "Ukuran file lebih dari 20MB.");
+            }
+        }
+
+        // 3. Jika semua lolos validasi, kirim ke server
+        if (isValid) {
+            const formData = new FormData(formUnggah);
+            const csrfToken =
+                document.querySelector('meta[name="csrf-token"]')?.content ??
+                "";
+
+            try {
+                btnSubmit.textContent = "Mengunggah...";
+                btnSubmit.disabled = true;
+
+                const response = await fetch("/unggah", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": csrfToken,
+                        Accept: "application/json",
+                    },
+                    body: formData,
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.status === "success") {
+                    alert("Berhasil: " + result.message);
+                    window.location.href = "/unggah"; // kembali ke list
+                } else {
+                    // Jika lolos validasi frontend tapi ditolak backend Laravel
+                    if (result.errors) {
+                        const errorMap = {
+                            id_matkul: "err-matkul",
+                            tahun: "err-tahun",
+                            id_dosen: "err-dosen",
+                            kategori_file: "err-kategori",
+                            judul: "err-judul",
+                            file_pdf: "err-file",
+                        };
+                        for (const [field, messages] of Object.entries(
+                            result.errors,
+                        )) {
+                            if (errorMap[field])
+                                showError(errorMap[field], messages[0]);
+                        }
+                    } else {
+                        alert(
+                            "Gagal mengunggah:\n" +
+                                (result.message || "Periksa kembali isianmu."),
+                        );
+                    }
+                }
+            } catch (err) {
+                console.error("Upload error:", err);
+                alert("Terjadi kesalahan jaringan. Coba lagi nanti.");
+            } finally {
+                btnSubmit.textContent = "Unggah";
+                btnSubmit.disabled = false;
+            }
         }
     });
 
@@ -239,21 +302,17 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
+    // Search Bar Topbar
     const topbarSearchInput = document.querySelector(".search-bar input");
     if (topbarSearchInput) {
         topbarSearchInput.addEventListener("keydown", function (e) {
-            // Jika user menekan tombol Enter
             if (e.key === "Enter") {
-                e.preventDefault(); // Mencegah form tersubmit otomatis
+                e.preventDefault();
                 const query = this.value.trim();
-
-                if (query !== "") {
-                    // Pindah ke halaman matkul sambil membawa teks yang dicari
-                    window.location.href = `/matkul?q=${encodeURIComponent(query)}`;
-                } else {
-                    // Jika kosong, sekadar pindah ke halaman matkul
-                    window.location.href = `/matkul`;
-                }
+                window.location.href =
+                    query !== ""
+                        ? `/matkul?q=${encodeURIComponent(query)}`
+                        : `/matkul`;
             }
         });
     }
