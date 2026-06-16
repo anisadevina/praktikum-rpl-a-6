@@ -2,17 +2,18 @@ package com.example.studyscope.network
 
 import com.example.studyscope.model.AuthResponse
 import com.example.studyscope.model.BerandaResponse
+import com.example.studyscope.model.DetailMatkulResponse
 import com.example.studyscope.model.LoginRequest
-import com.example.studyscope.model.RegisterRequest
 import com.example.studyscope.model.MatkulResponse
+import com.example.studyscope.model.RegisterRequest
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface ApiService {
@@ -33,17 +34,25 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Response<BerandaResponse>
 
-    //Mata Kuliah
+    // Menembak route GET /matkul/data
     @Headers("Accept: application/json")
     @GET("matkul/data")
     suspend fun getMatkul(
         @Header("Authorization") token: String,
         @Query("q") query: String = ""
     ): Response<MatkulResponse>
+
+    // Menembak route GET /matkul/detail/data?id={id_matkul}
+    @Headers("Accept: application/json")
+    @GET("matkul/detail/data")
+    suspend fun getDetailMatkul(
+        @Header("Authorization") token: String,
+        @Query("id") idMatkul: Int
+    ): Response<DetailMatkulResponse>
 }
 
 object ApiClient {
-    private const val BASE_URL = "http://192.168.1.7:8000/api/" // sesuaikan masing masing hp
+    private const val BASE_URL = "http://192.168.1.7:8000/api/"
 
     val instance: ApiService by lazy {
         Retrofit.Builder()

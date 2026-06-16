@@ -37,17 +37,18 @@ import com.example.studyscope.viewmodel.AuthViewModel
 fun LoginScreen(
     viewModel: AuthViewModel = viewModel(),
     onNavigateToRegister: () -> Unit,
-    onLoginSuccess: (String) -> Unit
+    onLoginSuccess: (String, String) -> Unit
 ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     val authState by viewModel.authState.collectAsState()
-    val token by viewModel.token.collectAsState()
+    val authToken by viewModel.token.collectAsState()
+    val savedUsername by viewModel.username.collectAsState()
 
-    if (authState == "SuccessLogin" && token != null) {
+    if (authState == "SuccessLogin" && authToken != null && savedUsername != null) {
         LaunchedEffect(Unit) {
-            onLoginSuccess(token!!)
+            onLoginSuccess(authToken!!, savedUsername!!)
             viewModel.resetState()
         }
     }
@@ -201,7 +202,7 @@ fun LoginScreenPreview() {
     StudyScopeTheme {
         LoginScreen(
             onNavigateToRegister = {},
-            onLoginSuccess = {}
+            onLoginSuccess = { _, _ -> }
         )
     }
 }

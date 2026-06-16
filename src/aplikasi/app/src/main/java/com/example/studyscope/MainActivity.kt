@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.studyscope.screen.BerandaScreen
+import com.example.studyscope.screen.DetailMatkulScreen
 import com.example.studyscope.screen.LoginScreen
 import com.example.studyscope.screen.MataKuliahScreen
 import com.example.studyscope.screen.RegisterScreen
@@ -30,16 +31,20 @@ class MainActivity : ComponentActivity() {
 fun StudyScopeApp() {
     val navController = rememberNavController()
     val authViewModel: AuthViewModel = viewModel()
+
     var authToken by remember { mutableStateOf<String?>(null) }
+    var authUsername by remember { mutableStateOf<String?>(null) }
 
     NavHost(navController = navController, startDestination = "login") {
 
+        // Layar 1: Login
         composable("login") {
             LoginScreen(
                 viewModel = authViewModel,
                 onNavigateToRegister = { navController.navigate("register") },
-                onLoginSuccess = { token ->
+                onLoginSuccess = { token, username ->
                     authToken = token
+                    authUsername = username
                     navController.navigate("beranda") {
                         popUpTo("login") { inclusive = true }
                     }
@@ -47,12 +52,14 @@ fun StudyScopeApp() {
             )
         }
 
+        // Layar 2: Register
         composable("register") {
             RegisterScreen(
                 viewModel = authViewModel,
                 onNavigateToLogin = { navController.navigate("login") },
-                onRegisterSuccess = { token ->
+                onRegisterSuccess = { token, username ->
                     authToken = token
+                    authUsername = username
                     navController.navigate("beranda") {
                         popUpTo("register") { inclusive = true }
                     }
@@ -60,6 +67,7 @@ fun StudyScopeApp() {
             )
         }
 
+        // Layar 3: Beranda
         composable("beranda") {
             if (authToken != null) {
                 BerandaScreen(
@@ -80,10 +88,37 @@ fun StudyScopeApp() {
             if (authToken != null) {
                 MataKuliahScreen(
                     token = authToken!!,
+                    username = authUsername ?: "",
                     onNavigateBack = { navController.popBackStack() },
                     onNavigateToDetail = { idMatkul ->
-                        // TODO: nanti ke halaman detail
-                        // navController.navigate("detail_matkul/$idMatkul")
+                        navController.navigate("detail_matkul/$idMatkul")
+                    },
+                    onLogout = {
+                        authToken = null
+                        authUsername = null
+                        navController.navigate("login") { popUpTo(0) }
+                    }
+                )
+            } else {
+                LaunchedEffect(Unit) {
+                    navController.navigate("login") { popUpTo(0) }
+                }
+            }
+        }
+
+        // Layar 5: Detail Mata Kuliah
+        composable("detail_matkul/{idMatkul}") { backStackEntry ->
+            val idMatkul = backStackEntry.arguments?.getString("idMatkul")?.toIntOrNull() ?: 0
+            if (authToken != null) {
+                DetailMatkulScreen(
+                    token = authToken!!,
+                    username = authUsername ?: "",
+                    idMatkul = idMatkul,
+                    onNavigateBack = { navController.popBackStack() },
+                    onLogout = {
+                        authToken = null
+                        authUsername = null
+                        navController.navigate("login") { popUpTo(0) }
                     }
                 )
             } else {

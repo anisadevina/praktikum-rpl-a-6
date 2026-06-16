@@ -9,16 +9,16 @@ import com.example.studyscope.network.ApiClient
 import com.example.studyscope.model.LoginRequest
 import com.example.studyscope.model.RegisterRequest
 
-
 class AuthViewModel : ViewModel() {
 
-    // Menyimpan status UI (Idle, Loading, Success, Error)
     private val _authState = MutableStateFlow("Idle")
     val authState: StateFlow<String> = _authState
 
-    // Menyimpan token jika berhasil
     private val _token = MutableStateFlow<String?>(null)
     val token: StateFlow<String?> = _token
+
+    private val _username = MutableStateFlow<String?>(null)
+    val username: StateFlow<String?> = _username
 
     fun login(username: String, pass: String) {
         viewModelScope.launch {
@@ -27,6 +27,7 @@ class AuthViewModel : ViewModel() {
                 val response = ApiClient.instance.login(LoginRequest(username, pass))
                 if (response.isSuccessful && response.body()?.status == "success") {
                     _token.value = response.body()?.token
+                    _username.value = username
                     _authState.value = "SuccessLogin"
                 } else {
                     _authState.value = "Error: Username atau Password salah"
@@ -43,12 +44,11 @@ class AuthViewModel : ViewModel() {
             try {
                 val request = RegisterRequest(nim, username, email, pass)
                 val response = ApiClient.instance.register(request)
-
                 if (response.isSuccessful && response.body()?.status == "success") {
                     _token.value = response.body()?.token
+                    _username.value = username
                     _authState.value = "SuccessRegister"
                 } else {
-                    // Laravel biasanya mengirim error 422 jika validasi gagal
                     _authState.value = "Error: Cek kembali data (NIM/Email SSO)"
                 }
             } catch (e: Exception) {
