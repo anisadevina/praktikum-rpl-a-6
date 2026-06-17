@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.studyscope.screen.ArsipScreen
 import com.example.studyscope.screen.BerandaScreen
 import com.example.studyscope.screen.DetailMatkulScreen
 import com.example.studyscope.screen.LoginScreen
@@ -126,6 +127,18 @@ fun StudyScopeApp() {
                     navController.navigate("login") { popUpTo(0) }
                 }
             }
+        }
+
+        // Layar 6: Arsip
+        composable("arsip") {
+            ArsipScreen(
+                onNavigateToBeranda = { navController.navigate("beranda") },
+                onLogout = {
+                    authToken = null
+                    authUsername = null
+                    navController.navigate("login") { popUpTo(0) }
+                }
+            )
         }
     }
 }
