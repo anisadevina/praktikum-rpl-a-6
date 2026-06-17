@@ -14,6 +14,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -49,6 +50,14 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("id") idMatkul: Int
     ): Response<DetailMatkulResponse>
+
+    // Menembak route POST /arsip/bookmark/{id}
+    @Headers("Accept: application/json")
+    @POST("arsip/bookmark/{id}")
+    suspend fun toggleBookmark(
+        @Header("Authorization") token: String,
+        @Path("id") idDokumen: Int
+    ): Response<Unit>
 }
 
 object ApiClient {

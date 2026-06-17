@@ -3,7 +3,6 @@ package com.example.studyscope.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -27,6 +26,7 @@ import com.example.studyscope.model.MatkulDetail
 import com.example.studyscope.model.UserData
 import com.example.studyscope.ui.theme.*
 import com.example.studyscope.viewmodel.DetailMatkulViewModel
+import androidx.compose.material.icons.outlined.FileCopy
 
 @Composable
 fun DetailMatkulScreen(
@@ -51,7 +51,8 @@ fun DetailMatkulScreen(
         isLoading = isLoading,
         error = error,
         onNavigateBack = onNavigateBack,
-        onLogout = onLogout
+        onLogout = onLogout,
+        onToggleBookmark = { idDokumen -> viewModel.toggleBookmark(token, idDokumen) }
     )
 }
 
@@ -62,7 +63,8 @@ fun DetailMatkulContent(
     isLoading: Boolean,
     error: String?,
     onNavigateBack: () -> Unit,
-    onLogout: () -> Unit = {}
+    onLogout: () -> Unit = {},
+    onToggleBookmark: (Int) -> Unit = {}
 ) {
     Scaffold(
         bottomBar = {
@@ -185,7 +187,9 @@ fun DetailMatkulContent(
                 isLoading -> {
                     item {
                         Box(
-                            modifier = Modifier.fillMaxWidth().padding(top = 100.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 100.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             CircularProgressIndicator(color = HunterGreen)
@@ -231,7 +235,9 @@ fun DetailMatkulContent(
                                 ) {
                                     // Fokus Materi
                                     Card(
-                                        modifier = Modifier.weight(1f).fillMaxHeight(),
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .fillMaxHeight(),
                                         shape = RoundedCornerShape(12.dp),
                                         colors = CardDefaults.cardColors(containerColor = Color.White)
                                     ) {
@@ -257,12 +263,16 @@ fun DetailMatkulContent(
 
                                     // Tingkat Kesulitan
                                     Card(
-                                        modifier = Modifier.weight(1f).fillMaxHeight(),
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .fillMaxHeight(),
                                         shape = RoundedCornerShape(12.dp),
                                         colors = CardDefaults.cardColors(containerColor = Color.White)
                                     ) {
                                         Column(
-                                            modifier = Modifier.padding(10.dp).fillMaxSize(),
+                                            modifier = Modifier
+                                                .padding(10.dp)
+                                                .fillMaxSize(),
                                             horizontalAlignment = Alignment.CenterHorizontally,
                                             verticalArrangement = Arrangement.Center
                                         ) {
@@ -297,12 +307,16 @@ fun DetailMatkulContent(
 
                                     // Jumlah Arsip
                                     Card(
-                                        modifier = Modifier.weight(1f).fillMaxHeight(),
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .fillMaxHeight(),
                                         shape = RoundedCornerShape(12.dp),
                                         colors = CardDefaults.cardColors(containerColor = Color.White)
                                     ) {
                                         Column(
-                                            modifier = Modifier.padding(10.dp).fillMaxSize(),
+                                            modifier = Modifier
+                                                .padding(10.dp)
+                                                .fillMaxSize(),
                                             horizontalAlignment = Alignment.CenterHorizontally,
                                             verticalArrangement = Arrangement.Center
                                         ) {
@@ -332,24 +346,37 @@ fun DetailMatkulContent(
 
                         Spacer(modifier = Modifier.height(20.dp))
 
+                        // Section Arsip
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(16.dp),
                             colors = CardDefaults.cardColors(containerColor = Color.White),
                             border = androidx.compose.foundation.BorderStroke(1.5.dp, Color.Black)
                         ) {
-                            Column(modifier = Modifier.padding(16.dp)) {
+                            Column(modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)) {
                                 Text(
                                     text = "Arsip Mata Kuliah",
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = Color.Black
+                                    color = Color.Black,
+                                    modifier = Modifier.padding(horizontal = 8.dp)
                                 )
-                                Text(
-                                    text = "Daftar arsip akan ditampilkan di sini.",
-                                    fontSize = 12.sp,
-                                    color = Color.Gray
-                                )
+                                Spacer(modifier = Modifier.height(12.dp))
+                                if (detailData.daftarArsip.isEmpty()) {
+                                    Text(
+                                        text = "Belum ada arsip untuk mata kuliah ini.",
+                                        fontSize = 12.sp,
+                                        color = Color.Gray
+                                    )
+                                } else {
+                                    detailData.daftarArsip.forEach { dokumen ->
+                                        ArsipItem(
+                                            dokumen = dokumen,
+                                            onToggleBookmark = { onToggleBookmark(dokumen.id_dokumen) }
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                    }
+                                }
                             }
                         }
 
@@ -362,82 +389,63 @@ fun DetailMatkulContent(
 }
 
 @Composable
-fun ArsipItem(dokumen: Dokumen) {
-    Card(
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = SageGreen),
+fun ArsipItem(
+    dokumen: Dokumen,
+    onToggleBookmark: () -> Unit = {}
+) {
+    Surface(
+        color = MaterialTheme.colorScheme.secondary,
+        shape = RoundedCornerShape(20.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 10.dp),
+            modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Icon dokumen
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .background(YellowGreen, RoundedCornerShape(8.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    Icons.Default.ContentCopy,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-
+            Icon(
+                imageVector = Icons.Outlined.FileCopy,
+                contentDescription = null,
+                modifier = Modifier.size(32.dp),
+                tint = Color.Black
+            )
             Spacer(modifier = Modifier.width(12.dp))
-
-            // Info dokumen
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = dokumen.judul,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    maxLines = 1
+                    color = Color.Black,
+                    maxLines = 2
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Surface(
-                        shape = RoundedCornerShape(4.dp),
-                        color = HunterGreen
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = RoundedCornerShape(6.dp)
                     ) {
                         Text(
                             text = "${dokumen.tahun_dokumen}",
                             fontSize = 10.sp,
                             color = Color.White,
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 1.dp)
                         )
                     }
-                    Spacer(modifier = Modifier.width(6.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Diunggah pada ${dokumen.waktu_unggah}",
-                        fontSize = 10.sp,
-                        color = Color.White.copy(alpha = 0.85f)
+                        fontSize = 11.sp,
+                        color = Color.Black.copy(alpha = 0.7f)
                     )
                 }
             }
-
-            // Tombol download
-            IconButton(onClick = { }) {
+            IconButton(onClick = onToggleBookmark) {
                 Icon(
-                    Icons.Default.Download,
-                    contentDescription = "Download",
-                    tint = Color.White
-                )
-            }
-
-            // Tombol bookmark
-            IconButton(onClick = { }) {
-                Icon(
-                    if (dokumen.is_bookmarked) Icons.Default.Bookmark
+                    imageVector = if (dokumen.is_bookmarked) Icons.Default.Bookmark
                     else Icons.Outlined.BookmarkBorder,
                     contentDescription = "Bookmark",
-                    tint = Color.White
+                    modifier = Modifier.size(24.dp),
+                    tint = Color.Black
                 )
             }
         }
@@ -456,14 +464,15 @@ fun DetailMatkulScreenPreview() {
                 teksKesulitan = "Cukup sulit",
                 jumlahArsip = 23,
                 daftarArsip = listOf(
-                    Dokumen(1, "Soal UAS Organisasi Sistem Komputer", "soal ujian", 2024, "23 Mei 2026", false),
+                    Dokumen(1, "Soal UAS Kalkulus II", "soal ujian", 2024, "23 Mei 2026", false),
                     Dokumen(2, "Soal UAS Organisasi Sistem Komputer", "soal ujian", 2024, "23 Mei 2026", true),
                     Dokumen(3, "Materi Pemrograman Web", "materi", 2024, "20 Mei 2026", false),
                 )
             ),
             isLoading = false,
             error = null,
-            onNavigateBack = {}
+            onNavigateBack = {},
+            onToggleBookmark = {}
         )
     }
 }

@@ -37,4 +37,26 @@ class DetailMatkulViewModel : ViewModel() {
             }
         }
     }
+
+    fun toggleBookmark(token: String, idDokumen: Int) {
+        viewModelScope.launch {
+            try {
+                val response = ApiClient.instance.toggleBookmark("Bearer $token", idDokumen)
+                if (response.isSuccessful) {
+                    // Update state lokal tanpa fetch ulang
+                    _detailData.value = _detailData.value?.let { data ->
+                        data.copy(
+                            daftarArsip = data.daftarArsip.map { dokumen ->
+                                if (dokumen.id_dokumen == idDokumen) {
+                                    dokumen.copy(is_bookmarked = !dokumen.is_bookmarked)
+                                } else dokumen
+                            }
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                // silent fail
+            }
+        }
+    }
 }
