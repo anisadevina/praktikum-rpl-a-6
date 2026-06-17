@@ -145,7 +145,7 @@ class MatkulController extends Controller
 
         return $queryArsip->get()->map(function ($dokumen) use ($idDokumenDibookmark) {
             $dokumen->kodeRahasia  = Crypt::encryptString($dokumen->id_dokumen ?? $dokumen->id);
-            $dokumen->isDibookmark = in_array($dokumen->id_dokumen, $idDokumenDibookmark);
+            $dokumen->is_bookmarked = in_array($dokumen->id_dokumen, $idDokumenDibookmark);
             return $dokumen;
         });
     }
