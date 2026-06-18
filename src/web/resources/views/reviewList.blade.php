@@ -103,7 +103,7 @@
                     </svg>
                     <h1 class="review-title">REVIEW DOKUMEN</h1>
                 </div>
-                <p class="review-subtitle">Review & Approval</p>
+                <p class="review-subtitle">Review & Approval.</p>
             </div>
 
             <hr class="review-divider">

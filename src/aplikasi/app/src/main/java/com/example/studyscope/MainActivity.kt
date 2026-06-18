@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.studyscope.screen.ArsipScreen
+import com.example.studyscope.screen.BerandaScreen
 import com.example.studyscope.screen.LoginScreen
 import com.example.studyscope.screen.RegisterScreen
 import com.example.studyscope.ui.theme.StudyScopeTheme
@@ -32,13 +33,17 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun StudyScopeApp() {
     val navController = rememberNavController()
-    // Menggunakan 1 ViewModel yang sama untuk Login dan Register
     val authViewModel: AuthViewModel = viewModel()
 
-    // Menyimpan token login sementara
-    var authToken by remember { mutableStateOf<String?>(null) }
+    var authToken    by remember { mutableStateOf<String?>(null) }
+    var authUsername by remember { mutableStateOf("") }
 
-    NavHost(navController = navController, startDestination = "arsip") {
+    val authUsernameFromVm by authViewModel.username.collectAsState()
+    LaunchedEffect(authUsernameFromVm) {
+        if (authUsernameFromVm.isNotBlank()) authUsername = authUsernameFromVm
+    }
+
+    NavHost(navController = navController, startDestination = "login") {
 
         // Layar 1: Login
         composable("login") {
@@ -68,29 +73,45 @@ fun StudyScopeApp() {
             )
         }
 
-        // Layar Placeholder: Beranda (Tugas teman, jangan dihapus/diubah isinya)
+        // Layar 3: Beranda
         composable("beranda") {
-            // Placeholder sementara agar tidak crash saat navigasi
-            Box(modifier = androidx.compose.ui.Modifier.fillMaxSize(), contentAlignment = androidx.compose.ui.Alignment.Center) {
-                Column(horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally) {
-                    Text("Halaman Beranda (Sedang Dikembangkan)")
-                    Button(onClick = { navController.navigate("arsip") }) {
-                        Text("Ke Arsip")
+            if (authToken != null) {
+                BerandaScreen(
+                    token = authToken!!,
+                    onNavigateToMatkul = {
+                        // Nanti diarahkan ke detail matkul
+                    },
+                    onNavigateToArsip = {
+                        navController.navigate("arsip")
+                    },
+                    onLogout = {
+                        authToken = null
+                        navController.navigate("login") {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    }
+                )
+            } else {
+                LaunchedEffect(Unit) {
+                    navController.navigate("login") {
+                        popUpTo(0)
                     }
                 }
             }
         }
 
-        // Layar 3: Arsip
+        // Layar 4: Arsip
         composable("arsip") {
             ArsipScreen(
+                token = authToken ?: "",
+                username = authUsername,
                 onNavigateToBeranda = {
                     navController.navigate("beranda") {
-                        popUpTo("beranda") { saveState = true }
+                        popUpTo("beranda") { inclusive = false }
                         launchSingleTop = true
-                        restoreState = true
                     }
                 },
+                onOpenDocument = { _, _ -> }, // dikerjakan temanmu nanti
                 onLogout = {
                     authToken = null
                     navController.navigate("login") {

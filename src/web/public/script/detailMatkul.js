@@ -45,6 +45,23 @@ function setupFilter() {
     const select = document.getElementById("filter-tahun");
     if (!select) return;
 
+    // --- BAGIAN BARU: Generate Tahun Otomatis ---
+    const tahunSekarang = new Date().getFullYear();
+    const urlParams = new URLSearchParams(window.location.search);
+    const tahunTerpilih = urlParams.get("tahun");
+
+    for (let y = tahunSekarang; y >= 2022; y--) {
+        const opsi = document.createElement("option");
+        opsi.value = y;
+        opsi.textContent = y;
+
+        // Pertahankan status filter (meski halaman ini pakai AJAX)
+        if (String(y) === tahunTerpilih) {
+            opsi.selected = true;
+        }
+        select.appendChild(opsi);
+    }
+
     select.addEventListener("change", function () {
         const selectedTahun = this.value;
         const urlParams = new URLSearchParams(window.location.search);
@@ -190,7 +207,7 @@ async function fetchDetailMatkul() {
                                     <span class="arsip-date">Diunggah pada ${formattedDate}</span>
                                 </div>
                             </div>
-                            <div class="arsip-bookmark ${arsip.is_bookmarked ? 'bookmarked' : ''}" data-id="${arsip.id_dokumen || arsip.id}">
+                            <div class="arsip-bookmark ${arsip.is_bookmarked ? "bookmarked" : ""}" data-id="${arsip.id_dokumen || arsip.id}">
                                 <svg viewBox="0 0 24 24">
                                     <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
                                 </svg>
@@ -241,8 +258,11 @@ function setupBookmarks() {
 
             try {
                 const csrf =
-                    document.querySelector('meta[name="csrf-token"]')?.content ??
-                    document.querySelector('#logout-form input[name="_token"]')?.value ?? "";
+                    document.querySelector('meta[name="csrf-token"]')
+                        ?.content ??
+                    document.querySelector('#logout-form input[name="_token"]')
+                        ?.value ??
+                    "";
 
                 const response = await fetch(`/arsip/bookmark/${id}`, {
                     method: "POST",
@@ -254,7 +274,6 @@ function setupBookmarks() {
                 });
 
                 if (!response.ok) throw new Error("Gagal menyimpan bookmark");
-
             } catch (err) {
                 // Rollback kalau gagal
                 btn.classList.toggle("bookmarked");

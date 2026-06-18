@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // ─── 1. NAVIGASI SIDEBAR ──────────────────────────────────
+    // NAVIGASI SIDEBAR
     const PAGE_PATHS = {
         beranda: "/beranda",
         matkul: "/matkul",
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // ─── 2. FUNGSI AMBIL DATA API (FETCH) ─────────────────────
+    // AMBIL DATA API (FETCH)
     const tbody = document.getElementById("review-table-body");
 
     // Bungkus proses fetch ke dalam fungsi async yang rapi
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Panggil fungsi saat halaman selesai dimuat
     fetchReviewList();
 
-    // ─── 3. UTILITY & LOGOUT ──────────────────────────────────
+    // UTILITY
 
     // Fungsi untuk mencegah XSS (serangan script)
     function escapeHTML(str) {

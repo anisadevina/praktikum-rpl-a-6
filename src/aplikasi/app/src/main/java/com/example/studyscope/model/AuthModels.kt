@@ -12,8 +12,20 @@ data class RegisterRequest(
     val password: String
 )
 
+data class AuthUserData(
+    val id_user: Int,
+    val username: String,
+    val role: String
+)
+
 data class AuthResponse(
     val status: String,
     val message: String,
-    val token: String? = null // Nanti diisi token Sanctum
+    val token: String? = null, // Nanti diisi token Sanctum
+    val user: AuthUserData? = null  // Data user setelah login/register
+)
+
+data class ValidationErrorResponse(
+    val message: String,
+    val errors: Map<String, List<String>>
 )

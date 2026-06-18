@@ -72,6 +72,22 @@ function setupFilter() {
     const select = document.getElementById("filter-tahun");
     if (!select) return;
 
+    const tahunSekarang = new Date().getFullYear();
+    const urlParams = new URLSearchParams(window.location.search);
+    const tahunTerpilih = urlParams.get("tahun");
+
+    for (let y = tahunSekarang; y >= 2022; y--) {
+        const opsi = document.createElement("option");
+        opsi.value = y;
+        opsi.textContent = y;
+
+        // Pertahankan status filter saat di-refresh
+        if (String(y) === tahunTerpilih) {
+            opsi.selected = true;
+        }
+        select.appendChild(opsi);
+    }
+
     select.addEventListener("change", function () {
         const selectedTahun = this.value;
         const urlParams = new URLSearchParams(window.location.search);

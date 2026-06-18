@@ -17,39 +17,39 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.studyscope.model.ArsipItem
 import com.example.studyscope.ui.theme.AppSpacing
 import com.example.studyscope.ui.theme.StudyScopeTheme
-
-data class ArsipItem(
-    val title: String,
-    val year: String,
-    val uploadDate: String
-)
+import com.example.studyscope.viewmodel.ArsipViewModel
 
 @Composable
 fun ArsipScreen(
+    token: String = "",
+    username: String = "nama pengguna",
     onNavigateToBeranda: () -> Unit = {},
     onNavigateToLibrary: () -> Unit = {},
-    onLogout: () -> Unit = {}
+    onOpenDocument: (url: String, title: String) -> Unit = { _, _ -> },
+    onLogout: () -> Unit = {},
+    viewModel: ArsipViewModel = viewModel()
 ) {
-    val arsipList = remember {
-        listOf(
-            ArsipItem("Soal UAS Kalkulus II", "2024", "Diunggah pada 23 Mei 2026"),
-            ArsipItem("Soal UAS Organisasi Sistem Komputer", "2024", "Diunggah pada 23 Mei 2026"),
-            ArsipItem("Soal UAS Organisasi Sistem Komputer", "2024", "Diunggah pada 23 Mei 2026"),
-            ArsipItem("Soal UAS Organisasi Sistem Komputer", "2024", "Diunggah pada 23 Mei 2026"),
-            ArsipItem("Soal UAS Organisasi Sistem Komputer", "2024", "Diunggah pada 23 Mei 2026"),
-            ArsipItem("Soal UAS Organisasi Sistem Komputer", "2024", "Diunggah pada 23 Mei 2026"),
-            ArsipItem("Soal UAS Organisasi Sistem Komputer", "2024", "Diunggah pada 23 Mei 2026"),
-            ArsipItem("Soal UAS Organisasi Sistem Komputer", "2024", "Diunggah pada 23 Mei 2026")
-        )
-    }
+    // Ambil state dari ViewModel
+    val arsipList   by viewModel.filteredArsip.collectAsState()
+    val isLoading   by viewModel.isLoading.collectAsState()
+    val error       by viewModel.error.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
 
-    var searchQuery by remember { mutableStateOf("") }
+    // Fetch data dari API saat pertama kali layar dibuka
+    LaunchedEffect(Unit) {
+        viewModel.fetchArsip(token)
+    }
 
     Scaffold(
         bottomBar = {
@@ -94,7 +94,7 @@ fun ArsipScreen(
                         border = androidx.compose.foundation.BorderStroke(1.dp, Color.Gray.copy(alpha = 0.3f))
                     ) {
                         Text(
-                            text = "nama pengguna",
+                            text = username, // Menampilkan username dari parameter
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
                         )
@@ -116,25 +116,29 @@ fun ArsipScreen(
                 }
             }
 
-            // Search Bar
+            // Search Bar — hasil muncul setelah tekan enter (fetch ke API)
             OutlinedTextField(
                 value = searchQuery,
-                onValueChange = { searchQuery = it },
-                placeholder = { 
+                onValueChange = { viewModel.updateSearchQuery(it) },
+                placeholder = {
                     Text(
-                        "Cari mata kuliah", 
+                        "Cari mata kuliah",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.outline
-                    ) 
+                    )
                 },
-                leadingIcon = { 
+                leadingIcon = {
                     Icon(
-                        Icons.Default.Search, 
+                        Icons.Default.Search,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.outline,
                         modifier = Modifier.size(20.dp)
-                    ) 
+                    )
                 },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(
+                    onSearch = { viewModel.fetchArsip(token) } // Fetch API saat tekan enter
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)
@@ -185,13 +189,42 @@ fun ArsipScreen(
 
             Spacer(modifier = Modifier.height(AppSpacing.md))
 
-            // List
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(start = 24.dp, end = 24.dp, bottom = AppSpacing.md)
-            ) {
-                items(arsipList) { item ->
-                    ArsipCard(item)
+            // List — sekarang dari API, bukan dummy data
+            when {
+                isLoading -> {
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                    }
+                }
+                error != null -> {
+                    Text(
+                        text = error!!,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(horizontal = 24.dp)
+                    )
+                }
+                arsipList.isEmpty() -> {
+                    Text(
+                        text = "Belum ada dokumen yang disimpan.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(horizontal = 24.dp)
+                    )
+                }
+                else -> {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(start = 24.dp, end = 24.dp, bottom = AppSpacing.md)
+                    ) {
+                        items(arsipList) { item ->
+                            ArsipCard(
+                                item = item,
+                                onBookmarkClick = { viewModel.toggleBookmark(token, item.idDokumen) },
+                                onCardClick = { onOpenDocument(item.fileUrl, item.judul) }
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -199,11 +232,16 @@ fun ArsipScreen(
 }
 
 @Composable
-fun ArsipCard(item: ArsipItem) {
+fun ArsipCard(
+    item: ArsipItem,
+    onBookmarkClick: () -> Unit = {},
+    onCardClick: () -> Unit = {}
+) {
     Surface(
         color = MaterialTheme.colorScheme.secondary,
         shape = RoundedCornerShape(20.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        onClick = onCardClick
     ) {
         Row(
             modifier = Modifier.padding(AppSpacing.md),
@@ -218,9 +256,15 @@ fun ArsipCard(item: ArsipItem) {
             Spacer(modifier = Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = item.title,
+                    text = item.judul,
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onSecondary
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = item.namaMatkul,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.8f)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -229,7 +273,7 @@ fun ArsipCard(item: ArsipItem) {
                         shape = RoundedCornerShape(6.dp)
                     ) {
                         Text(
-                            text = item.year,
+                            text = item.tahunDokumen.toString(),
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.White,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
@@ -239,19 +283,22 @@ fun ArsipCard(item: ArsipItem) {
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = item.uploadDate,
+                        text = "Diunggah pada ${item.waktuUnggahFormatted}",
                         style = MaterialTheme.typography.bodySmall,
                         fontSize = 11.sp,
                         color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.7f)
                     )
                 }
             }
-            Icon(
-                imageVector = Icons.Default.Bookmark,
-                contentDescription = "Bookmarked",
-                modifier = Modifier.size(24.dp),
-                tint = MaterialTheme.colorScheme.onSecondary
-            )
+            // Tombol bookmark — tap untuk hapus dari arsip
+            IconButton(onClick = onBookmarkClick) {
+                Icon(
+                    imageVector = Icons.Default.Bookmark,
+                    contentDescription = "Bookmarked",
+                    modifier = Modifier.size(24.dp),
+                    tint = MaterialTheme.colorScheme.onSecondary
+                )
+            }
         }
     }
 }

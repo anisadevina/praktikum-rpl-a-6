@@ -7,8 +7,8 @@ use App\Http\Controllers\MatkulController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ArsipController;
 use App\Http\Controllers\UnggahController;
-use App\Http\Controllers\ReviewDokumenController;
 use App\Http\Middleware\CekAdmin;
+use App\Http\Controllers\ReviewDokumenController;
 
 
 // Autensifiaksi 
@@ -66,4 +66,5 @@ Route::middleware('auth')->group(function () {
         Route::get('/api/review-dokumen/{id}', [ReviewDokumenController::class, 'getDetailData']);
         Route::post('/api/review-dokumen/{id}', [ReviewDokumenController::class, 'submitReview']);
     });
+
 });
