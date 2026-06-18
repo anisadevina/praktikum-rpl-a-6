@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,6 +31,7 @@ import com.example.studyscope.viewmodel.BerandaViewModel
 fun BerandaScreen(
     token: String,
     onNavigateToMatkul: () -> Unit,
+    onNavigateToLibrary: () -> Unit = {},
     onNavigateToArsip: () -> Unit = {},
     onLogout: () -> Unit,
     viewModel: BerandaViewModel = viewModel()
@@ -52,6 +54,7 @@ fun BerandaScreen(
         error = error,
         matkulList = filteredMatkul,
         onNavigateToMatkul = onNavigateToMatkul,
+        onNavigateToLibrary = onNavigateToLibrary,
         onNavigateToArsip = onNavigateToArsip,
         onLogoutClick = {
             viewModel.logout(token) { onLogout() }
@@ -69,9 +72,11 @@ fun BerandaContent(
     error: String?,
     matkulList: List<com.example.studyscope.model.Matkul>,
     onNavigateToMatkul: () -> Unit,
+    onNavigateToLibrary: () -> Unit,
     onNavigateToArsip: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
+    val currentRoute = "beranda"
     Scaffold(
         bottomBar = {
             NavigationBar(
@@ -80,8 +85,13 @@ fun BerandaContent(
                 modifier = Modifier.clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
             ) {
                 NavigationBarItem(
-                    icon = { Icon(Icons.Default.Home, contentDescription = "Beranda") },
-                    selected = true,
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Home,
+                            contentDescription = "Beranda"
+                        )
+                    },
+                    selected = currentRoute == "beranda",
                     onClick = { },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = MaterialTheme.colorScheme.primary,
@@ -92,15 +102,28 @@ fun BerandaContent(
                 )
                 NavigationBarItem(
                     icon = { Icon(Icons.AutoMirrored.Filled.MenuBook, contentDescription = "Library") },
-                    selected = false,
-                    onClick = { /* TODO: navigasi ke Library */ },
-                    colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.LightGray)
+                    selected = currentRoute == "library",
+                    onClick = onNavigateToLibrary,
+                    colors = NavigationBarItemDefaults.colors(
+                        unselectedIconColor = Color.LightGray,
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        indicatorColor = MaterialTheme.colorScheme.onPrimary
+                    )
                 )
                 NavigationBarItem(
-                    icon = { Icon(Icons.Outlined.BookmarkBorder, contentDescription = "Bookmark") },
-                    selected = false,
-                    onClick = { onNavigateToArsip() },
-                    colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.LightGray)
+                    icon = {
+                        Icon(
+                            imageVector = if (currentRoute == "arsip") Icons.Default.Bookmark else Icons.Outlined.BookmarkBorder,
+                            contentDescription = "Arsip"
+                        )
+                    },
+                    selected = currentRoute == "arsip",
+                    onClick = onNavigateToArsip,
+                    colors = NavigationBarItemDefaults.colors(
+                        unselectedIconColor = Color.LightGray,
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        indicatorColor = MaterialTheme.colorScheme.onPrimary
+                    )
                 )
             }
         },
@@ -111,7 +134,7 @@ fun BerandaContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = 24.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -159,13 +182,15 @@ fun BerandaContent(
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = onSearchQueryChange,
-                placeholder = { Text("Cari mata kuliah", style = MaterialTheme.typography.bodyMedium, color = Color.Gray) },
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Gray) },
+                placeholder = { Text("Cari mata kuliah", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline) },
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search", tint = MaterialTheme.colorScheme.outline) },
                 modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp)),
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent
                 ),
                 singleLine = true,
                 textStyle = MaterialTheme.typography.bodyMedium
@@ -198,14 +223,18 @@ fun BerandaContent(
 
             // --- GRID KARTU MATA KULIAH ---
             if (isLoading) {
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
             } else if (error != null) {
-                Text(text = error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
+                Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
+                    Text(text = error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center)
+                }
             } else {
                 if (matkulList.isEmpty()) {
-                    Text("Mata kuliah tidak ditemukan.", color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
+                    Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
+                        Text("Mata kuliah tidak ditemukan.", color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center)
+                    }
                 } else {
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(2),

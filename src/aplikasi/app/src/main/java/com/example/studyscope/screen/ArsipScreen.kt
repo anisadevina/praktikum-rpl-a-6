@@ -1,5 +1,8 @@
 package com.example.studyscope.screen
 
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -55,7 +58,8 @@ fun ArsipScreen(
         bottomBar = {
             BottomNavigationBar(
                 currentRoute = "arsip",
-                onNavigateToBeranda = onNavigateToBeranda
+                onNavigateToBeranda = onNavigateToBeranda,
+                onNavigateToLibrary = onNavigateToLibrary
             )
         },
         containerColor = MaterialTheme.colorScheme.background
@@ -75,28 +79,32 @@ fun ArsipScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Surface(
-                        shape = CircleShape,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(36.dp)
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary),
+                        contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.Default.Person,
                             contentDescription = "Profile",
-                            tint = Color.White,
-                            modifier = Modifier.padding(8.dp)
+                            tint = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier.size(24.dp)
                         )
                     }
-                    Spacer(modifier = Modifier.width(AppSpacing.sm))
+                    Spacer(modifier = Modifier.width(8.dp))
                     Surface(
                         shape = RoundedCornerShape(20.dp),
-                        color = Color.White,
-                        border = androidx.compose.foundation.BorderStroke(1.dp, Color.Gray.copy(alpha = 0.3f))
+                        color = Color.Transparent,
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
                     ) {
                         Text(
-                            text = username, // Menampilkan username dari parameter
+                            text = username,
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                            color = MaterialTheme.colorScheme.primary,
                             style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 }
@@ -105,13 +113,13 @@ fun ArsipScreen(
                     onClick = onLogout,
                     modifier = Modifier
                         .background(MaterialTheme.colorScheme.error, CircleShape)
-                        .size(32.dp)
+                        .size(40.dp)
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ExitToApp,
                         contentDescription = "Logout",
-                        tint = Color.White,
-                        modifier = Modifier.size(18.dp)
+                        tint = MaterialTheme.colorScheme.onError,
+                        modifier = Modifier.size(20.dp)
                     )
                 }
             }
@@ -142,13 +150,13 @@ fun ArsipScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)
-                    .height(52.dp),
-                shape = RoundedCornerShape(25.dp),
+                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp)),
+                shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
                     unfocusedBorderColor = Color.Transparent,
-                    focusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
                     disabledBorderColor = Color.Transparent,
                     errorBorderColor = Color.Transparent,
                 ),
@@ -192,25 +200,31 @@ fun ArsipScreen(
             // List — sekarang dari API, bukan dummy data
             when {
                 isLoading -> {
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                     }
                 }
                 error != null -> {
-                    Text(
-                        text = error!!,
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(horizontal = 24.dp)
-                    )
+                    Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
+                        Text(
+                            text = error!!,
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(horizontal = 24.dp),
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
                 arsipList.isEmpty() -> {
-                    Text(
-                        text = "Belum ada dokumen yang disimpan.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(horizontal = 24.dp)
-                    )
+                    Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
+                        Text(
+                            text = "Belum ada dokumen yang disimpan.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(horizontal = 24.dp),
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
                 else -> {
                     LazyColumn(
@@ -307,81 +321,51 @@ fun ArsipCard(
 fun BottomNavigationBar(
     currentRoute: String,
     onNavigateToBeranda: () -> Unit = {},
+    onNavigateToLibrary: () -> Unit = {},
     onNavigateToArsip: () -> Unit = {}
 ) {
-    Surface(
-        color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(70.dp)
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
+        modifier = Modifier.clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
     ) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Beranda Icon
-            if (currentRoute == "beranda") {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .size(48.dp)
-                        .background(Color.White, CircleShape)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Inventory2,
-                        contentDescription = "Beranda",
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-            } else {
-                IconButton(onClick = onNavigateToBeranda) {
-                    Icon(
-                        imageVector = Icons.Default.Inventory2,
-                        contentDescription = "Beranda",
-                        tint = Color.White,
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-            }
-
-            // Library Icon
-            IconButton(onClick = { /* TODO */ }) {
+        NavigationBarItem(
+            icon = { Icon(Icons.Default.Home, contentDescription = "Beranda") },
+            selected = currentRoute == "beranda",
+            onClick = onNavigateToBeranda,
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = MaterialTheme.colorScheme.primary,
+                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                indicatorColor = MaterialTheme.colorScheme.onPrimary,
+                unselectedIconColor = Color.LightGray
+            )
+        )
+        NavigationBarItem(
+            icon = { Icon(Icons.AutoMirrored.Filled.MenuBook, contentDescription = "Library") },
+            selected = currentRoute == "library",
+            onClick = onNavigateToLibrary,
+            colors = NavigationBarItemDefaults.colors(
+                unselectedIconColor = Color.LightGray,
+                selectedIconColor = MaterialTheme.colorScheme.primary,
+                indicatorColor = MaterialTheme.colorScheme.onPrimary
+            )
+        )
+        NavigationBarItem(
+            icon = {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Filled.MenuBook,
-                    contentDescription = "Library",
-                    tint = Color.White,
-                    modifier = Modifier.size(28.dp)
+                    imageVector = if (currentRoute == "arsip") Icons.Default.Bookmark else Icons.Outlined.BookmarkBorder,
+                    contentDescription = "Arsip"
                 )
-            }
-
-            // Archive Icon
-            if (currentRoute == "arsip") {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .size(48.dp)
-                        .background(Color.White, CircleShape)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Bookmark,
-                        contentDescription = "Arsip",
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-            } else {
-                IconButton(onClick = onNavigateToArsip) {
-                    Icon(
-                        imageVector = Icons.Default.Bookmark,
-                        contentDescription = "Arsip",
-                        tint = Color.White,
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-            }
-        }
+            },
+            selected = currentRoute == "arsip",
+            onClick = onNavigateToArsip,
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = MaterialTheme.colorScheme.primary,
+                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                indicatorColor = MaterialTheme.colorScheme.onPrimary,
+                unselectedIconColor = Color.LightGray
+            )
+        )
     }
 }
 
