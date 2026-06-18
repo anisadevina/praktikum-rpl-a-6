@@ -30,6 +30,7 @@ import com.example.studyscope.viewmodel.BerandaViewModel
 fun BerandaScreen(
     token: String,
     onNavigateToMatkul: () -> Unit,
+    onNavigateToArsip: () -> Unit = {},
     onLogout: () -> Unit,
     viewModel: BerandaViewModel = viewModel()
 ) {
@@ -51,6 +52,7 @@ fun BerandaScreen(
         error = error,
         matkulList = filteredMatkul,
         onNavigateToMatkul = onNavigateToMatkul,
+        onNavigateToArsip = onNavigateToArsip,
         onLogoutClick = {
             viewModel.logout(token) { onLogout() }
         }
@@ -67,6 +69,7 @@ fun BerandaContent(
     error: String?,
     matkulList: List<com.example.studyscope.model.Matkul>,
     onNavigateToMatkul: () -> Unit,
+    onNavigateToArsip: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
     Scaffold(
@@ -88,15 +91,15 @@ fun BerandaContent(
                     )
                 )
                 NavigationBarItem(
-                    icon = { Icon(Icons.AutoMirrored.Filled.MenuBook, contentDescription = "Arsip") },
+                    icon = { Icon(Icons.AutoMirrored.Filled.MenuBook, contentDescription = "Library") },
                     selected = false,
-                    onClick = { },
+                    onClick = { /* TODO: navigasi ke Library */ },
                     colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.LightGray)
                 )
                 NavigationBarItem(
                     icon = { Icon(Icons.Outlined.BookmarkBorder, contentDescription = "Bookmark") },
                     selected = false,
-                    onClick = { },
+                    onClick = { onNavigateToArsip() },
                     colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.LightGray)
                 )
             }

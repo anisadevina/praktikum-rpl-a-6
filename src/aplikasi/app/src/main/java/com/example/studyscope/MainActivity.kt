@@ -35,7 +35,13 @@ fun StudyScopeApp() {
     val navController = rememberNavController()
     val authViewModel: AuthViewModel = viewModel()
 
-    var authToken by remember { mutableStateOf<String?>(null) }
+    var authToken    by remember { mutableStateOf<String?>(null) }
+    var authUsername by remember { mutableStateOf("") }
+
+    val authUsernameFromVm by authViewModel.username.collectAsState()
+    LaunchedEffect(authUsernameFromVm) {
+        if (authUsernameFromVm.isNotBlank()) authUsername = authUsernameFromVm
+    }
 
     NavHost(navController = navController, startDestination = "login") {
 
@@ -75,9 +81,11 @@ fun StudyScopeApp() {
                     onNavigateToMatkul = {
                         // Nanti diarahkan ke detail matkul
                     },
+                    onNavigateToArsip = {
+                        navController.navigate("arsip")
+                    },
                     onLogout = {
                         authToken = null
-
                         navController.navigate("login") {
                             popUpTo(0) { inclusive = true }
                         }
@@ -95,13 +103,15 @@ fun StudyScopeApp() {
         // Layar 4: Arsip
         composable("arsip") {
             ArsipScreen(
+                token = authToken ?: "",
+                username = authUsername,
                 onNavigateToBeranda = {
                     navController.navigate("beranda") {
-                        popUpTo("beranda") { saveState = true }
+                        popUpTo("beranda") { inclusive = false }
                         launchSingleTop = true
-                        restoreState = true
                     }
                 },
+                onOpenDocument = { _, _ -> }, // dikerjakan temanmu nanti
                 onLogout = {
                     authToken = null
                     navController.navigate("login") {
