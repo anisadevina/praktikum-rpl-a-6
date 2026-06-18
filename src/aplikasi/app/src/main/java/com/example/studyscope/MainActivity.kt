@@ -8,6 +8,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import androidx.navigation.NavType
 import com.example.studyscope.screen.BerandaScreen
 import com.example.studyscope.screen.DetailMatkulScreen
 import com.example.studyscope.screen.LoginScreen
@@ -33,7 +35,6 @@ fun StudyScopeApp() {
     val authViewModel: AuthViewModel = viewModel()
 
     var authToken by remember { mutableStateOf<String?>(null) }
-    var authUsername by remember { mutableStateOf<String?>(null) }
 
     NavHost(navController = navController, startDestination = "login") {
 
@@ -42,9 +43,8 @@ fun StudyScopeApp() {
             LoginScreen(
                 viewModel = authViewModel,
                 onNavigateToRegister = { navController.navigate("register") },
-                onLoginSuccess = { token, username ->
+                onLoginSuccess = { token ->
                     authToken = token
-                    authUsername = username
                     navController.navigate("beranda") {
                         popUpTo("login") { inclusive = true }
                     }
@@ -57,9 +57,8 @@ fun StudyScopeApp() {
             RegisterScreen(
                 viewModel = authViewModel,
                 onNavigateToLogin = { navController.navigate("login") },
-                onRegisterSuccess = { token, username ->
+                onRegisterSuccess = { token ->
                     authToken = token
-                    authUsername = username
                     navController.navigate("beranda") {
                         popUpTo("register") { inclusive = true }
                     }
@@ -72,8 +71,21 @@ fun StudyScopeApp() {
             if (authToken != null) {
                 BerandaScreen(
                     token = authToken!!,
-                    onNavigateToMatkul = {
-                        navController.navigate("matakuliah")
+                    onNavigateToMatkul = { query ->
+                        if (query.isNotBlank()) {
+                            navController.navigate("matakuliah?query=$query")
+                        } else {
+                            navController.navigate("matakuliah")
+                        }
+                    },
+                    onNavigateToDetail = { idMatkul ->
+                        navController.navigate("detail_matkul/$idMatkul")
+                    },
+                    onLogout = {
+                        authToken = null
+                        navController.navigate("login") {
+                            popUpTo(0) { inclusive = true }
+                        }
                     }
                 )
             } else {
@@ -84,18 +96,26 @@ fun StudyScopeApp() {
         }
 
         // Layar 4: Mata Kuliah
-        composable("matakuliah") {
+        composable(
+            route = "matakuliah?query={query}",
+            arguments = listOf(navArgument("query") {
+                type = NavType.StringType
+                nullable = true
+                defaultValue = null
+            })
+        ) { backStackEntry ->
+            val query = backStackEntry.arguments?.getString("query") ?: ""
+
             if (authToken != null) {
                 MataKuliahScreen(
                     token = authToken!!,
-                    username = authUsername ?: "",
+                    initialQuery = query,
                     onNavigateBack = { navController.popBackStack() },
                     onNavigateToDetail = { idMatkul ->
                         navController.navigate("detail_matkul/$idMatkul")
                     },
                     onLogout = {
                         authToken = null
-                        authUsername = null
                         navController.navigate("login") { popUpTo(0) }
                     }
                 )
@@ -112,12 +132,10 @@ fun StudyScopeApp() {
             if (authToken != null) {
                 DetailMatkulScreen(
                     token = authToken!!,
-                    username = authUsername ?: "",
                     idMatkul = idMatkul,
                     onNavigateBack = { navController.popBackStack() },
                     onLogout = {
                         authToken = null
-                        authUsername = null
                         navController.navigate("login") { popUpTo(0) }
                     }
                 )

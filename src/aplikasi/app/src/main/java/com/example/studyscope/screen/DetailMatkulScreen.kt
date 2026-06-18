@@ -31,7 +31,6 @@ import com.example.studyscope.viewmodel.DetailMatkulViewModel
 @Composable
 fun DetailMatkulScreen(
     token: String,
-    username: String,
     idMatkul: Int,
     onNavigateBack: () -> Unit,
     onLogout: () -> Unit = {},
@@ -41,12 +40,14 @@ fun DetailMatkulScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
 
+    val currentUsername by viewModel.username.collectAsState()
+
     LaunchedEffect(Unit) {
         viewModel.fetchDetail(token, idMatkul)
     }
 
     DetailMatkulContent(
-        username = username,
+        username = currentUsername,
         detailData = detailData,
         isLoading = isLoading,
         error = error,

@@ -1,5 +1,4 @@
 package com.example.studyscope.model
-
 data class UserData(
     val id_user: Int,
     val username: String,

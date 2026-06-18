@@ -13,6 +13,9 @@ class DetailMatkulViewModel : ViewModel() {
     private val _detailData = MutableStateFlow<DetailMatkulData?>(null)
     val detailData: StateFlow<DetailMatkulData?> = _detailData
 
+    private val _username = MutableStateFlow("Memuat...")
+    val username: StateFlow<String> = _username
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
@@ -26,7 +29,10 @@ class DetailMatkulViewModel : ViewModel() {
             try {
                 val response = ApiClient.instance.getDetailMatkul("Bearer $token", idMatkul)
                 if (response.isSuccessful) {
-                    _detailData.value = response.body()?.data
+                    val data = response.body()?.data
+                    _detailData.value = data
+
+                    _username.value = data?.user?.username ?: "Pengguna"
                 } else {
                     _error.value = "Gagal memuat data"
                 }

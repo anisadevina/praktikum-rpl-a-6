@@ -27,6 +27,10 @@ interface ApiService {
     @POST("register")
     suspend fun register(@Body request: RegisterRequest): Response<AuthResponse>
 
+    @Headers("Accept: application/json")
+    @POST("logout")
+    suspend fun logout(@Header("Authorization") token: String): Response<AuthResponse>
+
     // Menembak route GET /beranda/data
     @Headers("Accept: application/json")
     @GET("beranda/data")
@@ -39,7 +43,8 @@ interface ApiService {
     @GET("matkul/data")
     suspend fun getMatkul(
         @Header("Authorization") token: String,
-        @Query("q") query: String = ""
+        @Query("q") query: String = "",
+        @Query("page") page: Int = 1
     ): Response<MatkulResponse>
 
     // Menembak route GET /matkul/detail/data?id={id_matkul}
@@ -52,7 +57,7 @@ interface ApiService {
 }
 
 object ApiClient {
-    private const val BASE_URL = "http://192.168.1.7:8000/api/"
+    private const val BASE_URL = "http://10.219.113.103:8000/api/"
 
     val instance: ApiService by lazy {
         Retrofit.Builder()
