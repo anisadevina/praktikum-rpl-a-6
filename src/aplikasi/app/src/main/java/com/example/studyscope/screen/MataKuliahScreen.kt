@@ -35,6 +35,7 @@ fun MataKuliahScreen(
     initialQuery: String = "",
     onNavigateBack: () -> Unit,
     onNavigateToDetail: (Int) -> Unit,
+    onNavigateToArsip: () -> Unit,
     onLogout: () -> Unit = {},
     viewModel: MataKuliahViewModel = viewModel()
 ) {
@@ -65,6 +66,7 @@ fun MataKuliahScreen(
         matkulList = matkulList,
         onNavigateBack = onNavigateBack,
         onNavigateToDetail = onNavigateToDetail,
+        onNavigateToArsip = onNavigateToArsip,
         onLogout = onLogout
     )
 }
@@ -82,6 +84,7 @@ fun MataKuliahContent(
     matkulList: List<Matkul>,
     onNavigateBack: () -> Unit,
     onNavigateToDetail: (Int) -> Unit,
+    onNavigateToArsip: () -> Unit,
     onLogout: () -> Unit = {}
 ){
     Scaffold(
@@ -114,9 +117,9 @@ fun MataKuliahContent(
                     )
                 )
                 NavigationBarItem(
-                    icon = { Icon(Icons.Outlined.BookmarkBorder, contentDescription = "Bookmark") },
+                    icon = { Icon(Icons.Outlined.BookmarkBorder, contentDescription = "Arsip") },
                     selected = false,
-                    onClick = { },
+                    onClick = { onNavigateToArsip },
                     colors = NavigationBarItemDefaults.colors(
                         unselectedIconColor = Color.LightGray
                     )
@@ -383,26 +386,26 @@ fun MatkulCard(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun MataKuliahScreenPreview() {
-    StudyScopeTheme {
-        MataKuliahContent(
-            username = "nama pengguna",
-            searchQuery = "",
-            onSearchQueryChange = {},
-            isLoading = false,
-            error = null,
-            matkulList = listOf(
-                Matkul(1, "Algoritma & Pemrograman", 4.5, 10),
-                Matkul(2, "Struktur Data", 4.0, 8),
-                Matkul(3, "Basis Data", 3.5, 12),
-                Matkul(4, "Jaringan Komputer", 4.2, 6),
-            ),
-            onNavigateBack = {},
-            onNavigateToDetail = {},
-            isPaginating = false,
-            onLoadMore = {}
-        )
-    }
-}
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun MataKuliahScreenPreview() {
+//    StudyScopeTheme {
+//        MataKuliahContent(
+//            username = "nama pengguna",
+//            searchQuery = "",
+//            onSearchQueryChange = {},
+//            isLoading = false,
+//            error = null,
+//            matkulList = listOf(
+//                Matkul(1, "Algoritma & Pemrograman", 4.5, 10),
+//                Matkul(2, "Struktur Data", 4.0, 8),
+//                Matkul(3, "Basis Data", 3.5, 12),
+//                Matkul(4, "Jaringan Komputer", 4.2, 6),
+//            ),
+//            onNavigateBack = {},
+//            onNavigateToDetail = {},
+//            isPaginating = false,
+//            onLoadMore = {}
+//        )
+//    }
+//}

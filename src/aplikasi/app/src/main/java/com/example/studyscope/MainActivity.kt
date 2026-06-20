@@ -3,17 +3,25 @@ package com.example.studyscope
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
-import com.example.studyscope.screen.BerandaScreen
-import com.example.studyscope.screen.DetailMatkulScreen
-import com.example.studyscope.screen.LoginScreen
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
 import com.example.studyscope.screen.MataKuliahScreen
+import com.example.studyscope.screen.DetailMatkulScreen
+import com.example.studyscope.screen.ArsipScreen
+import com.example.studyscope.screen.BerandaScreen
+import com.example.studyscope.screen.LoginScreen
 import com.example.studyscope.screen.RegisterScreen
 import com.example.studyscope.ui.theme.StudyScopeTheme
 import com.example.studyscope.viewmodel.AuthViewModel
@@ -34,7 +42,13 @@ fun StudyScopeApp() {
     val navController = rememberNavController()
     val authViewModel: AuthViewModel = viewModel()
 
-    var authToken by remember { mutableStateOf<String?>(null) }
+    var authToken    by remember { mutableStateOf<String?>(null) }
+    var authUsername by remember { mutableStateOf("") }
+
+    val authUsernameFromVm by authViewModel.username.collectAsState()
+    LaunchedEffect(authUsernameFromVm) {
+        if (authUsernameFromVm.isNotBlank()) authUsername = authUsernameFromVm
+    }
 
     NavHost(navController = navController, startDestination = "login") {
 
@@ -71,6 +85,7 @@ fun StudyScopeApp() {
             if (authToken != null) {
                 BerandaScreen(
                     token = authToken!!,
+                    // Navigasi matkul dengan membawa kata kunci pencarian
                     onNavigateToMatkul = { query ->
                         if (query.isNotBlank()) {
                             navController.navigate("matakuliah?query=$query")
@@ -78,8 +93,12 @@ fun StudyScopeApp() {
                             navController.navigate("matakuliah")
                         }
                     },
+                    // Navigasi langsung ke detail matkul dari kartu Beranda
                     onNavigateToDetail = { idMatkul ->
                         navController.navigate("detail_matkul/$idMatkul")
+                    },
+                    onNavigateToArsip = {
+                        navController.navigate("arsip")
                     },
                     onLogout = {
                         authToken = null
@@ -89,13 +108,35 @@ fun StudyScopeApp() {
                     }
                 )
             } else {
-                LaunchedEffect(Unit) {
-                    navController.navigate("login") { popUpTo(0) }
-                }
+                LaunchedEffect(Unit) { navController.navigate("login") { popUpTo(0) } }
             }
         }
 
-        // Layar 4: Mata Kuliah
+        // Layar 4: Arsip
+        composable("arsip") {
+            ArsipScreen(
+                token = authToken ?: "",
+                username = authUsername,
+                onNavigateToBeranda = {
+                    navController.navigate("beranda") {
+                        popUpTo("beranda") { inclusive = false }
+                        launchSingleTop = true
+                    }
+                },
+                onOpenDocument = { _, _ -> },
+                onNavigateToLibrary = {
+                    navController.navigate("matakuliah")
+                },
+                onLogout = {
+                    authToken = null
+                    navController.navigate("login") {
+                        popUpTo(0) { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        // Layar 5: Mata Kuliah
         composable(
             route = "matakuliah?query={query}",
             arguments = listOf(navArgument("query") {
@@ -114,35 +155,50 @@ fun StudyScopeApp() {
                     onNavigateToDetail = { idMatkul ->
                         navController.navigate("detail_matkul/$idMatkul")
                     },
+                    onNavigateToArsip = {
+                        navController.navigate("arsip")
+                    },
                     onLogout = {
                         authToken = null
-                        navController.navigate("login") { popUpTo(0) }
+                        navController.navigate("login") { popUpTo(0) { inclusive = true } }
                     }
                 )
             } else {
-                LaunchedEffect(Unit) {
-                    navController.navigate("login") { popUpTo(0) }
-                }
+                LaunchedEffect(Unit) { navController.navigate("login") { popUpTo(0) } }
             }
         }
 
-        // Layar 5: Detail Mata Kuliah
+        // Layar 6: Detail Mata Kuliah
         composable("detail_matkul/{idMatkul}") { backStackEntry ->
             val idMatkul = backStackEntry.arguments?.getString("idMatkul")?.toIntOrNull() ?: 0
+            val context = LocalContext.current // Diperlukan untuk membuka link browser
+
             if (authToken != null) {
                 DetailMatkulScreen(
                     token = authToken!!,
                     idMatkul = idMatkul,
                     onNavigateBack = { navController.popBackStack() },
+                    onNavigateToBeranda = {
+                        navController.navigate("beranda") {
+                            popUpTo("beranda") { inclusive = false }
+                            launchSingleTop = true
+                        }
+                    },
+                    onNavigateToArsip = {
+                        navController.navigate("arsip")
+                    },
+                    onOpenDokumen = { kodeRahasia ->
+                        val url = "http://192.168.1.16:8000/arsip/view/$kodeRahasia"
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        context.startActivity(intent)
+                    },
                     onLogout = {
                         authToken = null
-                        navController.navigate("login") { popUpTo(0) }
+                        navController.navigate("login") { popUpTo(0) { inclusive = true } }
                     }
                 )
             } else {
-                LaunchedEffect(Unit) {
-                    navController.navigate("login") { popUpTo(0) }
-                }
+                LaunchedEffect(Unit) { navController.navigate("login") { popUpTo(0) } }
             }
         }
     }

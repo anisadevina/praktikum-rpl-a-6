@@ -19,6 +19,10 @@ class AuthViewModel : ViewModel() {
     private val _token = MutableStateFlow<String?>(null)
     val token: StateFlow<String?> = _token
 
+    // Menyimpan username setelah login/register berhasil
+    private val _username = MutableStateFlow("")
+    val username: StateFlow<String> = _username
+
     private val _fieldErrors = MutableStateFlow<Map<String, String>>(emptyMap())
     val fieldErrors: StateFlow<Map<String, String>> = _fieldErrors
 
@@ -31,6 +35,7 @@ class AuthViewModel : ViewModel() {
                 val response = ApiClient.instance.login(LoginRequest(username, pass))
                 if (response.isSuccessful && response.body()?.status == "success") {
                     _token.value = response.body()?.token
+                    _username.value = response.body()?.user?.username ?: ""
                     _authState.value = "SuccessLogin"
                 } else if (response.code() == 422) {
                     parseValidationErrors(response.errorBody()?.string())
@@ -55,6 +60,7 @@ class AuthViewModel : ViewModel() {
 
                 if (response.isSuccessful && response.body()?.status == "success") {
                     _token.value = response.body()?.token
+                    _username.value = response.body()?.user?.username ?: ""
                     _authState.value = "SuccessRegister"
                 } else if (response.code() == 422) {
                     parseValidationErrors(response.errorBody()?.string())

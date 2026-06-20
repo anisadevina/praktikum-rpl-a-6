@@ -34,6 +34,7 @@ fun BerandaScreen(
     token: String,
     onNavigateToMatkul: (String) -> Unit,
     onNavigateToDetail: (Int) -> Unit,
+    onNavigateToArsip: () -> Unit,
     onLogout: () -> Unit,
     viewModel: BerandaViewModel = viewModel()
 ) {
@@ -56,6 +57,7 @@ fun BerandaScreen(
         matkulList = filteredMatkul,
         onNavigateToMatkul = onNavigateToMatkul,
         onNavigateToDetail = onNavigateToDetail,
+        onNavigateToArsip = onNavigateToArsip,
         onLogoutClick = {
             viewModel.logout(token) { onLogout() }
         }
@@ -73,6 +75,7 @@ fun BerandaContent(
     matkulList: List<com.example.studyscope.model.Matkul>,
     onNavigateToMatkul: (String) -> Unit,
     onNavigateToDetail: (Int) -> Unit,
+    onNavigateToArsip: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
     Scaffold(
@@ -94,15 +97,15 @@ fun BerandaContent(
                     )
                 )
                 NavigationBarItem(
-                    icon = { Icon(Icons.AutoMirrored.Filled.MenuBook, contentDescription = "Arsip") },
+                    icon = { Icon(Icons.AutoMirrored.Filled.MenuBook, contentDescription = "Mata Kuliah") },
                     selected = false,
                     onClick = { onNavigateToMatkul("") },
                     colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.LightGray)
                 )
                 NavigationBarItem(
-                    icon = { Icon(Icons.Outlined.BookmarkBorder, contentDescription = "Bookmark") },
+                    icon = { Icon(Icons.Outlined.BookmarkBorder, contentDescription = "Arsip") },
                     selected = false,
-                    onClick = { },
+                    onClick = onNavigateToArsip,
                     colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.LightGray)
                 )
             }

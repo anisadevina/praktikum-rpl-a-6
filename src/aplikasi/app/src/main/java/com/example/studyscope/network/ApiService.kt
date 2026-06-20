@@ -1,19 +1,20 @@
 package com.example.studyscope.network
 
+import com.example.studyscope.model.ArsipResponse
 import com.example.studyscope.model.AuthResponse
 import com.example.studyscope.model.BerandaResponse
-import com.example.studyscope.model.DetailMatkulResponse
+import com.example.studyscope.model.BookmarkResponse
 import com.example.studyscope.model.LoginRequest
-import com.example.studyscope.model.MatkulResponse
 import com.example.studyscope.model.RegisterRequest
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.POST
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -38,6 +39,23 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Response<BerandaResponse>
 
+    // Menembak route GET /arsip/data?q=...
+    @Headers("Accept: application/json")
+    @GET("arsip/data")
+    suspend fun getArsip(
+        @Header("Authorization") token: String,
+        @Query("q")     search: String? = null,
+        @Query("tahun") tahun: String?  = null
+    ): Response<ArsipResponse>
+
+    // Menembak route POST /arsip/bookmark/{id}
+    @Headers("Accept: application/json")
+    @POST("arsip/bookmark/{id}")
+    suspend fun toggleBookmark(
+        @Header("Authorization") token: String,
+        @Path("id") idDokumen: Int
+    ): Response<BookmarkResponse>
+
     // Menembak route GET /matkul/data
     @Headers("Accept: application/json")
     @GET("matkul/data")
@@ -45,7 +63,7 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("q") query: String = "",
         @Query("page") page: Int = 1
-    ): Response<MatkulResponse>
+    ): Response<com.example.studyscope.model.MatkulResponse>
 
     // Menembak route GET /matkul/detail/data?id={id_matkul}
     @Headers("Accept: application/json")
@@ -53,11 +71,11 @@ interface ApiService {
     suspend fun getDetailMatkul(
         @Header("Authorization") token: String,
         @Query("id") idMatkul: Int
-    ): Response<DetailMatkulResponse>
+    ): Response<com.example.studyscope.model.DetailMatkulResponse>
 }
 
 object ApiClient {
-    private const val BASE_URL = "http://10.219.113.103:8000/api/"
+    private const val BASE_URL = "http://192.168.1.16:8000/api/" // sesuaikan masing masing hp
 
     val instance: ApiService by lazy {
         Retrofit.Builder()
