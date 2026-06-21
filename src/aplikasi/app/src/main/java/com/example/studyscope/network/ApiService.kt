@@ -1,7 +1,9 @@
 package com.example.studyscope.network
 
+import com.example.studyscope.model.ArsipResponse
 import com.example.studyscope.model.AuthResponse
 import com.example.studyscope.model.BerandaResponse
+import com.example.studyscope.model.BookmarkResponse
 import com.example.studyscope.model.DetailMatkulResponse
 import com.example.studyscope.model.LoginRequest
 import com.example.studyscope.model.MatkulResponse
@@ -28,6 +30,10 @@ interface ApiService {
     @POST("register")
     suspend fun register(@Body request: RegisterRequest): Response<AuthResponse>
 
+    @Headers("Accept: application/json")
+    @POST("logout")
+    suspend fun logout(@Header("Authorization") token: String): Response<AuthResponse>
+
     // Menembak route GET /beranda/data
     @Headers("Accept: application/json")
     @GET("beranda/data")
@@ -35,12 +41,30 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Response<BerandaResponse>
 
+    // Menembak route GET /arsip/data?q=...
+    @Headers("Accept: application/json")
+    @GET("arsip/data")
+    suspend fun getArsip(
+        @Header("Authorization") token: String,
+        @Query("q") search: String? = null,
+        @Query("tahun") tahun: String? = null
+    ): Response<ArsipResponse>
+
+    // Menembak route POST /arsip/bookmark/{id}
+    @Headers("Accept: application/json")
+    @POST("arsip/bookmark/{id}")
+    suspend fun toggleBookmark(
+        @Header("Authorization") token: String,
+        @Path("id") idDokumen: Int
+    ): Response<BookmarkResponse>
+
     // Menembak route GET /matkul/data
     @Headers("Accept: application/json")
     @GET("matkul/data")
     suspend fun getMatkul(
         @Header("Authorization") token: String,
-        @Query("q") query: String = ""
+        @Query("q") query: String = "",
+        @Query("page") page: Int = 1
     ): Response<MatkulResponse>
 
     // Menembak route GET /matkul/detail/data?id={id_matkul}
@@ -50,18 +74,10 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("id") idMatkul: Int
     ): Response<DetailMatkulResponse>
-
-    // Menembak route POST /arsip/bookmark/{id}
-    @Headers("Accept: application/json")
-    @POST("arsip/bookmark/{id}")
-    suspend fun toggleBookmark(
-        @Header("Authorization") token: String,
-        @Path("id") idDokumen: Int
-    ): Response<Unit>
 }
 
 object ApiClient {
-    private const val BASE_URL = "http://192.168.1.7:8000/api/"
+    private const val BASE_URL = "http://192.168.42.108:8000/api/" // sesuaikan masing masing hp
 
     val instance: ApiService by lazy {
         Retrofit.Builder()

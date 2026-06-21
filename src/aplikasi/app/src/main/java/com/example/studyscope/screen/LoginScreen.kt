@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Layers
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
@@ -37,18 +38,18 @@ import com.example.studyscope.viewmodel.AuthViewModel
 fun LoginScreen(
     viewModel: AuthViewModel = viewModel(),
     onNavigateToRegister: () -> Unit,
-    onLoginSuccess: (String, String) -> Unit
+    onLoginSuccess: (String) -> Unit
 ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     val authState by viewModel.authState.collectAsState()
-    val authToken by viewModel.token.collectAsState()
-    val savedUsername by viewModel.username.collectAsState()
+    val token by viewModel.token.collectAsState()
+    val fieldErrors by viewModel.fieldErrors.collectAsState()
 
-    if (authState == "SuccessLogin" && authToken != null && savedUsername != null) {
+    if (authState == "SuccessLogin" && token != null) {
         LaunchedEffect(Unit) {
-            onLoginSuccess(authToken!!, savedUsername!!)
+            onLoginSuccess(token!!)
             viewModel.resetState()
         }
     }
@@ -71,11 +72,11 @@ fun LoginScreen(
                 modifier = Modifier
                     .size(width = 120.dp, height = 60.dp)
                     .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
-                    .background(Color.White.copy(alpha = 0.5f)),
+                    .background(Color.White.copy(alpha = 0.5f), RoundedCornerShape(10.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Default.Image,
+                    imageVector = Icons.Outlined.Layers,
                     contentDescription = "Logo",
                     modifier = Modifier.size(24.dp),
                     tint = MaterialTheme.colorScheme.primary
@@ -119,6 +120,12 @@ fun LoginScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 textStyle = MaterialTheme.typography.bodyMedium,
+                isError = fieldErrors.containsKey("username"),
+                supportingText = {
+                    if (fieldErrors.containsKey("username")) {
+                        Text(text = fieldErrors["username"]!!, color = MaterialTheme.colorScheme.error)
+                    }
+                },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
@@ -157,6 +164,12 @@ fun LoginScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 textStyle = MaterialTheme.typography.bodyMedium,
+                isError = fieldErrors.containsKey("password"),
+                supportingText = {
+                    if (fieldErrors.containsKey("password")) {
+                        Text(text = fieldErrors["password"]!!, color = MaterialTheme.colorScheme.error)
+                    }
+                },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
@@ -232,7 +245,7 @@ fun LoginScreenPreview() {
     StudyScopeTheme {
         LoginScreen(
             onNavigateToRegister = {},
-            onLoginSuccess = { _, _ -> }
+            onLoginSuccess = {}
         )
     }
 }

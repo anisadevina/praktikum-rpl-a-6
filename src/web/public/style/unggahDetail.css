@@ -34,7 +34,7 @@
     margin-bottom: 16px;
 }
 
-/* ─── Form Card ──────────────────────────────── */
+/* Form Card */
 .form-unggah-card {
     background-color: var(--color-primary-card);
     border-radius: var(--radius-lg);
@@ -76,8 +76,8 @@
 /* Input teks biasa */
 .form-input {
     width: 100%;
-    height: 44px; /* Kunci tinggi */
-    padding: 0 16px; /* Hapus padding vertikal, fokus horizontal */
+    height: 44px; 
+    padding: 0 16px; 
     border: none;
     border-radius: var(--radius-full);
     background-color: var(--color-bg-card);
@@ -98,8 +98,7 @@
     color: var(--color-text-muted);
 }
 
-/* ─── Choices.js — override styling ─────────────
-   Supaya tampilannya sesuai design system hijau  */
+/*  Choices.js — override styling  */
 .choices {
     margin-bottom: 0;
 }
@@ -108,14 +107,14 @@
     background-color: var(--color-bg-card) !important;
     border: none !important;
     border-radius: var(--radius-full) !important;
-    height: 44px !important; /* Kunci tinggi sama dengan input teks */
+    height: 44px !important; 
     min-height: 44px !important;
-    padding: 0 16px !important; /* Hapus padding atas/bawah bawaan Choices */
+    padding: 0 16px !important; 
     font-family: var(--font-base) !important;
     font-size: var(--text-body) !important;
     color: var(--color-text-primary) !important;
     display: flex !important;
-    align-items: center !important; /* Flexbox akan menengahkan dengan sempurna sekarang */
+    align-items: center !important; 
 }
 
 .choices__inner:focus-within {
@@ -126,7 +125,6 @@
     padding-right: 36px !important;
 }
 
-/* Memastikan wadah teks tunggal benar-benar rata tengah */
 .choices__list--single {
     display: flex !important;
     align-items: center !important;
@@ -187,11 +185,11 @@
     width: 100% !important;
 }
 
-/* Caret bawaan Choices */
+/*  */
 .choices[data-type*="select-one"]::after {
     border-color: var(--color-text-muted) transparent transparent !important;
     right: 16px !important;
-    margin-top: -2px !important; /* Tweak sedikit posisi panahnya agar seimbang */
+    margin-top: -2px !important; 
 }
 
 .choices[data-type*="select-one"].is-open::after {
@@ -199,7 +197,7 @@
     margin-top: -6px !important;
 }
 
-/* ─── Dropzone ───────────────────────────────── */
+/* Dropzone */
 .dropzone-area {
     width: 100%;
     min-height: 120px;
@@ -294,7 +292,7 @@
     background: rgba(255, 255, 255, 0.28);
 }
 
-/* ─── Form Actions ───────────────────────────── */
+/* Form Actions */
 .form-unggah-actions {
     display: flex;
     justify-content: flex-end;

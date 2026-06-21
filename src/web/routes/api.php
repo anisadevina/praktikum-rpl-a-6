@@ -21,5 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/arsip/data', [ArsipController::class, 'getData']);
     Route::post('/arsip/bookmark/{id}', [ArsipController::class, 'toggleBookmark']);
 
+    Route::get('/arsip/view/{kode}', [ArsipController::class, 'viewDokumen']);
+
 
 });

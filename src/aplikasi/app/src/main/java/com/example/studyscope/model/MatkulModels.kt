@@ -1,7 +1,9 @@
 package com.example.studyscope.model
+import com.google.gson.annotations.SerializedName
 
 data class MatkulResponse(
     val status: String,
+    @SerializedName("data")
     val matkulData: MatkulData
 )
 

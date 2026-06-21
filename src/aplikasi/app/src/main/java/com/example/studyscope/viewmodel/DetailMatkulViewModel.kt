@@ -13,6 +13,9 @@ class DetailMatkulViewModel : ViewModel() {
     private val _detailData = MutableStateFlow<DetailMatkulData?>(null)
     val detailData: StateFlow<DetailMatkulData?> = _detailData
 
+    private val _username = MutableStateFlow("Memuat...")
+    val username: StateFlow<String> = _username
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
@@ -26,7 +29,9 @@ class DetailMatkulViewModel : ViewModel() {
             try {
                 val response = ApiClient.instance.getDetailMatkul("Bearer $token", idMatkul)
                 if (response.isSuccessful) {
-                    _detailData.value = response.body()?.data
+                    val data = response.body()?.data
+                    _detailData.value = data
+                    _username.value = data?.user?.username ?: "Pengguna"
                 } else {
                     _error.value = "Gagal memuat data"
                 }
@@ -38,24 +43,17 @@ class DetailMatkulViewModel : ViewModel() {
         }
     }
 
-    fun toggleBookmark(token: String, idDokumen: Int) {
+    fun toggleBookmark(token: String, idMatkul: Int, idDokumen: Int) {
         viewModelScope.launch {
             try {
                 val response = ApiClient.instance.toggleBookmark("Bearer $token", idDokumen)
                 if (response.isSuccessful) {
-                    // Update state lokal tanpa fetch ulang
-                    _detailData.value = _detailData.value?.let { data ->
-                        data.copy(
-                            daftarArsip = data.daftarArsip.map { dokumen ->
-                                if (dokumen.id_dokumen == idDokumen) {
-                                    dokumen.copy(is_bookmarked = !dokumen.is_bookmarked)
-                                } else dokumen
-                            }
-                        )
-                    }
+                    fetchDetail(token, idMatkul)
+                } else {
+                    _error.value = "Gagal mengubah status bookmark."
                 }
             } catch (e: Exception) {
-                // silent fail
+                _error.value = "Koneksi bermasalah saat menyimpan arsip."
             }
         }
     }

@@ -48,7 +48,7 @@
     margin-bottom: 32px;
 }
 
-/* ─── Tombol + Dokumen ───────────────────────── */
+/* Tambah dokumen (button) */
 .btn-tambah-dokumen {
     display: inline-flex;
     align-items: center;
@@ -84,7 +84,7 @@
     transform: translateY(-1px);
 }
 
-/* ─── Tabel ──────────────────────────────────── */
+/* Tabel */
 .unggah-table-wrapper {
     width: 100%;
     overflow-x: auto;
@@ -148,7 +148,7 @@
     font-style: italic;
 }
 
-/* ─── Status Badge ───────────────────────────── */
+/* Status badge */
 .status-badge {
     display: inline-block;
     padding: 4px 14px;

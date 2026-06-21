@@ -65,7 +65,7 @@ class UnggahController extends Controller
 
         $request->validate([
             'id_matkul' => 'required|exists:mata_kuliah,id_matkul',
-            'tahun' => 'required|integer|min:2000|max:' . (Carbon::now()->year + 1),
+            'tahun' => 'required|integer|min:2022|max:' . (Carbon::now()->year),
             'id_dosen' => 'required|exists:dosen,id_dosen',
             'kategori_file' => 'required|in:soal_ujian,tugas,materi',
             'judul' => 'required|string|max:255',

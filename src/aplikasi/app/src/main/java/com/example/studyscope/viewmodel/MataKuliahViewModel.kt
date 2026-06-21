@@ -13,8 +13,14 @@ class MataKuliahViewModel : ViewModel() {
     private val _matkulList = MutableStateFlow<List<Matkul>>(emptyList())
     val matkulList: StateFlow<List<Matkul>> = _matkulList
 
+    private val _username = MutableStateFlow("Memuat...")
+    val username: StateFlow<String> = _username
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
+
+    private val _isPaginating = MutableStateFlow(false)
+    val isPaginating: StateFlow<Boolean> = _isPaginating
 
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
@@ -25,21 +31,24 @@ class MataKuliahViewModel : ViewModel() {
     private val _currentPage = MutableStateFlow(1)
     private val _lastPage = MutableStateFlow(1)
 
-    fun updateSearchQuery(query: String) {
+    fun updateSearchQuery(query: String, token: String) {
         _searchQuery.value = query
         _currentPage.value = 1
         _matkulList.value = emptyList()
-        fetchMatkul(query, 1)
+        fetchMatkul(query, 1, token)
     }
 
     fun fetchMatkul(query: String = "", page: Int = 1, token: String = "") {
         viewModelScope.launch {
-            _isLoading.value = true
+            if (page == 1) _isLoading.value = true else _isPaginating.value = true
             _error.value = null
             try {
-                val response = ApiClient.instance.getMatkul("Bearer $token", query)
+                val response = ApiClient.instance.getMatkul("Bearer $token", query, page)
                 if (response.isSuccessful) {
                     val body = response.body()
+
+                    _username.value = body?.matkulData?.user?.username ?: "Pengguna"
+
                     val newList: List<Matkul> = body?.matkulData?.semuaMatkul?.data ?: emptyList()
                     _matkulList.value = if (page == 1) newList else _matkulList.value + newList
                     _currentPage.value = body?.matkulData?.semuaMatkul?.current_page ?: 1
@@ -51,7 +60,15 @@ class MataKuliahViewModel : ViewModel() {
                 _error.value = "Terjadi kesalahan: ${e.message}"
             } finally {
                 _isLoading.value = false
+                _isPaginating.value = false
             }
+        }
+    }
+
+    fun loadMore(token: String) {
+        if (_currentPage.value < _lastPage.value && !_isLoading.value && !_isPaginating.value) {
+            val nextPage = _currentPage.value + 1
+            fetchMatkul(_searchQuery.value, nextPage, token)
         }
     }
 }

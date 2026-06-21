@@ -1,5 +1,7 @@
 package com.example.studyscope.screen
 
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -30,30 +32,41 @@ import com.example.studyscope.viewmodel.MataKuliahViewModel
 @Composable
 fun MataKuliahScreen(
     token: String,
-    username: String,
-    onNavigateBack: () -> Unit,
+    initialQuery: String = "",
+    onNavigateToBeranda: () -> Unit,
     onNavigateToDetail: (Int) -> Unit,
+    onNavigateToArsip: () -> Unit,
     onLogout: () -> Unit = {},
     viewModel: MataKuliahViewModel = viewModel()
 ) {
     val matkulList by viewModel.matkulList.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val isPaginating by viewModel.isPaginating.collectAsState()
     val error by viewModel.error.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
 
+    val currentUsername by viewModel.username.collectAsState()
+
     LaunchedEffect(Unit) {
-        viewModel.fetchMatkul(token = token)
+        if (initialQuery.isNotBlank()) {
+            viewModel.updateSearchQuery(initialQuery, token)
+        } else {
+            viewModel.fetchMatkul(token = token)
+        }
     }
 
     MataKuliahContent(
-        username = username,
+        username = currentUsername,
         searchQuery = searchQuery,
-        onSearchQueryChange = { viewModel.updateSearchQuery(it) },
+        onSearchQueryChange = { query -> viewModel.updateSearchQuery(query, token) },
         isLoading = isLoading,
+        isPaginating = isPaginating,
+        onLoadMore = { viewModel.loadMore(token) },
         error = error,
         matkulList = matkulList,
-        onNavigateBack = onNavigateBack,
+        onNavigateToBeranda = onNavigateToBeranda,
         onNavigateToDetail = onNavigateToDetail,
+        onNavigateToArsip = onNavigateToArsip,
         onLogout = onLogout
     )
 }
@@ -65,10 +78,13 @@ fun MataKuliahContent(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     isLoading: Boolean,
+    isPaginating: Boolean,
+    onLoadMore: () -> Unit,
     error: String?,
     matkulList: List<Matkul>,
-    onNavigateBack: () -> Unit,
+    onNavigateToBeranda: () -> Unit,
     onNavigateToDetail: (Int) -> Unit,
+    onNavigateToArsip: () -> Unit,
     onLogout: () -> Unit = {}
 ){
     Scaffold(
@@ -81,7 +97,7 @@ fun MataKuliahContent(
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.Home, contentDescription = "Beranda") },
                     selected = false,
-                    onClick = { onNavigateBack() },
+                    onClick = onNavigateToBeranda,
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = HunterGreen,
                         selectedTextColor = Color.White,
@@ -101,9 +117,9 @@ fun MataKuliahContent(
                     )
                 )
                 NavigationBarItem(
-                    icon = { Icon(Icons.Outlined.BookmarkBorder, contentDescription = "Bookmark") },
+                    icon = { Icon(Icons.Outlined.BookmarkBorder, contentDescription = "Arsip") },
                     selected = false,
-                    onClick = { },
+                    onClick = onNavigateToArsip,
                     colors = NavigationBarItemDefaults.colors(
                         unselectedIconColor = Color.LightGray
                     )
@@ -116,12 +132,11 @@ fun MataKuliahContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = 24.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
             // Header: judul kiri, logout kanan
-            // Header: profil kiri, logout kanan
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -241,14 +256,14 @@ fun MataKuliahContent(
 
             // Content
             when {
-                isLoading -> {
+                isLoading && matkulList.isEmpty() -> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator(color = HunterGreen)
                     }
                 }
-                error != null -> {
+                error != null && matkulList.isEmpty() -> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(text = error, color = MaterialTheme.colorScheme.error)
+                        Text(text = error!!, color = MaterialTheme.colorScheme.error)
                     }
                 }
                 matkulList.isEmpty() -> {
@@ -263,11 +278,32 @@ fun MataKuliahContent(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        items(matkulList) { matkul ->
+                        itemsIndexed(matkulList) { index, matkul ->
+
+                            if (index == matkulList.size - 1) {
+                                LaunchedEffect(Unit) {
+                                    onLoadMore() // Tarik halaman selanjutnya
+                                }
+                            }
+
                             MatkulCard(
                                 matkul = matkul,
                                 onLihatSelengkapnya = { onNavigateToDetail(matkul.id_matkul) }
                             )
+                        }
+
+                        if (isPaginating) {
+                            item(span = { GridItemSpan(maxLineSpan) }) {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicator(
+                                        color = HunterGreen,
+                                        modifier = Modifier.size(32.dp)
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -358,6 +394,8 @@ fun MataKuliahScreenPreview() {
             searchQuery = "",
             onSearchQueryChange = {},
             isLoading = false,
+            isPaginating = false,
+            onLoadMore = {},
             error = null,
             matkulList = listOf(
                 Matkul(1, "Algoritma & Pemrograman", 4.5, 10),
@@ -365,8 +403,10 @@ fun MataKuliahScreenPreview() {
                 Matkul(3, "Basis Data", 3.5, 12),
                 Matkul(4, "Jaringan Komputer", 4.2, 6),
             ),
-            onNavigateBack = {},
-            onNavigateToDetail = {}
+            onNavigateToBeranda = {},
+            onNavigateToDetail = {},
+            onNavigateToArsip = {},
+            onLogout = {}
         )
     }
 }

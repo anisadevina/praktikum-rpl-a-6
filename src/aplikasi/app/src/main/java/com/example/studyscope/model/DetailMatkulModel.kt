@@ -26,5 +26,6 @@ data class Dokumen(
     val kategori_file: String,
     val tahun_dokumen: Int,
     val waktu_unggah: String,
-    val is_bookmarked: Boolean
+    val is_bookmarked: Boolean,
+    val kodeRahasia: String
 )

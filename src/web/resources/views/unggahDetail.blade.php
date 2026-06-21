@@ -126,17 +126,14 @@
                             <select name="id_matkul" id="select-matkul" required>
                                 <option value="" disabled selected>Pilih Mata Kuliah</option>
                             </select>
+                            <span class="error-text" id="err-matkul" style="color: red; font-size: 12px; display: none;"></span>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Tahun</label>
                             <select name="tahun" id="select-tahun" required>
                                 <option value="" disabled selected>Pilih Tahun</option>
-                                <option value="2026">2026</option>
-                                <option value="2025">2025</option>
-                                <option value="2024">2024</option>
-                                <option value="2023">2023</option>
-                                <option value="2022">2022</option>
                             </select>
+                            <span class="error-text" id="err-tahun" style="color: red; font-size: 12px; display: none;"></span>
                         </div>
                     </div>
 
@@ -146,6 +143,7 @@
                         <select name="id_dosen" id="select-dosen" required>
                             <option value="" disabled selected>Pilih Dosen</option>
                         </select>
+                        <span class="error-text" id="err-dosen" style="color: red; font-size: 12px; display: none;"></span>
                     </div>
 
                     {{-- Kategori File --}}
@@ -157,12 +155,14 @@
                             <option value="tugas">Tugas</option>
                             <option value="materi">Materi</option>
                         </select>
+                        <span class="error-text" id="err-kategori" style="color: red; font-size: 12px; display: none;"></span>
                     </div>
 
                     {{-- Judul File --}}
                     <div class="form-group">
                         <label class="form-label">Judul File</label>
                         <input type="text" name="judul" id="input-judul" class="form-input" placeholder="Ketik Judul File" required maxlength="255">
+                        <span class="error-text" id="err-judul" style="color: red; font-size: 12px; display: none;"></span>
                     </div>
 
                     {{-- Dropzone --}}
@@ -187,6 +187,7 @@
                             </div>
                         </div>
                         <span class="dropzone-hint">Maks. 20MB · PDF saja</span>
+                        <span class="error-text" id="err-file" style="color: red; font-size: 12px; display: none; margin-top: 4px;"></span>
                     </div>
 
                     {{-- Tombol aksi --}}
