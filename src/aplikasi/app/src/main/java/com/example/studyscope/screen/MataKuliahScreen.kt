@@ -119,7 +119,7 @@ fun MataKuliahContent(
                 NavigationBarItem(
                     icon = { Icon(Icons.Outlined.BookmarkBorder, contentDescription = "Arsip") },
                     selected = false,
-                    onClick = { onNavigateToArsip },
+                    onClick = onNavigateToArsip,
                     colors = NavigationBarItemDefaults.colors(
                         unselectedIconColor = Color.LightGray
                     )

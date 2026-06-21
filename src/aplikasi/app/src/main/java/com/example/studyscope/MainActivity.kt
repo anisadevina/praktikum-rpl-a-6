@@ -25,6 +25,7 @@ import com.example.studyscope.screen.LoginScreen
 import com.example.studyscope.screen.RegisterScreen
 import com.example.studyscope.ui.theme.StudyScopeTheme
 import com.example.studyscope.viewmodel.AuthViewModel
+import com.example.studyscope.screen.PdfViewerScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -188,14 +189,26 @@ fun StudyScopeApp() {
                         navController.navigate("arsip")
                     },
                     onOpenDokumen = { kodeRahasia ->
-                        val url = "http://192.168.1.16:8000/arsip/view/$kodeRahasia"
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                        context.startActivity(intent)
+                        navController.navigate("pdf_viewer/$kodeRahasia")
                     },
                     onLogout = {
                         authToken = null
                         navController.navigate("login") { popUpTo(0) { inclusive = true } }
                     }
+                )
+            } else {
+                LaunchedEffect(Unit) { navController.navigate("login") { popUpTo(0) } }
+            }
+        }
+        // Layar 7: Pembaca PDF Khusus
+        composable("pdf_viewer/{kodeRahasia}") { backStackEntry ->
+            val kodeRahasia = backStackEntry.arguments?.getString("kodeRahasia") ?: ""
+            if (authToken != null) {
+                // Panggil halaman khusus yang baru saja kita buat
+                PdfViewerScreen(
+                    kodeRahasia = kodeRahasia,
+                    token = authToken!!,
+                    onNavigateBack = { navController.popBackStack() }
                 )
             } else {
                 LaunchedEffect(Unit) { navController.navigate("login") { popUpTo(0) } }

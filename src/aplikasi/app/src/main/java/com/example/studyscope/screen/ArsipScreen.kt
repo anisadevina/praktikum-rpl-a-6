@@ -130,7 +130,7 @@ fun ArsipScreen(
                 onValueChange = { viewModel.updateSearchQuery(it) },
                 placeholder = {
                     Text(
-                        "Cari mata kuliah",
+                        "Cari judul file",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.outline
                     )
