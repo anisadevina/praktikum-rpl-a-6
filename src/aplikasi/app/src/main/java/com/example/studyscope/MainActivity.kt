@@ -124,7 +124,9 @@ fun StudyScopeApp() {
                         launchSingleTop = true
                     }
                 },
-                onOpenDocument = { _, _ -> },
+                onOpenDokumen = { kodeRahasia ->
+                    navController.navigate("pdf_viewer/$kodeRahasia")
+                },
                 onNavigateToLibrary = {
                     navController.navigate("matakuliah")
                 },
@@ -152,7 +154,12 @@ fun StudyScopeApp() {
                 MataKuliahScreen(
                     token = authToken!!,
                     initialQuery = query,
-                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToBeranda = {
+                        navController.navigate("beranda") {
+                            popUpTo("beranda") { inclusive = false }
+                            launchSingleTop = true
+                        }
+                    },
                     onNavigateToDetail = { idMatkul ->
                         navController.navigate("detail_matkul/$idMatkul")
                     },

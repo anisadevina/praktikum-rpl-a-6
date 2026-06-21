@@ -39,7 +39,7 @@ fun ArsipScreen(
     username: String = "nama pengguna",
     onNavigateToBeranda: () -> Unit = {},
     onNavigateToLibrary: () -> Unit = {},
-    onOpenDocument: (url: String, title: String) -> Unit = { _, _ -> },
+    onOpenDokumen: (String) -> Unit = {},
     onLogout: () -> Unit = {},
     viewModel: ArsipViewModel = viewModel()
 ) {
@@ -235,7 +235,10 @@ fun ArsipScreen(
                             ArsipCard(
                                 item = item,
                                 onBookmarkClick = { viewModel.toggleBookmark(token, item.idDokumen) },
-                                onCardClick = { onOpenDocument(item.fileUrl, item.judul) }
+                                onCardClick = {
+                                    val kodeRahasia = item.fileUrl.substringAfterLast("/")
+                                    onOpenDokumen(kodeRahasia)
+                                }
                             )
                         }
                     }

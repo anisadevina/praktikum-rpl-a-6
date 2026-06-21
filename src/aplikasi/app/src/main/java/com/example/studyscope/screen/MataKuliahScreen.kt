@@ -33,7 +33,7 @@ import com.example.studyscope.viewmodel.MataKuliahViewModel
 fun MataKuliahScreen(
     token: String,
     initialQuery: String = "",
-    onNavigateBack: () -> Unit,
+    onNavigateToBeranda: () -> Unit,
     onNavigateToDetail: (Int) -> Unit,
     onNavigateToArsip: () -> Unit,
     onLogout: () -> Unit = {},
@@ -64,7 +64,7 @@ fun MataKuliahScreen(
         onLoadMore = { viewModel.loadMore(token) },
         error = error,
         matkulList = matkulList,
-        onNavigateBack = onNavigateBack,
+        onNavigateToBeranda = onNavigateToBeranda,
         onNavigateToDetail = onNavigateToDetail,
         onNavigateToArsip = onNavigateToArsip,
         onLogout = onLogout
@@ -82,7 +82,7 @@ fun MataKuliahContent(
     onLoadMore: () -> Unit,
     error: String?,
     matkulList: List<Matkul>,
-    onNavigateBack: () -> Unit,
+    onNavigateToBeranda: () -> Unit,
     onNavigateToDetail: (Int) -> Unit,
     onNavigateToArsip: () -> Unit,
     onLogout: () -> Unit = {}
@@ -97,7 +97,7 @@ fun MataKuliahContent(
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.Home, contentDescription = "Beranda") },
                     selected = false,
-                    onClick = { onNavigateBack() },
+                    onClick = onNavigateToBeranda,
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = HunterGreen,
                         selectedTextColor = Color.White,

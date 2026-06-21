@@ -43,4 +43,21 @@ class DetailMatkulViewModel : ViewModel() {
             }
         }
     }
+    fun toggleBookmark(token: String, idMatkul: Int, idDokumen: Int) {
+        viewModelScope.launch {
+            try {
+                // Tembak API Laravel-nya
+                val response = ApiClient.instance.toggleBookmark("Bearer $token", idDokumen)
+
+                if (response.isSuccessful) {
+                    // Jika sukses, refresh data di layar agar ikon bookmark-nya berubah
+                    fetchDetail(token, idMatkul)
+                } else {
+                    _error.value = "Gagal mengubah status bookmark."
+                }
+            } catch (e: Exception) {
+                _error.value = "Koneksi bermasalah saat menyimpan arsip."
+            }
+        }
+    }
 }

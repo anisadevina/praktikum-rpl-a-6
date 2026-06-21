@@ -59,6 +59,9 @@ fun DetailMatkulScreen(
         onNavigateToBeranda = onNavigateToBeranda,
         onNavigateToArsip = onNavigateToArsip,
         onOpenDokumen = onOpenDokumen,
+        onToggleBookmark = { idDokumen ->
+            viewModel.toggleBookmark(token, idMatkul, idDokumen)
+        },
         onLogout = onLogout
     )
 }
@@ -73,6 +76,7 @@ fun DetailMatkulContent(
     onNavigateToBeranda: () -> Unit,
     onNavigateToArsip: () -> Unit,
     onOpenDokumen: (String) -> Unit,
+    onToggleBookmark: (Int) -> Unit,
     onLogout: () -> Unit = {}
 ) {
     Scaffold(
@@ -270,7 +274,8 @@ fun DetailMatkulContent(
                         items(detailData.daftarArsip) { dokumen ->
                             ArsipItem(
                                 dokumen = dokumen,
-                                onClick = { onOpenDokumen(dokumen.kodeRahasia) }
+                                onClick = { onOpenDokumen(dokumen.kodeRahasia) },
+                                onToggleBookmark = { onToggleBookmark(dokumen.id_dokumen) }
                             )
                             Spacer(modifier = Modifier.height(12.dp))
                         }
@@ -284,7 +289,7 @@ fun DetailMatkulContent(
 }
 
 @Composable
-fun ArsipItem(dokumen: Dokumen, onClick: () -> Unit) {
+fun ArsipItem(dokumen: Dokumen, onClick: () -> Unit, onToggleBookmark: () -> Unit) {
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = SageGreen),
@@ -314,7 +319,7 @@ fun ArsipItem(dokumen: Dokumen, onClick: () -> Unit) {
                     Text("Diunggah ${dokumen.waktu_unggah.take(10)}", fontSize = 10.sp, color = Color.White.copy(alpha = 0.85f))
                 }
             }
-            IconButton(onClick = { }) {
+            IconButton(onClick = onToggleBookmark) {
                 Icon(if (dokumen.is_bookmarked) Icons.Default.Bookmark else Icons.Outlined.BookmarkBorder, "Bookmark", tint = Color.White)
             }
         }
@@ -342,7 +347,8 @@ fun DetailMatkulScreenPreview() {
             onNavigateBack = {},
             onNavigateToBeranda = {},
             onNavigateToArsip = {},
-            onOpenDokumen = {}
+            onOpenDokumen = {},
+            onToggleBookmark = {}
         )
     }
 }
