@@ -23,7 +23,7 @@ fun PdfViewerScreen(
     onNavigateBack: () -> Unit
 ) {
     // 1. Tembak langsung ke API Laravel-mu
-    val pdfUrl = "http://192.168.1.16:8000/api/arsip/view/$kodeRahasia"
+    val pdfUrl = "http://10.49.126.103:8000/api/arsip/view/$kodeRahasia"
 
     // 2. Bouquet akan mengurus proses unduh dan render secara otomatis
     val pdfState = rememberVerticalPdfReaderState(

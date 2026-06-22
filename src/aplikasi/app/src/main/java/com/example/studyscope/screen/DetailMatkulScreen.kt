@@ -368,7 +368,8 @@ fun ArsipItem(
 
 fun formatTanggal(tanggal: String): String {
     return try {
-        val parts = tanggal.split("-")
+        val tanggalSaja = tanggal.substringBefore(" ")
+        val parts = tanggalSaja.split("-")
         val bulanIndo = listOf(
             "Januari", "Februari", "Maret", "April", "Mei", "Juni",
             "Juli", "Agustus", "September", "Oktober", "November", "Desember"

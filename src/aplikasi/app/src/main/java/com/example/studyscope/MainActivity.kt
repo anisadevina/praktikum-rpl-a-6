@@ -70,10 +70,9 @@ fun StudyScopeApp() {
             RegisterScreen(
                 viewModel = authViewModel,
                 onNavigateToLogin = { navController.navigate("login") },
-                onRegisterSuccess = { token ->
-                    authToken = token
-                    navController.navigate("beranda") {
-                        popUpTo("register") { inclusive = true }
+                onRegisterSuccess = { _ ->
+                    navController.navigate("login") {
+                        popUpTo(0) { inclusive = true }
                     }
                 }
             )
@@ -180,7 +179,11 @@ fun StudyScopeApp() {
                 DetailMatkulScreen(
                     token = authToken!!,
                     idMatkul = idMatkul,
-                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateBack = {
+                        navController.navigate("matakuliah") {
+                            popUpTo("matakuliah") { inclusive = true }
+                        }
+                    },
                     onNavigateToBeranda = {
                         navController.navigate("beranda") {
                             popUpTo("beranda") { inclusive = false }
