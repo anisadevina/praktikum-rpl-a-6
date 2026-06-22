@@ -12,11 +12,9 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Layers
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +22,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,6 +54,42 @@ fun RegisterScreen(
         }
     }
 
+    RegisterContent(
+        nim = nim,
+        onNimChange = { nim = it },
+        username = username,
+        onUsernameChange = { username = it },
+        email = email,
+        onEmailChange = { email = it },
+        password = password,
+        onPasswordChange = { password = it },
+        authState = authState,
+        fieldErrors = fieldErrors,
+        onRegisterClick = { viewModel.register(nim, username, email, password) },
+        onNavigateToLogin = {
+            viewModel.resetState()
+            onNavigateToLogin()
+        }
+    )
+}
+
+@Composable
+fun RegisterContent(
+    nim: String,
+    onNimChange: (String) -> Unit,
+    username: String,
+    onUsernameChange: (String) -> Unit,
+    email: String,
+    onEmailChange: (String) -> Unit,
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    authState: String,
+    fieldErrors: Map<String, String>,
+    onRegisterClick: () -> Unit,
+    onNavigateToLogin: () -> Unit
+) {
+    var passwordVisible by remember { mutableStateOf(false) }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -62,27 +97,20 @@ fun RegisterScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = AppSpacing.lg)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Spacer(modifier = Modifier.height(AppSpacing.xl))
 
             // Logo
-            Box(
-                modifier = Modifier
-                    .size(width = 120.dp, height = 60.dp)
-                    .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
-                    .background(Color.White.copy(alpha = 0.5f), RoundedCornerShape(10.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Layers,
-                    contentDescription = "Logo",
-                    modifier = Modifier.size(24.dp),
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
+            Icon(
+                imageVector = Icons.Outlined.Layers,
+                contentDescription = "Logo",
+                modifier = Modifier.size(80.dp),
+                tint = MaterialTheme.colorScheme.primary
+            )
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -112,7 +140,7 @@ fun RegisterScreen(
             )
             OutlinedTextField(
                 value = nim,
-                onValueChange = { nim = it },
+                onValueChange = onNimChange,
                 placeholder = {
                     Text(
                         "Masukkan NIM",
@@ -132,8 +160,8 @@ fun RegisterScreen(
                     }
                 },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = MaterialTheme.colorScheme.outline
                 )
@@ -150,7 +178,7 @@ fun RegisterScreen(
             )
             OutlinedTextField(
                 value = username,
-                onValueChange = { username = it },
+                onValueChange = onUsernameChange,
                 placeholder = {
                     Text(
                         "Masukkan Username",
@@ -170,8 +198,8 @@ fun RegisterScreen(
                     }
                 },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = MaterialTheme.colorScheme.outline
                 )
@@ -188,7 +216,7 @@ fun RegisterScreen(
             )
             OutlinedTextField(
                 value = email,
-                onValueChange = { email = it },
+                onValueChange = onEmailChange,
                 placeholder = {
                     Text(
                         "Masukkan Email SSO",
@@ -208,8 +236,8 @@ fun RegisterScreen(
                     }
                 },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = MaterialTheme.colorScheme.outline
                 )
@@ -226,7 +254,7 @@ fun RegisterScreen(
             )
             OutlinedTextField(
                 value = password,
-                onValueChange = { password = it },
+                onValueChange = onPasswordChange,
                 placeholder = {
                     Text(
                         "Masukkan Password",
@@ -236,7 +264,15 @@ fun RegisterScreen(
                 },
                 modifier = Modifier.fillMaxWidth(),
                 leadingIcon = { Icon(Icons.Default.Lock, null, Modifier.size(18.dp)) },
-                visualTransformation = PasswordVisualTransformation(),
+                trailingIcon = {
+                    val image = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff
+                    val description = if (passwordVisible) "Hide password" else "Show password"
+
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(imageVector = image, contentDescription = description, modifier = Modifier.size(20.dp))
+                    }
+                },
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 textStyle = MaterialTheme.typography.bodyMedium,
@@ -247,8 +283,8 @@ fun RegisterScreen(
                     }
                 },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = MaterialTheme.colorScheme.outline
                 )
@@ -258,7 +294,7 @@ fun RegisterScreen(
 
             // Tombol Daftar
             Button(
-                onClick = { viewModel.register(nim, username, email, password) },
+                onClick = onRegisterClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(46.dp),
@@ -270,12 +306,11 @@ fun RegisterScreen(
             ) {
                 Text(
                     text = if (authState == "Loading") "Memproses..." else "Daftar",
-                    style = MaterialTheme.typography.labelLarge,
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
                     color = Color.White
                 )
             }
 
-            // Pesan Error
             if (authState.startsWith("Error")) {
                 Text(
                     text = authState,
@@ -288,11 +323,7 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(AppSpacing.sm))
 
-            // Link ke Login
-            TextButton(onClick = {
-                viewModel.resetState()
-                onNavigateToLogin()
-            }) {
+            TextButton(onClick = onNavigateToLogin) {
                 Text(
                     text = buildAnnotatedString {
                         append("Sudah punya akun? ")
@@ -319,9 +350,19 @@ fun RegisterScreen(
 @Composable
 fun RegisterScreenPreview() {
     StudyScopeTheme {
-        RegisterScreen(
-            onNavigateToLogin = {},
-            onRegisterSuccess = {}
+        RegisterContent(
+            nim = "L0122XXX",
+            onNimChange = {},
+            username = "Mahasiswa",
+            onUsernameChange = {},
+            email = "mhs@student.uns.ac.id",
+            onEmailChange = {},
+            password = "password",
+            onPasswordChange = {},
+            authState = "",
+            fieldErrors = emptyMap(),
+            onRegisterClick = {},
+            onNavigateToLogin = {}
         )
     }
 }
