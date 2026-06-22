@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('id_matkul');
             $table->unsignedBigInteger('id_dosen');
             $table->string('judul', 255);
-            $table->enum('kategori_file', ['soal ujian', 'tugas', 'materi']);
+            $table->enum('kategori_file', ['soal_ujian', 'tugas', 'materi']);
             $table->year('tahun_dokumen');
             $table->string('file_path', 500);
             $table->enum('status', ['menunggu', 'disetujui', 'ditolak'])->default('menunggu');
