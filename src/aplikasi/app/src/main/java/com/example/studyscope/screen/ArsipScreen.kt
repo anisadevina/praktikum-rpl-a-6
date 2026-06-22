@@ -1,5 +1,6 @@
 package com.example.studyscope.screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.ui.draw.clip
 import androidx.compose.material.icons.outlined.BookmarkBorder
@@ -294,9 +295,10 @@ fun ArsipCard(
     Surface(
         color = SageGreen,
         shape = RoundedCornerShape(16.dp),
-        shadowElevation = 2.dp,
-        modifier = Modifier.fillMaxWidth(),
-        onClick = onCardClick
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(2.dp, RoundedCornerShape(16.dp))
+            .clickable { onCardClick() }
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -340,7 +342,7 @@ fun ArsipCard(
                     Text(
                         text = "Diunggah: ${item.waktuUnggahFormatted}",
                         style = MaterialTheme.typography.labelSmall,
-                        color = Color.Black.copy(alpha = 0.6f)
+                        color = Color.White.copy(alpha = 0.7f)
                     )
                 }
             }
@@ -349,7 +351,7 @@ fun ArsipCard(
                     imageVector = Icons.Default.Bookmark,
                     contentDescription = "Bookmarked",
                     modifier = Modifier.size(20.dp),
-                    tint = Color.Black
+                    tint = Color.White
                 )
             }
         }

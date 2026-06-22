@@ -16,8 +16,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -115,7 +117,7 @@ fun DetailMatkulContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = AppSpacing.lg)
         ) {
             item {
                 Spacer(modifier = Modifier.height(16.dp))
@@ -224,8 +226,8 @@ fun DetailMatkulContent(
                                             horizontalAlignment = Alignment.CenterHorizontally,
                                             verticalArrangement = Arrangement.Center
                                         ) {
-                                            Text("Tingkat Kesulitan", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                                            Spacer(modifier = Modifier.height(8.dp))
+                                            Text("Tingkat Kesulitan", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                            Spacer(modifier = Modifier.height(4.dp))
                                             Row(verticalAlignment = Alignment.Bottom) {
                                                 Text("${matkul.tingkat_kesulitan}", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                                                 Text("/5.0", fontSize = 12.sp, color = Color.Gray, modifier = Modifier.padding(bottom = 4.dp))
@@ -245,8 +247,8 @@ fun DetailMatkulContent(
                                             horizontalAlignment = Alignment.CenterHorizontally,
                                             verticalArrangement = Arrangement.Center
                                         ) {
-                                            Text("Jumlah Arsip", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                                            Spacer(modifier = Modifier.height(8.dp))
+                                            Text("Jumlah Arsip", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                            Spacer(modifier = Modifier.height(4.dp))
                                             Text("${detailData.jumlahArsip}", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                                             Text("Arsip tersimpan", fontSize = 9.sp, color = Color.Gray)
                                         }
@@ -306,10 +308,11 @@ fun ArsipItem(
     onToggleBookmark: () -> Unit = {}
 ) {
     Surface(
-        color = YellowGreen,
+        color = SageGreen,
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier
             .fillMaxWidth()
+            .shadow(2.dp, RoundedCornerShape(20.dp))
             .clickable { onClick() }
     ) {
         Row(
@@ -320,19 +323,21 @@ fun ArsipItem(
                 imageVector = Icons.Outlined.FileCopy,
                 contentDescription = null,
                 modifier = Modifier.size(32.dp),
-                tint = Color.Black
+                tint = Color.White
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = dokumen.judul,
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = Color.Black
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    color = Color.White,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Surface(
-                        color = HunterGreen,
+                        color = BlushedBrick,
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         Text(
@@ -349,7 +354,7 @@ fun ArsipItem(
                         text = "Diunggah pada ${formatTanggal(dokumen.waktu_unggah)}",
                         style = MaterialTheme.typography.bodySmall,
                         fontSize = 11.sp,
-                        color = Color.Black.copy(alpha = 0.7f)
+                        color = Color.White.copy(alpha = 0.8f)
                     )
                 }
             }
@@ -359,7 +364,7 @@ fun ArsipItem(
                     else Icons.Outlined.BookmarkBorder,
                     contentDescription = "Bookmark",
                     modifier = Modifier.size(24.dp),
-                    tint = Color.Black
+                    tint = Color.White
                 )
             }
         }
