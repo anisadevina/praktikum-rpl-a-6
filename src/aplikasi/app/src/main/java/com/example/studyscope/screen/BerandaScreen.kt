@@ -195,6 +195,7 @@ fun BerandaContent(
                     onSearch = {
                         if (searchQuery.isNotBlank()) {
                             onNavigateToMatkul(searchQuery)
+                            onSearchQueryChange("")
                         }
                     }
                 )

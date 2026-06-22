@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.BookmarkBorder
@@ -17,15 +16,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import com.example.studyscope.model.DetailMatkulData
 import com.example.studyscope.model.Dokumen
 import com.example.studyscope.model.MatkulDetail
@@ -85,50 +81,44 @@ fun DetailMatkulContent(
     Scaffold(
         bottomBar = {
             NavigationBar(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = HunterGreen,
+                contentColor = Color.White,
                 modifier = Modifier.clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
             ) {
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.Home, contentDescription = "Beranda") },
                     selected = false,
                     onClick = onNavigateToBeranda,
-                    colors = NavigationBarItemDefaults.colors(
-                        unselectedIconColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
-                        indicatorColor = MaterialTheme.colorScheme.onPrimary
-                    )
+                    colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.LightGray)
                 )
                 NavigationBarItem(
                     icon = { Icon(Icons.AutoMirrored.Filled.MenuBook, contentDescription = "Mata Kuliah") },
                     selected = true,
                     onClick = { },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MaterialTheme.colorScheme.primary,
-                        indicatorColor = MaterialTheme.colorScheme.onPrimary,
-                        unselectedIconColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f)
+                        selectedIconColor = HunterGreen,
+                        indicatorColor = Color.White,
+                        unselectedIconColor = Color.LightGray
                     )
                 )
                 NavigationBarItem(
                     icon = { Icon(Icons.Outlined.BookmarkBorder, contentDescription = "Arsip") },
                     selected = false,
                     onClick = onNavigateToArsip,
-                    colors = NavigationBarItemDefaults.colors(
-                        unselectedIconColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
-                        indicatorColor = MaterialTheme.colorScheme.onPrimary
-                    )
+                    colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.LightGray)
                 )
             }
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = VanillaCream
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = AppSpacing.lg)
+                .padding(horizontal = 24.dp)
         ) {
             item {
-                Spacer(modifier = Modifier.height(AppSpacing.md))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // Header Top Bar
                 Row(
@@ -138,50 +128,45 @@ fun DetailMatkulContent(
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(
-                            modifier = Modifier
-                                .size(40.dp)
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.primary),
+                            modifier = Modifier.size(40.dp).clip(CircleShape).background(HunterGreen),
                             contentAlignment = Alignment.Center
                         ) {
-                            Icon(Icons.Default.Person, contentDescription = "Profile", tint = MaterialTheme.colorScheme.onPrimary)
+                            Icon(Icons.Default.Person, contentDescription = "Profile", tint = Color.White)
                         }
-                        Spacer(modifier = Modifier.width(AppSpacing.sm))
+                        Spacer(modifier = Modifier.width(8.dp))
                         Surface(
                             shape = RoundedCornerShape(20.dp),
-                            color = MaterialTheme.colorScheme.surface,
-                            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
+                            color = Color.White,
+                            border = androidx.compose.foundation.BorderStroke(1.dp, HunterGreen)
                         ) {
                             Text(
                                 text = username,
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                color = MaterialTheme.colorScheme.primary,
-                                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold)
+                                color = HunterGreen,
+                                fontSize = 12.sp
                             )
                         }
                     }
                     IconButton(
                         onClick = onLogout,
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.error, CircleShape)
-                            .size(40.dp)
+                        modifier = Modifier.background(BlushedBrick, CircleShape).size(40.dp)
                     ) {
-                        Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Logout", tint = MaterialTheme.colorScheme.onError)
+                        Icon(Icons.Default.ExitToApp, contentDescription = "Logout", tint = Color.White)
                     }
                 }
 
-                Spacer(modifier = Modifier.height(AppSpacing.md))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // Tombol Kembali
                 TextButton(onClick = onNavigateBack, contentPadding = PaddingValues(0.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = MaterialTheme.colorScheme.onBackground)
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = Color.Black)
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("Kembali", color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold))
+                        Text("Kembali", color = Color.Black, fontWeight = FontWeight.Bold)
                     }
                 }
 
-                Spacer(modifier = Modifier.height(AppSpacing.sm))
+                Spacer(modifier = Modifier.height(8.dp))
             }
 
             // --- KONTEN UTAMA ---
@@ -189,17 +174,15 @@ fun DetailMatkulContent(
                 isLoading -> {
                     item {
                         Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 100.dp),
+                            modifier = Modifier.fillMaxWidth().padding(top = 100.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                            CircularProgressIndicator(color = HunterGreen)
                         }
                     }
                 }
                 error != null -> {
-                    item { Text(text = error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium) }
+                    item { Text(text = error, color = MaterialTheme.colorScheme.error) }
                 }
                 detailData != null -> {
                     val matkul = detailData.matkul
@@ -209,117 +192,92 @@ fun DetailMatkulContent(
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(16.dp),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                            colors = CardDefaults.cardColors(containerColor = HunterGreen)
                         ) {
-                            Column(modifier = Modifier.padding(AppSpacing.md)) {
+                            Column(modifier = Modifier.padding(20.dp)) {
                                 Text(
                                     text = matkul.nama_matkul.uppercase(),
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
+                                    color = Color.White,
+                                    fontSize = 22.sp,
+                                    fontWeight = FontWeight.Bold
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
-                                    text = matkul.deskripsi ?: "Tidak ada deskripsi tersedia.",
-                                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.85f),
-                                    style = MaterialTheme.typography.bodyMedium
+                                    text = matkul.deskripsi ?: "-",
+                                    color = Color.White.copy(alpha = 0.85f),
+                                    fontSize = 13.sp
                                 )
-                                Spacer(modifier = Modifier.height(AppSpacing.md))
+                                Spacer(modifier = Modifier.height(16.dp))
 
                                 Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(IntrinsicSize.Max),
-                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                    modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
                                     // Tingkat Kesulitan
                                     Card(
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .fillMaxHeight(),
+                                        modifier = Modifier.weight(1f).fillMaxHeight(),
                                         shape = RoundedCornerShape(12.dp),
-                                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                                        colors = CardDefaults.cardColors(containerColor = Color.White)
                                     ) {
                                         Column(
-                                            modifier = Modifier
-                                                .padding(AppSpacing.sm)
-                                                .fillMaxSize(),
+                                            modifier = Modifier.padding(10.dp).fillMaxSize(),
                                             horizontalAlignment = Alignment.CenterHorizontally,
                                             verticalArrangement = Arrangement.Center
                                         ) {
-                                            Text("Tingkat Kesulitan", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                            Spacer(modifier = Modifier.height(4.dp))
+                                            Text("Tingkat Kesulitan", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                            Spacer(modifier = Modifier.height(8.dp))
                                             Row(verticalAlignment = Alignment.Bottom) {
-                                                Text("${matkul.tingkat_kesulitan}", style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                                Text("/5.0", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f), modifier = Modifier.padding(bottom = 6.dp))
+                                                Text("${matkul.tingkat_kesulitan}", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                                Text("/5.0", fontSize = 12.sp, color = Color.Gray, modifier = Modifier.padding(bottom = 4.dp))
                                             }
-                                            Text(
-                                                text = detailData.teksKesulitan,
-                                                style = MaterialTheme.typography.labelSmall.copy(lineHeight = 12.sp),
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-                                                textAlign = TextAlign.Center,
-                                                maxLines = 2,
-                                                overflow = TextOverflow.Ellipsis
-                                            )
+                                            Text(detailData.teksKesulitan, fontSize = 9.sp, color = Color.Gray, maxLines = 1)
                                         }
                                     }
 
                                     // Jumlah Arsip
                                     Card(
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .fillMaxHeight(),
+                                        modifier = Modifier.weight(1f).fillMaxHeight(),
                                         shape = RoundedCornerShape(12.dp),
-                                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                                        colors = CardDefaults.cardColors(containerColor = Color.White)
                                     ) {
                                         Column(
-                                            modifier = Modifier
-                                                .padding(AppSpacing.sm)
-                                                .fillMaxSize(),
+                                            modifier = Modifier.padding(10.dp).fillMaxSize(),
                                             horizontalAlignment = Alignment.CenterHorizontally,
                                             verticalArrangement = Arrangement.Center
                                         ) {
-                                            Text("Jumlah Arsip", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                            Spacer(modifier = Modifier.height(4.dp))
-                                            Text("${detailData.jumlahArsip}", style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                            Text(
-                                                text = "Arsip tersimpan",
-                                                style = MaterialTheme.typography.labelSmall.copy(lineHeight = 12.sp),
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-                                                textAlign = TextAlign.Center,
-                                                maxLines = 2,
-                                                overflow = TextOverflow.Ellipsis
-                                            )
+                                            Text("Jumlah Arsip", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                            Spacer(modifier = Modifier.height(8.dp))
+                                            Text("${detailData.jumlahArsip}", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                            Text("Arsip tersimpan", fontSize = 9.sp, color = Color.Gray)
                                         }
                                     }
                                 }
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(AppSpacing.lg))
+                        Spacer(modifier = Modifier.height(24.dp))
 
                         // Section Arsip - border + judul (gaya kamu)
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(16.dp),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                            border = androidx.compose.foundation.BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                            colors = CardDefaults.cardColors(containerColor = Color.White),
+                            border = androidx.compose.foundation.BorderStroke(1.5.dp, Color.Black)
                         ) {
-                            Column(modifier = Modifier.padding(horizontal = 8.dp, vertical = AppSpacing.md)) {
+                            Column(modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)) {
                                 Text(
                                     text = "Arsip Mata Kuliah",
-                                    style = MaterialTheme.typography.titleLarge,
-                                    color = MaterialTheme.colorScheme.onSurface,
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.Black,
                                     modifier = Modifier.padding(horizontal = 8.dp)
                                 )
-                                Spacer(modifier = Modifier.height(AppSpacing.md))
+                                Spacer(modifier = Modifier.height(12.dp))
                                 if (detailData.daftarArsip.isEmpty()) {
                                     Text(
                                         text = "Belum ada arsip untuk mata kuliah ini.",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        modifier = Modifier.padding(horizontal = 8.dp)
+                                        fontSize = 12.sp,
+                                        color = Color.Gray
                                     )
                                 } else {
                                     detailData.daftarArsip.forEach { dokumen ->
@@ -327,13 +285,13 @@ fun DetailMatkulContent(
                                             dokumen = dokumen,
                                             onClick = { onOpenDokumen(dokumen.kodeRahasia) },
                                         ) { onToggleBookmark(dokumen.id_dokumen) }
-                                        Spacer(modifier = Modifier.height(AppSpacing.sm))
+                                        Spacer(modifier = Modifier.height(8.dp))
                                     }
                                 }
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(AppSpacing.md))
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
             }
@@ -348,57 +306,59 @@ fun ArsipItem(
     onToggleBookmark: () -> Unit = {}
 ) {
     Surface(
-        color = SageGreen,
-        shape = RoundedCornerShape(16.dp),
-        shadowElevation = 2.dp,
+        color = YellowGreen,
+        shape = RoundedCornerShape(20.dp),
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
     ) {
         Row(
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = Icons.Outlined.FileCopy,
                 contentDescription = null,
-                modifier = Modifier.size(24.dp),
-                tint = Color.White
+                modifier = Modifier.size(32.dp),
+                tint = Color.Black
             )
-            Spacer(modifier = Modifier.width(20.dp))
+            Spacer(modifier = Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = dokumen.judul,
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                    color = Color.White,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    text = "Diunggah pada ${formatTanggal(dokumen.waktu_unggah)}",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = Color.Black.copy(alpha = 0.6f)
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                Surface(
-                    color = BlushedBrick,
-                    shape = RoundedCornerShape(4.dp)
-                ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Surface(
+                        color = HunterGreen,
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            text = "${dokumen.tahun_dokumen}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = Color.White,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "${dokumen.tahun_dokumen}",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = Color.White,
-                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                        fontWeight = FontWeight.Bold
+                        text = "Diunggah pada ${formatTanggal(dokumen.waktu_unggah)}",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontSize = 11.sp,
+                        color = Color.Black.copy(alpha = 0.7f)
                     )
                 }
             }
-            IconButton(onClick = onToggleBookmark, modifier = Modifier.size(32.dp)) {
+            IconButton(onClick = onToggleBookmark) {
                 Icon(
                     imageVector = if (dokumen.is_bookmarked) Icons.Default.Bookmark
                     else Icons.Outlined.BookmarkBorder,
                     contentDescription = "Bookmark",
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(24.dp),
                     tint = Color.Black
                 )
             }
@@ -408,11 +368,8 @@ fun ArsipItem(
 
 fun formatTanggal(tanggal: String): String {
     return try {
-        // Handle format ISO (YYYY-MM-DD)
-        val cleanDate = tanggal.substringBefore(" ") // case if it has time
-        val parts = cleanDate.split("-")
-        if (parts.size < 3) return tanggal
-
+        val tanggalSaja = tanggal.substringBefore(" ")
+        val parts = tanggalSaja.split("-")
         val bulanIndo = listOf(
             "Januari", "Februari", "Maret", "April", "Mei", "Juni",
             "Juli", "Agustus", "September", "Oktober", "November", "Desember"
