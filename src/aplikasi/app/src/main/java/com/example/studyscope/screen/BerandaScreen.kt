@@ -20,6 +20,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -27,8 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.studyscope.ui.theme.HunterGreen
-import com.example.studyscope.viewmodel.BerandaViewModel
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextOverflow
+import com.example.studyscope.ui.theme.*
+import com.example.studyscope.model.Matkul
+import com.example.studyscope.viewmodel.BerandaViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,7 +78,7 @@ fun BerandaContent(
     onSearchQueryChange: (String) -> Unit,
     isLoading: Boolean,
     error: String?,
-    matkulList: List<com.example.studyscope.model.Matkul>,
+    matkulList: List<Matkul>,
     onNavigateToMatkul: (String) -> Unit,
     onNavigateToDetail: (Int) -> Unit,
     onNavigateToArsip: () -> Unit,
@@ -95,20 +99,20 @@ fun BerandaContent(
                         selectedIconColor = MaterialTheme.colorScheme.primary,
                         selectedTextColor = MaterialTheme.colorScheme.onPrimary,
                         indicatorColor = MaterialTheme.colorScheme.onPrimary,
-                        unselectedIconColor = Color.LightGray
+                        unselectedIconColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f)
                     )
                 )
                 NavigationBarItem(
                     icon = { Icon(Icons.AutoMirrored.Filled.MenuBook, contentDescription = "Mata Kuliah") },
                     selected = false,
                     onClick = { onNavigateToMatkul("") },
-                    colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.LightGray)
+                    colors = NavigationBarItemDefaults.colors(unselectedIconColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f))
                 )
                 NavigationBarItem(
                     icon = { Icon(Icons.Outlined.BookmarkBorder, contentDescription = "Arsip") },
                     selected = false,
                     onClick = onNavigateToArsip,
-                    colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.LightGray)
+                    colors = NavigationBarItemDefaults.colors(unselectedIconColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f))
                 )
             }
         },
@@ -119,9 +123,9 @@ fun BerandaContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = AppSpacing.lg)
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.md))
 
             // --- HEADER ---
             Row(
@@ -131,53 +135,61 @@ fun BerandaContent(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
-                        modifier = Modifier.size(40.dp).clip(CircleShape).background(MaterialTheme.colorScheme.primary),
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(Icons.Default.Person, contentDescription = "Profile", tint = MaterialTheme.colorScheme.onPrimary)
                     }
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(AppSpacing.sm))
                     Surface(
                         shape = RoundedCornerShape(20.dp),
-                        color = Color.White,
-                        border = androidx.compose.foundation.BorderStroke(1.dp, HunterGreen)
+                        color = MaterialTheme.colorScheme.surface,
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
                     ) {
                         Text(
                             text = username,
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                            color = HunterGreen,
-                            fontSize = 12.sp
+                            color = MaterialTheme.colorScheme.primary,
+                            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold)
                         )
                     }
                 }
 
                 IconButton(
                     onClick = onLogoutClick,
-                    modifier = Modifier.background(MaterialTheme.colorScheme.error, CircleShape).size(40.dp)
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.error, CircleShape)
+                        .size(40.dp)
                 ) {
                     Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Logout", tint = MaterialTheme.colorScheme.onError)
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.md))
 
             // --- SEARCH BAR ---
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = onSearchQueryChange,
-                placeholder = { Text("Cari mata kuliah", style = MaterialTheme.typography.bodyMedium, color = Color.Gray) },
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Gray) },
+                placeholder = { Text("Cari mata kuliah", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search", tint = MaterialTheme.colorScheme.onSurfaceVariant) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White, RoundedCornerShape(24.dp))
-                    .heightIn(min = 40.dp),
+                    .heightIn(min = 48.dp)
+                    .background(Color.Transparent)
+                    .shadow(elevation = 2.dp, shape = RoundedCornerShape(24.dp)),
                 shape = RoundedCornerShape(24.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
                 ),
                 singleLine = true,
-                textStyle = LocalTextStyle.current.copy(fontSize = 13.sp),
+                textStyle = MaterialTheme.typography.bodyMedium,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(
                     onSearch = {
@@ -188,34 +200,43 @@ fun BerandaContent(
                 )
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.md))
 
             // --- HERO CARD ---
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
-                    Text(text = "Halo, $username!", color = MaterialTheme.colorScheme.onPrimary, style = MaterialTheme.typography.headlineLarge)
+                    Text(
+                        text = "Halo, $username!",
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.headlineLarge
+                    )
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = "Selamat datang di Study Scope", color = MaterialTheme.colorScheme.onPrimary, style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        text = "Selamat datang di Study Scope",
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
+                    )
                     Text(
                         text = "Ayo mulai perjalananmu dengan mengakses menu mata kuliah dan arsip",
-                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f),
+                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.9f),
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(top = 4.dp)
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(text = "Akses Terakhir Mata Kuliah", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onBackground)
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.lg))
+            Text(text = "Akses Terakhir Mata Kuliah", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onBackground)
+            Spacer(modifier = Modifier.height(AppSpacing.md))
 
             // --- GRID KARTU MATA KULIAH ---
             if (isLoading) {
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
             } else if (error != null) {
@@ -226,44 +247,108 @@ fun BerandaContent(
                 } else {
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(2),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
                         modifier = Modifier.fillMaxSize()
                     ) {
                         items(matkulList) { matkul ->
+                            val icons = listOf(
+                                Icons.AutoMirrored.Filled.MenuBook,
+                                Icons.Default.Code,
+                                Icons.Default.Terminal,
+                                Icons.Default.Storage,
+                                Icons.Default.Calculate,
+                                Icons.Default.Science,
+                                Icons.Default.LibraryBooks
+                            )
+                            val matkulIcon = icons[matkul.id_matkul % icons.size]
+
                             Card(
                                 shape = RoundedCornerShape(16.dp),
-                                colors = CardDefaults.cardColors(containerColor = com.example.studyscope.ui.theme.SageGreen),
+                                colors = CardDefaults.cardColors(containerColor = SageGreen),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Column(modifier = Modifier.height(260.dp)) { // Tinggi disamakan
+                                Column(modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(260.dp)) {
                                     Box(
-                                        modifier = Modifier.fillMaxWidth().height(100.dp).background(Color.White),
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(100.dp)
+                                            .background(Color.White),
                                         contentAlignment = Alignment.Center
                                     ) {
-                                        Icon(Icons.Default.Image, contentDescription = null, tint = Color.LightGray)
+                                        Icon(
+                                            imageVector = matkulIcon,
+                                            contentDescription = null,
+                                            tint = SageGreen,
+                                            modifier = Modifier.size(48.dp)
+                                        )
                                     }
 
-                                    Column(modifier = Modifier.padding(12.dp)) {
-                                        Text(text = matkul.nama_matkul, color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 14.sp, maxLines = 1)
-                                        Spacer(modifier = Modifier.height(2.dp))
-                                        Text("Tingkat kesulitan", fontSize = 10.sp, color = Color.Black)
-                                        Row(verticalAlignment = Alignment.CenterVertically) {
-                                            Icon(Icons.Default.Star, contentDescription = "Rating", tint = com.example.studyscope.ui.theme.StarYellow, modifier = Modifier.size(14.dp))
-                                            Spacer(modifier = Modifier.width(2.dp))
-                                            Text(text = "${matkul.tingkat_kesulitan}/5", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                    Column(modifier = Modifier
+                                        .padding(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 12.dp)
+                                        .fillMaxWidth()
+                                        .weight(1f)) {
+                                        Text(
+                                            text = matkul.nama_matkul,
+                                            color = Color.White,
+                                            style = MaterialTheme.typography.titleSmall.copy(
+                                                fontWeight = FontWeight.Bold,
+                                                lineHeight = 18.sp
+                                            ),
+                                            maxLines = 2,
+                                            minLines = 2,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+                                        Spacer(modifier = Modifier.height(4.dp))
+                                        Text(
+                                            text = "Tingkat kesulitan",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = Color.White.copy(alpha = 0.7f)
+                                        )
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            modifier = Modifier.padding(vertical = 2.dp)
+                                        ) {
+                                            Icon(
+                                                Icons.Default.Star,
+                                                contentDescription = null,
+                                                tint = StarYellow,
+                                                modifier = Modifier.size(14.dp)
+                                            )
+                                            Spacer(modifier = Modifier.width(4.dp))
+                                            Text(
+                                                text = "${matkul.tingkat_kesulitan}/5",
+                                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                                                color = Color.White
+                                            )
                                         }
-                                        Spacer(modifier = Modifier.height(2.dp))
-                                        Text("${matkul.arsip} arsip (materi, tugas, soal)", fontSize = 9.sp, color = Color.Black.copy(alpha = 0.7f))
-                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text(
+                                            text = "(${matkul.arsip} arsip tersedia)",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = Color.White.copy(alpha = 0.7f),
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+
+                                        Spacer(modifier = Modifier.weight(1f))
+
                                         Button(
                                             onClick = { onNavigateToDetail(matkul.id_matkul) },
-                                            colors = ButtonDefaults.buttonColors(containerColor = com.example.studyscope.ui.theme.YellowGreen),
-                                            shape = RoundedCornerShape(8.dp),
-                                            modifier = Modifier.fillMaxWidth().height(24.dp),
-                                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
+                                            colors = ButtonDefaults.buttonColors(containerColor = YellowGreen),
+                                            shape = RoundedCornerShape(10.dp),
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(32.dp),
+                                            contentPadding = PaddingValues(horizontal = 8.dp)
                                         ) {
-                                            Text("Lihat Selengkapnya", color = Color.Black, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                                            Text(
+                                                "Lihat",
+                                                color = Color.Black,
+                                                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
+                                            )
                                         }
                                     }
                                 }

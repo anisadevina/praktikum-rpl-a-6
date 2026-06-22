@@ -66,11 +66,12 @@ object AppSpacing {
 
 @Composable
 fun StudyScopeTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    // Kita set default ke false untuk mengabaikan sistem dark mode
+    darkTheme: Boolean = false,
     content: @Composable () -> Unit,
 ) {
-    // Memaksa menggunakan colorScheme buatan sendiri (mengabaikan Dynamic Color Android 12+)
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    // Memaksa menggunakan LightColorScheme agar estetika tetap konsisten (Cream & Green)
+    val colorScheme = LightColorScheme
 
     MaterialTheme(
         colorScheme = colorScheme,

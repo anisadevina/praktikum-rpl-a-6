@@ -77,7 +77,7 @@ interface ApiService {
 }
 
 object ApiClient {
-    private const val BASE_URL = "http://192.168.42.108:8000/api/" // sesuaikan masing masing hp
+    private const val BASE_URL = "http://192.168.228.50:8000/api/" // sesuaikan masing masing hp
 
     val instance: ApiService by lazy {
         Retrofit.Builder()
