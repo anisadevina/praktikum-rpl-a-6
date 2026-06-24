@@ -3,18 +3,25 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController as ApiAuthController;
+use App\Http\Controllers\BerandaController;
+use App\Http\Controllers\MatkulController;
+use App\Http\Controllers\ArsipController;
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
 Route::post('/register', [ApiAuthController::class, 'register']);
 Route::post('/login', [ApiAuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [ApiAuthController::class, 'logout']);
 
-    // Rute default untuk mengecek siapa user yang sedang login
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+    Route::get('/beranda/data', [BerandaController::class, 'getData']);
+
+    Route::get('/matkul/data', [MatkulController::class, 'getIndexData']);
+    Route::get('/matkul/detail/data', [MatkulController::class, 'getDetailData']);
+
+    Route::get('/arsip/data', [ArsipController::class, 'getData']);
+    Route::post('/arsip/bookmark/{id}', [ArsipController::class, 'toggleBookmark']);
+
+    Route::get('/arsip/view/{kode}', [ArsipController::class, 'viewDokumen']);
+
+
 });
