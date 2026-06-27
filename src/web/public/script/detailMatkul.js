@@ -138,12 +138,18 @@ async function fetchDetailMatkul() {
         const response = await fetch(
             `/matkul/detail/data?id=${id}&tahun=${tahun}`,
         );
+
+        if (response.status === 404 || response.status === 400) {
+            window.location.href = "/matkul";
+            return;
+        }
+
         if (!response.ok) throw new Error("Gagal mengambil data detail matkul");
 
         const json = await response.json();
 
         // Jika ID matkul tidak valid/tidak ada di database
-        if (json.status === "error") {
+        if (response.status === 404 || json.status === "error") {
             window.location.href = "/matkul";
             return;
         }

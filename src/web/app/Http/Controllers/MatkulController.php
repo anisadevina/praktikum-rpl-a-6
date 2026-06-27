@@ -19,7 +19,7 @@ class MatkulController extends Controller
 
     public function getIndexData(Request $request)
     {
-        $user  = auth()->user();
+        $user = auth()->user();
         $query = $request->input('q', '');
 
         $mataKuliahTerakhir = $this->ambilMatkulTerakhirDiakses($user->id_user);
@@ -53,7 +53,7 @@ class MatkulController extends Controller
     public function getDetailData(Request $request)
     {
         $idMatkul = $request->query('id');
-        $user     = auth()->user();
+        $user = auth()->user();
 
         if (!$idMatkul) {
             return response()->json([
@@ -61,8 +61,6 @@ class MatkulController extends Controller
                 'message' => 'ID tidak ditemukan'
             ], 400);
         }
-
-        $this->catatRiwayatAkses($user->id_user, $idMatkul);
 
         $matkul = DB::table('mata_kuliah')->where('id_matkul', $idMatkul)->first();
 
@@ -72,6 +70,8 @@ class MatkulController extends Controller
                 'message' => 'Mata kuliah tidak ditemukan'
             ], 404);
         }
+
+        $this->catatRiwayatAkses($user->id_user, $idMatkul);
 
         $teksKesulitan = $this->konversiTingkatKesulitan($matkul->tingkat_kesulitan);
 
@@ -144,7 +144,7 @@ class MatkulController extends Controller
         }
 
         return $queryArsip->get()->map(function ($dokumen) use ($idDokumenDibookmark) {
-            $dokumen->kodeRahasia  = Crypt::encryptString($dokumen->id_dokumen ?? $dokumen->id);
+            $dokumen->kodeRahasia = Crypt::encryptString($dokumen->id_dokumen ?? $dokumen->id);
             $dokumen->is_bookmarked = in_array($dokumen->id_dokumen, $idDokumenDibookmark);
             return $dokumen;
         });
@@ -152,12 +152,12 @@ class MatkulController extends Controller
 
     private function konversiTingkatKesulitan(float $skor): string
     {
-        return match(true) {
+        return match (true) {
             $skor >= 1.00 && $skor < 2.00 => 'Materi cenderung mudah sekali',
             $skor >= 2.00 && $skor < 3.00 => 'Materi cenderung mudah',
             $skor >= 3.00 && $skor < 4.00 => 'Materi cenderung sedang',
             $skor >= 4.00 && $skor < 5.00 => 'Materi cenderung sulit',
-            default                        => 'Materi cenderung sulit sekali',
+            default => 'Materi cenderung sulit sekali',
         };
     }
 }
