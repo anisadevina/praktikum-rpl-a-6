@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @extends Factory<User>
@@ -24,22 +25,26 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
-        ];
-    }
+        $nim = fake()->unique()->numerify('L#######');
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
+        $prodiPilihan = ['Informatika', 'Sains Data'];
+
+        // Suntikkan ke tabel master agar relasi Foreign Key aman
+        DB::table('master_mahasiswa_fatisda')->insertOrIgnore([
+            'nim' => $nim,
+            'nama' => fake()->name(),
+            'email_institusi' => fake()->unique()->safeEmail(),
+            'prodi' => fake()->randomElement($prodiPilihan),
+            'tahun_angkatan' => fake()->numberBetween(2020, 2025),
+
         ]);
+
+        return [
+            'nim' => $nim,
+            'username' => fake()->unique()->userName(),
+            'email_user' => fake()->unique()->safeEmail(),
+            'password' => bcrypt('password123'),
+            'role' => 'user',
+        ];
     }
 }
