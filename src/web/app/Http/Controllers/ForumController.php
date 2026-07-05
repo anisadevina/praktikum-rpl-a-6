@@ -1,0 +1,99 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
+class ForumController extends Controller
+{
+    public function index()
+    {
+        return view('forum');
+    }
+
+    public function getData()
+    {
+        $user  = auth()->user();
+        $topik = DB::table('forum_topik')
+            ->join('users', 'forum_topik.id_user', '=', 'users.id_user')
+            ->select('forum_topik.*', 'users.username')
+            ->orderBy('forum_topik.waktu_topik', 'desc')
+            ->get()
+            ->map(fn($topik) => $this->lengkapiDataTopik($topik));
+
+        return response()->json([
+            'status' => 'success',
+            'data'   => [
+                'user'  => $user,
+                'topik' => $topik,
+            ]
+        ]);
+    }
+
+    public function buatTopik(Request $request)
+    {
+        $request->validate([
+            'pesan_topik' => 'required|min:5',
+            'tag'         => 'required|in:general,tanya jawab',
+        ], [
+            'pesan_topik.required' => 'Pesan tidak boleh kosong.',
+            'pesan_topik.min'      => 'Pesan minimal 5 karakter.',
+            'tag.required'         => 'Pilih kategori terlebih dahulu.',
+        ]);
+
+        DB::table('forum_topik')->insert([
+            'id_user'     => auth()->id(),
+            'tag'         => $request->tag,
+            'pesan_topik' => $request->pesan_topik,
+            'is_anonim'   => $request->is_anonim === '1',
+            'waktu_topik' => now(),
+        ]);
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Topik berhasil dibuat!',
+        ], 201);
+    }
+
+    public function buatBalasan(Request $request)
+    {
+        $request->validate([
+            'id_topik'      => 'required|exists:forum_topik,id_topik',
+            'pesan_balasan' => 'required|min:1',
+        ], [
+            'pesan_balasan.required' => 'Balasan tidak boleh kosong.',
+        ]);
+
+        DB::table('forum_balasan')->insert([
+            'id_topik'      => $request->id_topik,
+            'id_user'       => auth()->id(),
+            'pesan_balasan' => $request->pesan_balasan,
+            'is_anonim'     => $request->is_anonim === '1',
+            'waktu_balasan' => now(),
+        ]);
+
+        return response()->json([
+            'status'   => 'success',
+            'message'  => 'Balasan berhasil dikirim!',
+            'id_topik' => $request->id_topik,
+        ], 201);
+    }
+
+    // --- Private Methods ---
+
+    private function lengkapiDataTopik(object $topik): object
+    {
+        $topik->jumlah_balasan    = DB::table('forum_balasan')->where('id_topik', $topik->id_topik)->count();
+        $topik->waktu_topik_human = Carbon::parse($topik->waktu_topik)->diffForHumans();
+        $topik->balasan           = DB::table('forum_balasan')
+            ->join('users', 'forum_balasan.id_user', '=', 'users.id_user')
+            ->where('forum_balasan.id_topik', $topik->id_topik)
+            ->select('forum_balasan.*', 'users.username')
+            ->orderBy('forum_balasan.waktu_balasan', 'asc')
+            ->get();
+
+        return $topik;
+    }
+}

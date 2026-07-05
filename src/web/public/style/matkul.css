@@ -1,0 +1,127 @@
+/* --- Header Section --- */
+.matkul-header-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.book-icon {
+    width: 32px;
+    height: 32px;
+    stroke: var(--color-text-primary);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.matkul-header-title h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--color-text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+.matkul-header-subtitle {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin-bottom: 20px;
+}
+
+.matkul-header-divider {
+    border: none;
+    border-bottom: 2px solid var(--color-border-input);
+    margin-bottom: 32px;
+}
+
+/* Membuat bagian atas card (thumbnail) dengan warna per kategori */
+.matkul-card .card-thumbnail {
+    height: 150px;
+}
+
+.matkul-card .card-thumbnail svg {
+    width: 52px;
+    height: 52px;
+    stroke: var(--icon-stroke, var(--color-primary));
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Ukuran judul section */
+.section-title {
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
+/* Pagination Styles */
+.pagination-wrapper {
+    margin-top: 32px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination li {
+    display: inline-block;
+}
+
+/* Tampilan tombol normal */
+.pagination li a,
+.pagination li span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 14px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    background: var(--color-bg-card);
+    color: var(--color-text-secondary);
+    border: 1.5px solid var(--color-border);
+    transition: all 0.15s ease-in-out;
+}
+
+/* Saat tombol di-hover */
+.pagination li a:hover {
+    border-color: var(--color-primary-light);
+    color: var(--color-primary);
+    background: var(--color-bg-page);
+}
+
+/* Tampilan tombol halaman yang sedang aktif */
+.pagination li.active span {
+    background: var(--color-primary);
+    color: #ffffff;
+    border-color: var(--color-primary);
+}
+
+/* Tampilan tombol jika sudah mentok (disabled) */
+.pagination li.disabled span {
+    background: var(--color-bg-page);
+    color: var(--color-text-muted);
+    border-color: var(--color-border);
+    cursor: not-allowed;
+}
+
+/* Menyembunyikan icon panah SVG besar bawaan Laravel */
+.pagination svg {
+    width: 16px;
+    height: 16px;
+    display: none;
+}
