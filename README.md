@@ -81,7 +81,7 @@ praktikum-rpl-a-6/
 
 # 2. Menjalankan localhost
 Laragon : buka aplikasi laragon, lalu tekan button Start All
-Xampp : buka aplikasi xampp, lalu tekan button start pada apche dan MySQL
+Xampp : buka aplikasi xampp, lalu tekan button start pada apache dan MySQL
 
 # 3. Membuat database
 Laragon : Klik tombol Database > Open > masuk ke dalam HeidiSQL. Buat database kosong baru dengan nama study_scope
