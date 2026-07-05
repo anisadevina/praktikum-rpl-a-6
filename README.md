@@ -1,6 +1,6 @@
 # Study Scope - Praktikum RPL
 
-Platform akademik mahasiswa FATISDA untuk mengakses, berdiskusi, dan berbagi dokumen perkuliahan secara terpusat. 
+Study Scope merupakan platform akademik berbasis web yang dikembangkan sebagai proyek Praktikum Rekayasa Perangkat Lunak (RPL). Aplikasi ini ditujukan untuk membantu mahasiswa FATISDA dalam mengakses arsip perkuliahan, berbagi dokumen pembelajaran, serta berdiskusi melalui forum secara terpusat.
 
 ---
 
@@ -17,10 +17,12 @@ Platform akademik mahasiswa FATISDA untuk mengakses, berdiskusi, dan berbagi dok
 
 ## Tech Stack
 
-- **Backend:** Laravel 11 (PHP)
-- **Frontend Web:** Vanilla JS + CSS (tanpa framework)
-- **Database:** MySQL
-- **Auth:** Laravel Session (web) & Laravel Sanctum (API mobile)
+| Teknologi | Keterangan |
+|-----------|------------|
+| Backend | Laravel 11 (PHP) |
+| Frontend | HTML, CSS, JavaScript (Vanilla JS) |
+| Database | MySQL |
+| Authentication | Laravel Session (Web) & Laravel Sanctum (API Mobile) |
 
 ---
 
@@ -48,7 +50,7 @@ Platform akademik mahasiswa FATISDA untuk mengakses, berdiskusi, dan berbagi dok
 
 ---
 
-## Struktur Folder
+## Struktur Repository
 
 ```
 praktikum-rpl-a-6/
