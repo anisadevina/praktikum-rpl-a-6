@@ -69,34 +69,50 @@ praktikum-rpl-a-6/
 
 ---
 
-## Instalasi (Aplikasi Web)
+## Instalasi dan Cara Menjalankan (Aplikasi Web)
 
 ```bash
-# 1. Clone repository
+# 1. Download beberapa hal berikut:
+- VS Code sebagai kode editor
+- Laragon atau Xampp yang telah mencangkup pengeturan Apache, MySQL, PHP, dan Composer di dalamnya
+- Git yang berguna untuk mengunduh kode dari GitHub. Berikut adalah link repository GitHub : https://github.com/anisadevina/praktikum-rpl-a-6 
+- Command Prompt yang berguna untuk mengunduh source code dan kegiatan pengaturan lainnya.
+- Composer dengan link berikut https://getcomposer.org/download/
+
+# 2. Menjalankan localhost
+Laragon : buka aplikasi laragon, lalu tekan button Start All
+Xampp : buka aplikasi xampp, lalu tekan button start pada apche dan MySQL
+
+# 3. Membuat database
+Laragon : Klik tombol Database > Open > masuk ke dalam HeidiSQL. Buat database kosong baru dengan nama study_scope
+Xampp : Buka browser, masuk ke http://localhost/phpmyadmin. Buat database kosong baru dengan nama study_scope
+
+# 4. Clone repository
 git clone <url-repo>
 cd praktikum-rpl-a-6/src/web
 
-# 2. Install dependencies
+# 5. Install dependencies
 composer install
 
-# 3. Salin file environment
+# 6. Salin file environment
 cp env.example .env
 
-# 4. Generate app key
+# 7. Generate app key
 php artisan key:generate
 
-# 5. Konfigurasi database di .env
-DB_DATABASE=fatisda_db
+# 8. Konfigurasi database di .env
+DB_DATABASE=study_scope
 DB_USERNAME=root
 DB_PASSWORD=
 
-# 6. Jalankan migrasi dan seeder
+# 9. Jalankan migrasi dan seeder
 php artisan migrate --seed
 
-# 7. Buat symlink storage
+# 10. Buat symlink storage
 php artisan storage:link
 
-# 8. Jalankan server
+# 11. Jalankan server
 php artisan serve
+alamat http://127.0.0.1:8000
 ```
 
