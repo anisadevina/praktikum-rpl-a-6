@@ -72,5 +72,4 @@ Semua perubahan penting pada proyek ini akan didokumentasikan pada file ini.
   - MasterMahasiswaFatisda
 
 ### Fixed
-
-(Belum ada bug)
+- Tidak ditemukan bug pada pengujian versi 1.0.0
