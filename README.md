@@ -71,15 +71,23 @@ praktikum-rpl-a-6/
 
 ## Instalasi dan Cara Menjalankan (Aplikasi Web)
 
-### 1. Persiapkan Perangkat Lunak
+### 1. Persiapan
 
-Pastikan perangkat telah terpasang beberapa software berikut.
+Pastikan perangkat telah terpasang:
 
 - **Visual Studio Code** atau editor kode lainnya.
-- **Laragon** atau **XAMPP** yang telah menyediakan Apache, MySQL, PHP, dan Composer.
 - **Git** untuk mengunduh source code dari GitHub.
-- **Command Prompt**, **PowerShell**, atau **Terminal** untuk menjalankan perintah.
-- **Composer** (apabila belum tersedia pada Laragon/XAMPP). Unduh melalui https://getcomposer.org/download/
+- **Laragon** atau **XAMPP** sebagai web server yang menyediakan Apache, PHP, dan MySQL.
+- **Node.js** (disertai npm) untuk menjalankan Vite.
+- **Composer** (jika belum tersedia pada Laragon/XAMPP) untuk mengelola dependency Laravel.
+
+Unduh software melalui tautan berikut:
+
+- Git : https://git-scm.com/downloads
+- Laragon : https://laragon.org/download/
+- XAMPP : https://www.apachefriends.org/
+- Node.js : https://nodejs.org/
+- Composer : https://getcomposer.org/download/
 
 Repository GitHub:
 
@@ -91,6 +99,8 @@ https://github.com/anisadevina/praktikum-rpl-a-6
 
 ### 2. Menjalankan Web Server
 
+Aktifkan Apache dan MySQL sebelum menjalankan aplikasi.
+
 **Laragon**
 
 - Buka aplikasi Laragon.
@@ -98,33 +108,33 @@ https://github.com/anisadevina/praktikum-rpl-a-6
 
 **XAMPP**
 
-- Buka aplikasi XAMPP.
-- Jalankan **Apache** dan **MySQL**.
+- Buka XAMPP Control Panel.
+- Klik **Start** pada **Apache** dan **MySQL**.
 
 ---
 
 ### 3. Membuat Database
 
-Buat sebuah database kosong bernama **study_scope**.
+Buat database baru pada MySQL, misalnya `study_scope`.
 
 **Laragon**
 
-- Klik **Database** → **Open**.
-- HeidiSQL akan terbuka.
-- Buat database baru dengan nama `study_scope`.
+- Database → Open → HeidiSQL.
+- Klik kanan pada daftar database → **Create New** → beri nama database.
 
 **XAMPP**
 
-- Buka browser.
-- Akses `http://localhost/phpmyadmin`.
-- Pilih **New**.
-- Buat database dengan nama `study_scope`.
+- Buka browser dan akses `http://localhost/phpmyadmin`.
+- Klik **New**.
+- Masukkan nama database, kemudian klik **Create**.
 
-> **Catatan:** Nama database dapat disesuaikan. Pastikan nama tersebut sama dengan nilai `DB_DATABASE` pada file `.env`.
+> **Catatan:** Nama database dapat disesuaikan. Pastikan sama dengan nilai `DB_DATABASE` pada file `.env`.
 
 ---
 
 ### 4. Clone Repository
+
+Buka **Command Prompt**, **PowerShell**, **Git Bash**, atau **Terminal**, kemudian jalankan:
 
 ```bash
 git clone https://github.com/anisadevina/praktikum-rpl-a-6.git
@@ -135,10 +145,16 @@ cd praktikum-rpl-a-6/src/web
 
 ### 5. Install Dependency
 
-Install seluruh dependency Laravel menggunakan Composer.
+Install dependency backend menggunakan Composer.
 
 ```bash
 composer install
+```
+
+Install dependency frontend menggunakan npm.
+
+```bash
+npm install
 ```
 
 ---
@@ -147,16 +163,16 @@ composer install
 
 Salin file konfigurasi Laravel.
 
-Windows:
+**Windows**
 
 ```bash
-copy .env.example .env
+copy env.example .env
 ```
 
-Linux/macOS:
+**Linux/macOS**
 
 ```bash
-cp .env.example .env
+cp env.example .env
 ```
 
 ---
@@ -171,7 +187,7 @@ php artisan key:generate
 
 ### 8. Konfigurasi Database
 
-Buka file `.env`, kemudian ubah bagian berikut sesuai konfigurasi MySQL yang digunakan.
+Buka file `.env`, kemudian sesuaikan konfigurasi berikut.
 
 ```env
 DB_CONNECTION=mysql
@@ -184,21 +200,23 @@ DB_PASSWORD=
 
 ---
 
-### 9. Jalankan Migrasi dan Seeder
+### 9. Menjalankan Migration dan Seeder
 
 ```bash
 php artisan migrate --seed
 ```
 
+Perintah ini akan membuat seluruh tabel database beserta data awal yang diperlukan.
+
 ---
 
 ### 10. Membuat Storage Link
 
-Perintah ini diperlukan agar dokumen yang diunggah dapat diakses melalui browser.
-
 ```bash
 php artisan storage:link
 ```
+
+Perintah ini diperlukan agar dokumen yang diunggah dapat diakses melalui browser.
 
 ---
 
@@ -210,15 +228,30 @@ Jalankan server Laravel.
 php artisan serve
 ```
 
-Apabila proyek menggunakan **Vite**, jalankan juga pada terminal lain:
+Pada terminal lain, jalankan Vite.
 
 ```bash
-npm install
 npm run dev
 ```
 
-Setelah server berhasil berjalan, buka browser dan akses:
+Buka browser dan akses:
 
 ```text
 http://127.0.0.1:8000
 ```
+
+---
+
+## Dokumentasi
+
+Seluruh dokumentasi proyek tersedia pada folder **docs**, meliputi:
+
+- Software Requirements Specification (SRS)
+- UML Diagram
+- Wireframe
+- ERD
+- Data Dictionary
+- Product Backlog
+- User Stories
+- Team Contract
+- AI Usage Log
