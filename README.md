@@ -71,48 +71,154 @@ praktikum-rpl-a-6/
 
 ## Instalasi dan Cara Menjalankan (Aplikasi Web)
 
+### 1. Persiapkan Perangkat Lunak
+
+Pastikan perangkat telah terpasang beberapa software berikut.
+
+- **Visual Studio Code** atau editor kode lainnya.
+- **Laragon** atau **XAMPP** yang telah menyediakan Apache, MySQL, PHP, dan Composer.
+- **Git** untuk mengunduh source code dari GitHub.
+- **Command Prompt**, **PowerShell**, atau **Terminal** untuk menjalankan perintah.
+- **Composer** (apabila belum tersedia pada Laragon/XAMPP). Unduh melalui https://getcomposer.org/download/
+
+Repository GitHub:
+
+```text
+https://github.com/anisadevina/praktikum-rpl-a-6
+```
+
+---
+
+### 2. Menjalankan Web Server
+
+**Laragon**
+
+- Buka aplikasi Laragon.
+- Klik **Start All**.
+
+**XAMPP**
+
+- Buka aplikasi XAMPP.
+- Jalankan **Apache** dan **MySQL**.
+
+---
+
+### 3. Membuat Database
+
+Buat sebuah database kosong bernama **study_scope**.
+
+**Laragon**
+
+- Klik **Database** → **Open**.
+- HeidiSQL akan terbuka.
+- Buat database baru dengan nama `study_scope`.
+
+**XAMPP**
+
+- Buka browser.
+- Akses `http://localhost/phpmyadmin`.
+- Pilih **New**.
+- Buat database dengan nama `study_scope`.
+
+> **Catatan:** Nama database dapat disesuaikan. Pastikan nama tersebut sama dengan nilai `DB_DATABASE` pada file `.env`.
+
+---
+
+### 4. Clone Repository
+
 ```bash
-# 1. Download beberapa hal berikut:
-- VS Code sebagai kode editor
-- Laragon atau Xampp yang telah mencangkup pengeturan Apache, MySQL, PHP, dan Composer di dalamnya
-- Git yang berguna untuk mengunduh kode dari GitHub. Berikut adalah link repository GitHub : https://github.com/anisadevina/praktikum-rpl-a-6 
-- Command Prompt yang berguna untuk mengunduh source code dan kegiatan pengaturan lainnya.
-- Composer dengan link berikut https://getcomposer.org/download/
-
-# 2. Menjalankan localhost
-Laragon : buka aplikasi laragon, lalu tekan button Start All
-Xampp : buka aplikasi xampp, lalu tekan button start pada apache dan MySQL
-
-# 3. Membuat database
-Laragon : Klik tombol Database > Open > masuk ke dalam HeidiSQL. Buat database kosong baru dengan nama study_scope
-Xampp : Buka browser, masuk ke http://localhost/phpmyadmin. Buat database kosong baru dengan nama study_scope
-
-# 4. Clone repository
-git clone <url-repo>
+git clone https://github.com/anisadevina/praktikum-rpl-a-6.git
 cd praktikum-rpl-a-6/src/web
+```
 
-# 5. Install dependencies
+---
+
+### 5. Install Dependency
+
+Install seluruh dependency Laravel menggunakan Composer.
+
+```bash
 composer install
+```
 
-# 6. Salin file environment
-cp env.example .env
+---
 
-# 7. Generate app key
+### 6. Membuat File Environment
+
+Salin file konfigurasi Laravel.
+
+Windows:
+
+```bash
+copy .env.example .env
+```
+
+Linux/macOS:
+
+```bash
+cp .env.example .env
+```
+
+---
+
+### 7. Generate Application Key
+
+```bash
 php artisan key:generate
+```
 
-# 8. Konfigurasi database di .env
+---
+
+### 8. Konfigurasi Database
+
+Buka file `.env`, kemudian ubah bagian berikut sesuai konfigurasi MySQL yang digunakan.
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
 DB_DATABASE=study_scope
 DB_USERNAME=root
 DB_PASSWORD=
-
-# 9. Jalankan migrasi dan seeder
-php artisan migrate --seed
-
-# 10. Buat symlink storage
-php artisan storage:link
-
-# 11. Jalankan server
-php artisan serve
-alamat http://127.0.0.1:8000
 ```
 
+---
+
+### 9. Jalankan Migrasi dan Seeder
+
+```bash
+php artisan migrate --seed
+```
+
+---
+
+### 10. Membuat Storage Link
+
+Perintah ini diperlukan agar dokumen yang diunggah dapat diakses melalui browser.
+
+```bash
+php artisan storage:link
+```
+
+---
+
+### 11. Menjalankan Aplikasi
+
+Jalankan server Laravel.
+
+```bash
+php artisan serve
+```
+
+Apabila proyek menggunakan **Vite**, jalankan juga pada terminal lain:
+
+```bash
+npm install
+npm run dev
+```
+
+Setelah server berhasil berjalan, buka browser dan akses:
+
+```text
+http://127.0.0.1:8000
+```
